@@ -9,11 +9,11 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   viewBox="0 0 859.4011 116.8585"
+   viewBox="0 0 1100 117"
    version="1.1"
    id="svg3761"
    sodipodi:docname="arqma.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata3765">
     <rdf:RDF>
@@ -34,15 +34,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="715"
+     inkscape:window-width="1364"
+     inkscape:window-height="681"
      id="namedview3763"
      showgrid="false"
      inkscape:zoom="1.4091208"
-     inkscape:cx="334.82342"
+     inkscape:cx="270.81666"
      inkscape:cy="58.429249"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3761" />
   <defs
@@ -114,23 +114,24 @@
        y1="53.785625"
        x2="991.46423"
        y2="53.785625"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.93751359,0,0,0.93751366,155.08746,6.4658843)" />
   </defs>
   <g
      transform="translate(12 -183.1415)"
      id="g3759" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:123.58334351px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:'Calibri, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:url(#linearGradient2316);fill-opacity:1.0;stroke:none;stroke-width:3.08957434"
-     x="569.18091"
-     y="86.461594"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:115.86106873px;line-height:1.25;font-family:Calibri;-inkscape-font-specification:'Calibri, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:url(#linearGradient2316);fill-opacity:1;stroke:none;stroke-width:2.89651799"
+     x="688.70227"
+     y="87.524811"
      id="text3769"
-     transform="scale(0.86245826,1.1594764)"><tspan
+     transform="scale(0.89877561,1.1126248)"><tspan
        sodipodi:role="line"
        id="tspan3771"
-       x="569.18091"
-       y="86.461594"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:123.58334351px;font-family:Calibri;-inkscape-font-specification:'Calibri, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:url(#linearGradient2316);fill-opacity:1.0;stroke-width:3.08957434">ARQMA WALLET</tspan></text>
+       x="688.70227"
+       y="87.524811"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:115.86106873px;font-family:Calibri;-inkscape-font-specification:'Calibri, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:url(#linearGradient2316);fill-opacity:1;stroke-width:2.89651799">ARQMA WALLET</tspan></text>
   <image
      y="1.3716501"
      x="7.2847281"
