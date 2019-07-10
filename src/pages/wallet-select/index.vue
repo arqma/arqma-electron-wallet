@@ -11,7 +11,8 @@
 
     <q-list link no-border :dark="theme=='dark'">
         <template v-if="wallets.list.length">
-            <q-list-header>Open wallet</q-list-header>
+
+            <q-item-main :label="$t('buttons.openWallet')" />
             <q-item v-for="(wallet, index) in wallets.list" @click.native="openWallet(wallet)">
                 <q-item-side>
                 <div class="wallet-icon">
@@ -37,7 +38,7 @@
                     <q-list link separator style="min-width: 150px; max-height: 300px;">
                         <q-item v-close-overlay
                                 @click.native="openWallet(wallet)">
-                            <q-item-main label="Open wallet" />
+                                <q-item-main :label="$t('buttons.openWallet')" />
                         </q-item>
 
                         <q-item v-close-overlay
@@ -59,25 +60,25 @@
             <q-item-side>
                 <q-icon name="add_circle_outline" size="40px" />
             </q-item-side>
-            <q-item-main label="Create new wallet" />
+            <q-item-main :label="$t('titles.wallet.createNew')" />
         </q-item>
         <q-item @click.native="restoreWallet()">
             <q-item-side>
                 <q-icon name="input" size="40px" />
             </q-item-side>
-            <q-item-main label="Restore wallet from seed" />
+            <q-item-main :label="$t('titles.wallet.restoreFromSeed')" />
         </q-item>
         <q-item @click.native="restoreViewWallet()">
             <q-item-side>
                 <q-icon name="remove_red_eye" size="40px" />
             </q-item-side>
-            <q-item-main label="Restore view-only wallet" />
+            <q-item-main :label="$t('titles.wallet.restoreViewOnly')" />
         </q-item>
         <q-item @click.native="importWallet()">
             <q-item-side>
                 <q-icon name="file_copy" size="40px" />
             </q-item-side>
-            <q-item-main label="Import wallet from file" />
+            <q-item-main :label="$t('titles.wallet.importFromFile')" />
         </q-item>
         <template v-if="wallets.legacy.length">
             <q-item @click.native="importLegacyWallet()">
@@ -109,18 +110,18 @@ export default {
         openWallet(wallet) {
             if(wallet.password_protected !== false) {
                 this.$q.dialog({
-                    title: "Password",
-                    message: "Enter wallet password to continue.",
+                title: this.$t("dialog.password.title"),
+                message: this.$t("dialog.password.message"),
                     prompt: {
                         model: "",
                         type: "password"
                     },
                     ok: {
-                        label: "OPEN"
+                        label: this.$t("dialog.buttons.open")
                     },
                     cancel: {
                         flat: true,
-                        label: "CANCEL",
+                        label: this.$t("dialog.buttons.cancel"),
                         color: this.theme=="dark"?"white":"dark"
                     }
                 }).then(password => {
