@@ -12,7 +12,7 @@
         </template>
 
         <q-toolbar-title v-if="page_title=='Arqma'">
-            <div class="flex items-center justify-center" style="margin-top:7px">
+            <div style="margin-top:7px">
                 <img src="statics/arqma.svg" height="32">
             </div>
         </q-toolbar-title>
@@ -50,19 +50,17 @@ export default {
         page_title () {
             switch(this.$route.name) {
                 case "wallet-create":
-                    return this.$t("titles.wallet.createNew")
+                    return "Create new wallet"
                 case "wallet-restore":
-                    return this.$t("titles.wallet.restoreFromSeed")
+                    return "Restore wallet from seed"
                 case "wallet-import":
-                    return this.$t("titles.wallet.importFromFile")
+                    return "Import wallet from file"
                 case "wallet-import-view-only":
-                    return this.$t("titles.wallet.restoreViewOnly")
+                    return "Restore view-only wallet"
                 case "wallet-import-legacy":
-                    return this.$t("titles.wallet.importFromLegacyGUI")
-                case "wallet-import-old-gui":
-                    return this.$t("titles.wallet.importFromOldGUI")
+                    return "Import wallet from legacy gui"
                 case "wallet-created":
-                    return this.$t("titles.wallet.createdOrRestored")
+                    return "Wallet created/restored"
 
                 default:
                 case "wallet-select":

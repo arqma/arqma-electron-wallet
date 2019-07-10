@@ -1,46 +1,47 @@
 <template>
 <q-page>
-    <div class="row q-pt-sm q-mx-md q-mb-sm items-end non-selectable">
+
+    <div class="row q-pt-sm q-mx-md q-mb-sm items-center non-selectable">
 
         <div class="col-5">
-            {{ $t("titles.transactions") }}
+            <q-icon name="history" size="24px" /> Transaction history
         </div>
 
-        <ArqmaField class="col-5 q-px-sm" :label="$t('fieldLabels.filter')">
-            <q-input v-model="tx_filter"
+        <div class="col-5 q-px-sm">
+            <q-input v-model="tx_txid"
+                     stack-label="Filter by txid"
                      :dark="theme=='dark'"
-                     :placeholder="$t('placeholders.filterTx')"
-                     hide-underline
                      />
-        </ArqmaField>
+        </div>
 
-        <ArqmaField class="col-2" :label="$t('fieldLabels.filterTransactionType')">
+        <div class="col-2">
             <q-select :dark="theme=='dark'"
                       v-model="tx_type"
+                      float-label="Filter by transaction type"
                       :options="tx_type_options"
-                      hide-underline
                       />
-        </ArqmaField>
+        </div>
 
     </div>
-    <TxList :type="tx_type" :filter="tx_filter" />
+    <TxList :type="tx_type" :txid="tx_txid" />
 </q-page>
 </template>
 
 <script>
 import { mapState } from "vuex"
 import TxList from "components/tx_list"
-import ArqmaField from "components/arqma_field"
 export default {
     data () {
         return {
             tx_type: "all",
-            tx_filter: "",
+            tx_txid: "",
             tx_type_options: [
-                {label: this.$t("strings.transactions.types.all"), value: "all"},
-                {label: this.$t("strings.transactions.types.incoming"), value: "in"},
-                {label: this.$t("strings.transactions.types.outgoing"), value: "out"},
-                {label: this.$t("strings.transactions.types.pending"), value: "all_pending"},
+                {label: "All", value: "all"},
+                {label: "Incoming", value: "in"},
+                {label: "Outgoing", value: "out"},
+                {label: "Pending incoming", value: "pool"},
+                {label: "Pending outgoing", value: "pending"},
+                {label: "Failed", value: "failed"},
             ]
 
         }
@@ -49,10 +50,11 @@ export default {
         theme: state => state.gateway.app.config.appearance.theme,
         tx_list: state => state.gateway.wallet.transactions.tx_list
     }),
+
     components: {
-        TxList,
-        ArqmaField
+        TxList
     }
+
 }
 </script>
 
