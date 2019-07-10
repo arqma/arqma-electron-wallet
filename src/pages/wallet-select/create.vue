@@ -53,6 +53,7 @@
 <script>
 import { required } from "vuelidate/lib/validators"
 import { mapState } from "vuex"
+import WalletLoading from "components/wallet_loading"
 import ArqmaField from "components/arqma_field"
 export default {
     data () {
@@ -94,11 +95,11 @@ export default {
                     case 1:
                         break;
                     case 0:
-                        this.$q.loading.hide()
+                        this.$refs.loading.hide()
                         this.$router.replace({ path: "/wallet-select/created" });
                         break;
                     default:
-                        this.$q.loading.hide()
+                        this.$refs.loading.hide()
                         this.$q.notify({
                             type: "negative",
                             timeout: 1000,
@@ -155,7 +156,7 @@ export default {
 
             passwordPromise
                 .then(() => {
-                    this.$q.loading.show({
+                    this.$refs.loading.show({
                         delay: 0
                     })
                     this.$gateway.send("wallet", "create_wallet", this.wallet)

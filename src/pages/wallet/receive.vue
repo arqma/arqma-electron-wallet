@@ -1,136 +1,175 @@
 <template>
-<q-page class="receive">
-    <q-list link no-border :dark="theme=='dark'" class="arqma-list">
+<q-page>
 
-        <q-list-header>{{ $t("strings.addresses.myPrimaryAddress") }}</q-list-header>
-        <receive-item
-            class="primary-address"
-            v-for="address in address_list.primary"
-            :key="address.address"
-            :address="address"
-            :sublabel="$t('strings.addresses.primaryAddress')"
-            :showQR="showQR"
-            :copyAddress="copyAddress"
-            :details="details"
-            whiteQRIcon
-        />
+    <div class="row q-pt-sm q-mx-md q-mb-none items-center non-selectable" style="height: 44px;">
+
+        <div class="col-8">
+            <q-icon name="call_received" size="24px" /> Receive Arqma
+        </div>
+
+        <div class="col-4">
+        </div>
+
+    </div>
+
+    <q-list link no-border :dark="theme=='dark'">
+
+        <q-list-header>My primary address</q-list-header>
+        <q-item v-for="(address, index) in address_list.primary" @click.native="details(address)">
+        <q-item-side>
+            <div class="wallet-icon">
+                   <svg width="48" viewBox="0 0 17 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-wallet"><defs class="si-glyph-fill"></defs><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(1.000000, 0.000000)" fill="#434343"><path d="M7.988,10.635 L7.988,8.327 C7.988,7.578 8.561,6.969 9.267,6.969 L13.964,6.969 L13.964,5.531 C13.964,4.849 13.56,4.279 13.007,4.093 L13.007,4.094 L11.356,4.08 L11.336,4.022 L3.925,4.022 L3.784,4.07 L1.17,4.068 L1.165,4.047 C0.529,4.167 0.017,4.743 0.017,5.484 L0.017,13.437 C0.017,14.269 0.665,14.992 1.408,14.992 L12.622,14.992 C13.365,14.992 13.965,14.316 13.965,13.484 L13.965,12.031 L9.268,12.031 C8.562,12.031 7.988,11.384 7.988,10.635 L7.988,10.635 Z" class="si-glyph-fill"></path><path d="M14.996,8.061 L14.947,8.061 L9.989,8.061 C9.46,8.061 9.031,8.529 9.031,9.106 L9.031,9.922 C9.031,10.498 9.46,10.966 9.989,10.966 L14.947,10.966 L14.996,10.966 C15.525,10.966 15.955,10.498 15.955,9.922 L15.955,9.106 C15.955,8.528 15.525,8.061 14.996,8.061 L14.996,8.061 Z M12.031,10.016 L9.969,10.016 L9.969,9 L12.031,9 L12.031,10.016 L12.031,10.016 Z" class="si-glyph-fill"></path><path d="M3.926,4.022 L10.557,1.753 L11.337,4.022 L12.622,4.022 C12.757,4.022 12.885,4.051 13.008,4.092 L11.619,0.051 L1.049,3.572 L1.166,4.048 C1.245,4.033 1.326,4.023 1.408,4.023 L3.926,4.023 L3.926,4.022 Z" class="si-glyph-fill"></path></g></g></svg>
+            </div>
+            </q-item-side>
+            <q-item-main>
+                <q-item-tile class="monospace ellipsis" label>{{ address.address }}</q-item-tile>
+                <q-item-tile sublabel>Primary address</q-item-tile>
+            </q-item-main>
+            <q-item-side>
+                <q-btn
+                    color="primary" style="width:25px;"
+                    size="sm" icon="file_copy"
+                    @click="copyAddress(address.address, $event)">
+                    <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
+                        Copy address
+                    </q-tooltip>
+                </q-btn>
+            </q-item-side>
+
+            <q-context-menu>
+                <q-list link separator style="min-width: 150px; max-height: 300px;">
+                    <q-item v-close-overlay
+                            @click.native="details(address)">
+                        <q-item-main label="Show details" />
+                    </q-item>
+
+                    <q-item v-close-overlay
+                            @click.native="copyAddress(address.address, $event)">
+                        <q-item-main label="Copy address" />
+                    </q-item>
+
+                    <q-item v-close-overlay
+                            @click.native="$refs.primaryIdenticon[0].saveIdenticon()">
+                        <q-item-main label="Save identicon to file" />
+                    </q-item>
+                </q-list>
+            </q-context-menu>
+
+        </q-item>
 
         <template v-if="address_list.used.length">
-            <q-list-header>{{ $t("strings.addresses.myUsedAddresses") }}</q-list-header>
-            <receive-item
-                v-for="address in address_list.used"
-                :key="address.address"
-                :address="address"
-                :sublabel="`${$t('strings.addresses.subAddress')} (${$t('strings.addresses.subAddressIndex', { index: address.address_index })})`"
-                :showQR="showQR"
-                :copyAddress="copyAddress"
-                :details="details"
-            />
+            <q-list-header>My used addresses</q-list-header>
+            <q-item v-for="(address, index) in address_list.used" @click.native="details(address)">
+            <q-item-side>
+                <div class="wallet-icon">
+                       <svg width="48" viewBox="0 0 17 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-wallet"><defs class="si-glyph-fill"></defs><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(1.000000, 0.000000)" fill="#434343"><path d="M7.988,10.635 L7.988,8.327 C7.988,7.578 8.561,6.969 9.267,6.969 L13.964,6.969 L13.964,5.531 C13.964,4.849 13.56,4.279 13.007,4.093 L13.007,4.094 L11.356,4.08 L11.336,4.022 L3.925,4.022 L3.784,4.07 L1.17,4.068 L1.165,4.047 C0.529,4.167 0.017,4.743 0.017,5.484 L0.017,13.437 C0.017,14.269 0.665,14.992 1.408,14.992 L12.622,14.992 C13.365,14.992 13.965,14.316 13.965,13.484 L13.965,12.031 L9.268,12.031 C8.562,12.031 7.988,11.384 7.988,10.635 L7.988,10.635 Z" class="si-glyph-fill"></path><path d="M14.996,8.061 L14.947,8.061 L9.989,8.061 C9.46,8.061 9.031,8.529 9.031,9.106 L9.031,9.922 C9.031,10.498 9.46,10.966 9.989,10.966 L14.947,10.966 L14.996,10.966 C15.525,10.966 15.955,10.498 15.955,9.922 L15.955,9.106 C15.955,8.528 15.525,8.061 14.996,8.061 L14.996,8.061 Z M12.031,10.016 L9.969,10.016 L9.969,9 L12.031,9 L12.031,10.016 L12.031,10.016 Z" class="si-glyph-fill"></path><path d="M3.926,4.022 L10.557,1.753 L11.337,4.022 L12.622,4.022 C12.757,4.022 12.885,4.051 13.008,4.092 L11.619,0.051 L1.049,3.572 L1.166,4.048 C1.245,4.033 1.326,4.023 1.408,4.023 L3.926,4.023 L3.926,4.022 Z" class="si-glyph-fill"></path></g></g></svg>
+                </div>
+                </q-item-side>
+                <q-item-main>
+                    <q-item-tile class="monospace ellipsis" label>{{ address.address }}</q-item-tile>
+                    <q-item-tile sublabel>Sub-address (Index {{ address.address_index }})</q-item-tile>
+                </q-item-main>
+                <q-item-side>
+                    <q-btn
+                        color="primary" style="width:25px;"
+                        size="sm" icon="file_copy"
+                        @click="copyAddress(address.address, $event)">
+                        <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
+                            Copy address
+                        </q-tooltip>
+                    </q-btn>
+                </q-item-side>
+
+                <q-context-menu>
+                    <q-list link separator style="min-width: 150px; max-height: 300px;">
+                        <q-item v-close-overlay
+                                @click.native="details(address)">
+                            <q-item-main label="Show details" />
+                        </q-item>
+
+                        <q-item v-close-overlay
+                                @click.native="copyAddress(address.address, $event)">
+                            <q-item-main label="Copy address" />
+                        </q-item>
+
+                        <q-item v-close-overlay
+                                @click.native="$refs[`${index}-usedIdenticon`][0].saveIdenticon()">
+                            <q-item-main label="Save identicon to file" />
+                        </q-item>
+                    </q-list>
+                </q-context-menu>
+
+            </q-item>
         </template>
 
+
         <template v-if="address_list.unused.length">
-            <q-list-header>{{ $t("strings.addresses.myUnusedAddresses") }}</q-list-header>
-            <receive-item
-                v-for="address in address_list.unused"
-                :key="address.address"
-                :address="address"
-                :sublabel="`${$t('strings.addresses.subAddress')} (${$t('strings.addresses.subAddressIndex', { index: address.address_index })})`"
-                :showQR="showQR"
-                :copyAddress="copyAddress"
-                :details="details"
-                :shouldShowInfo="false"
-            />
+            <q-list-header>My unused addresses</q-list-header>
+            <q-item v-for="(address, index) in address_list.unused" @click.native="details(address)">
+            <q-item-side>
+            <div class="wallet-icon">
+                   <svg width="48" viewBox="0 0 17 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-wallet"><defs class="si-glyph-fill"></defs><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(1.000000, 0.000000)" fill="#434343"><path d="M7.988,10.635 L7.988,8.327 C7.988,7.578 8.561,6.969 9.267,6.969 L13.964,6.969 L13.964,5.531 C13.964,4.849 13.56,4.279 13.007,4.093 L13.007,4.094 L11.356,4.08 L11.336,4.022 L3.925,4.022 L3.784,4.07 L1.17,4.068 L1.165,4.047 C0.529,4.167 0.017,4.743 0.017,5.484 L0.017,13.437 C0.017,14.269 0.665,14.992 1.408,14.992 L12.622,14.992 C13.365,14.992 13.965,14.316 13.965,13.484 L13.965,12.031 L9.268,12.031 C8.562,12.031 7.988,11.384 7.988,10.635 L7.988,10.635 Z" class="si-glyph-fill"></path><path d="M14.996,8.061 L14.947,8.061 L9.989,8.061 C9.46,8.061 9.031,8.529 9.031,9.106 L9.031,9.922 C9.031,10.498 9.46,10.966 9.989,10.966 L14.947,10.966 L14.996,10.966 C15.525,10.966 15.955,10.498 15.955,9.922 L15.955,9.106 C15.955,8.528 15.525,8.061 14.996,8.061 L14.996,8.061 Z M12.031,10.016 L9.969,10.016 L9.969,9 L12.031,9 L12.031,10.016 L12.031,10.016 Z" class="si-glyph-fill"></path><path d="M3.926,4.022 L10.557,1.753 L11.337,4.022 L12.622,4.022 C12.757,4.022 12.885,4.051 13.008,4.092 L11.619,0.051 L1.049,3.572 L1.166,4.048 C1.245,4.033 1.326,4.023 1.408,4.023 L3.926,4.023 L3.926,4.022 Z" class="si-glyph-fill"></path></g></g></svg>
+            </div>
+            </q-item-side>
+                <q-item-main>
+                    <q-item-tile class="monospace ellipsis" label>{{ address.address }}</q-item-tile>
+                    <q-item-tile sublabel>Sub-address (Index {{ address.address_index }})</q-item-tile>
+                </q-item-main>
+                <q-item-side>
+                    <q-btn
+                        color="primary" style="width:25px;"
+                        size="sm" icon="file_copy"
+                        @click="copyAddress(address.address, $event)">
+                        <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
+                            Copy address
+                        </q-tooltip>
+                    </q-btn>
+                </q-item-side>
+
+                <q-context-menu>
+                    <q-list link separator style="min-width: 150px; max-height: 300px;">
+                        <q-item v-close-overlay
+                                @click.native="details(address)">
+                            <q-item-main label="Show details" />
+                        </q-item>
+
+                        <q-item v-close-overlay
+                                @click.native="copyAddress(address.address, $event)">
+                            <q-item-main label="Copy address" />
+                        </q-item>
+
+                        <q-item v-close-overlay
+                                @click.native="$refs[`${index}-unusedIdenticon`][0].saveIdenticon()">
+                            <q-item-main label="Save identicon to file" />
+                        </q-item>
+                    </q-list>
+                </q-context-menu>
+
+           </q-item>
         </template>
 
     </q-list>
     <AddressDetails ref="addressDetails" />
-
-    <!-- QR Code -->
-    <template v-if="QR.address != null">
-        <q-modal v-model="QR.visible" minimized :content-css="{padding: '25px'}">
-
-            <div class="text-center q-mb-sm q-pa-md" style="background: white;">
-                <qrcode-vue :value="QR.address" size="240" ref="qr">
-                </qrcode-vue>
-                <q-context-menu>
-                    <q-list link separator style="min-width: 150px; max-height: 300px;">
-                        <q-item v-close-overlay @click.native="copyQR()">
-                            <q-item-main :label="$t('menuItems.copyQR')" />
-                        </q-item>
-                        <q-item v-close-overlay @click.native="saveQR()">
-                            <q-item-main :label="$t('menuItems.saveQR')" />
-                        </q-item>
-                    </q-list>
-                </q-context-menu>
-            </div>
-
-            <q-btn
-                 color="primary"
-                 @click="QR.visible = false"
-                 :label="$t('buttons.close')"
-             />
-        </q-modal>
-    </template>
 </q-page>
 </template>
 
+<style>
+</style>
+
 <script>
-
-const { clipboard, nativeImage } = require("electron")
+const { clipboard } = require("electron")
 import { mapState } from "vuex"
-import QrcodeVue from "qrcode.vue";
+import Identicon from "components/identicon"
 import AddressDetails from "components/address_details"
-import ReceiveItem from "components/receive_item"
-
 export default {
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
         address_list: state => state.gateway.wallet.address_list
     }),
-    filters: {
-        toString: function (value) {
-            if (typeof value !== "number") return "N/A";
-            return String(value);
-        },
-        currency: function (value) {
-            if (typeof value !== "number") return "N/A";
-
-            const amount = value / 1e9
-            return amount.toLocaleString()
-        }
-    },
-    data () {
-        return {
-            QR: {
-                visible: false,
-                address: null,
-            }
-        }
-    },
     methods: {
         details (address) {
-            console.log(address)
             this.$refs.addressDetails.address = address;
             this.$refs.addressDetails.isVisible = true;
-        },
-        showQR (address, event) {
-            event.stopPropagation()
-            this.QR.visible = true
-            this.QR.address = address
-        },
-        copyQR () {
-            const data = this.$refs.qr.$el.childNodes[0].toDataURL()
-            const img = nativeImage.createFromDataURL(data)
-            clipboard.writeImage(img)
-             this.$q.notify({
-                type: "positive",
-                timeout: 1000,
-                message: this.$t("notification.positive.qrCopied")
-            })
-        },
-        saveQR () {
-            let img = this.$refs.qr.$el.childNodes[0].toDataURL()
-            this.$gateway.send("core", "save_png", {img, type: "QR Code"})
         },
         copyAddress (address, event) {
             event.stopPropagation()
@@ -144,52 +183,13 @@ export default {
             this.$q.notify({
                 type: "positive",
                 timeout: 1000,
-                message: this.$t("notification.positive.addressCopied")
+                message: "Address copied to clipboard"
             })
         }
     },
     components: {
+        Identicon,
         AddressDetails,
-        QrcodeVue,
-        ReceiveItem
     }
 }
 </script>
-
-<style lang="scss">
-.receive {
-    .q-item-label {
-        font-weight: 400;
-    }
-
-    .q-item-sublabel, .q-list-header {
-        font-size: 13px;
-    }
-
-    .arqma-list-item {
-        cursor: pointer;
-
-        .q-item {
-            padding-top: 4px;
-            padding-bottom: 4px;
-        }
-
-        .q-item-side {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .info {
-            span {
-                font-size: 14px;
-            }
-
-             .value {
-                font-size: 16px;
-                font-weight: bold;
-            }
-        }
-    }
-}
-</style>
