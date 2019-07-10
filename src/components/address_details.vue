@@ -10,10 +10,10 @@
                 icon="reply"
                 />
             <q-toolbar-title>
-                Address details
+                {{ $t("titles.addressDetails") }}
             </q-toolbar-title>
-            <q-btn flat @click="isQRCodeVisible = true" label="Show QR Code" />
-            <q-btn class="q-ml-sm" color="primary" @click="copyAddress()" label="Copy address" />
+            <q-btn flat @click="isQRCodeVisible = true" :label="$t('buttons.showQRCode')" />
+            <q-btn class="q-ml-sm" color="primary" @click="copyAddress()" :label="$t('buttons.copyAddress')" />
         </q-toolbar>
 
         <div class="layout-padding">
@@ -21,8 +21,9 @@
             <template v-if="address != null">
 
                 <AddressHeader :address="address.address"
-                               :title="address.address_index == 0 ? 'Primary address' : 'Sub-address (Index '+address.address_index+')'"
-                               :extra="'You have '+(address.used?'used':'not used')+' this address'"
+                               :title="addressHeaderInfo.title"
+                               :extra="addressHeaderInfo.extra"
+                               :showCopy="false"
                                />
 
 
@@ -31,21 +32,21 @@
 
                         <div class="infoBox">
                             <div class="infoBoxContent">
-                                <div class="text"><span>Balance</span></div>
-                                <div class="value"><span><FormatRyo :amount="address.balance" /></span></div>
+                                <div class="text"><span>{{ $t("strings.arqmaBalance") }}</span></div>
+                                <div class="value"><span><FormatArqma :amount="address.balance" /></span></div>
                             </div>
                         </div>
 
                         <div class="infoBox">
                             <div class="infoBoxContent">
-                                <div class="text"><span>Unlocked balance</span></div>
-                                <div class="value"><span><FormatRyo :amount="address.unlocked_balance" /></span></div>
+                                <div class="text"><span>{{ $t("strings.arqmaUnlockedBalance") }}</span></div>
+                                <div class="value"><span><FormatArqma :amount="address.unlocked_balance" /></span></div>
                             </div>
                         </div>
 
                         <div class="infoBox">
                             <div class="infoBoxContent">
-                                <div class="text"><span>Number of unspent outputs</span></div>
+                                <div class="text"><span>{{ $t("strings.numberOfUnspentOutputs") }}</span></div>
                                 <div class="value"><span>{{ address.num_unspent_outputs }}</span></div>
                             </div>
                         </div>
@@ -57,21 +58,21 @@
 
                         <div class="infoBox">
                             <div class="infoBoxContent">
-                                <div class="text"><span>Balance</span></div>
+                                <div class="text"><span>{{ $t("strings.arqmaBalance") }}</span></div>
                                 <div class="value"><span>N/A</span></div>
                             </div>
                         </div>
 
                         <div class="infoBox">
                             <div class="infoBoxContent">
-                                <div class="text"><span>Unlocked balance</span></div>
+                                <div class="text"><span>{{ $t("strings.arqmaUnlockedBalance") }}</span></div>
                                 <div class="value"><span>N/A</span></div>
                             </div>
                         </div>
 
                         <div class="infoBox">
                             <div class="infoBoxContent">
-                                <div class="text"><span>Number of unspent outputs</span></div>
+                                <div class="text"><span>{{ $t("strings.numberOfUnspentOutputs") }}</span></div>
                                 <div class="value"><span>N/A</span></div>
                             </div>
                         </div>
@@ -83,11 +84,11 @@
 
                     <div class="non-selectable">
                         <q-icon name="history" size="24px" />
-                        <span class="vertical-middle q-ml-xs">Recent incoming transactions to this address</span>
+                        <span class="vertical-middle q-ml-xs">{{ $t("strings.recentIncomingTransactionsToAddress") }}</span>
                     </div>
 
                     <div style="margin: 0 -16px;">
-                        <TxList type="in" :limit="5" :to-incoming-address-index="address.address_index" />
+                        <TxList type="all_in" :limit="5" :to-incoming-address-index="address.address_index" :key="address.address"/>
                     </div>
 
                 </div>
@@ -106,8 +107,11 @@
                 </qrcode-vue>
                 <q-context-menu>
                     <q-list link separator style="min-width: 150px; max-height: 300px;">
+                        <q-item v-close-overlay @click.native="copyQR()">
+                            <q-item-main :label="$t('menuItems.copyQR')" />
+                        </q-item>
                         <q-item v-close-overlay @click.native="saveQR()">
-                            <q-item-main label="Save QR code to file" />
+                            <q-item-main :label="$t('menuItems.saveQR')" />
                         </q-item>
                     </q-list>
                 </q-context-menu>
@@ -116,7 +120,7 @@
             <q-btn
                  color="primary"
                  @click="isQRCodeVisible = false"
-                 label="Close"
+                 :label="$t('buttons.close')"
              />
         </q-modal>
     </template>
@@ -126,14 +130,29 @@
 
 <script>
 import { mapState } from "vuex"
-const {clipboard} = require("electron")
+const { clipboard, nativeImage } = require("electron")
 import AddressHeader from "components/address_header"
-import FormatRyo from "components/format_ryo"
+import FormatArqma from "components/format_arqma"
 import QrcodeVue from "qrcode.vue";
 import TxList from "components/tx_list"
 export default {
     name: "AddressDetails",
     computed: mapState({
+        addressHeaderInfo (state) {
+            if (!this.address) return null
+
+            let title = this.$t('strings.addresses.primaryAddress')
+            if (this.address.address_index !== 0) {
+                title = this.$t('strings.addresses.subAddress') + ' (' + this.$t('strings.addresses.subAddressIndex', { index: this.address.address_index}) + ')'
+            }
+
+            const extra = this.address.used ? this.$t('strings.userUsedAddress') : this.$t('strings.userNotUsedAddress')
+
+            return {
+                title,
+                extra
+            }
+        }
     }),
     data () {
         return {
@@ -143,6 +162,16 @@ export default {
         }
     },
     methods: {
+         copyQR () {
+            const data = this.$refs.qr.$el.childNodes[0].toDataURL()
+            const img = nativeImage.createFromDataURL(data)
+            clipboard.writeImage(img)
+             this.$q.notify({
+                type: "positive",
+                timeout: 1000,
+                message: this.$t("notification.positive.qrCopied")
+            })
+        },
         saveQR() {
             let img = this.$refs.qr.$el.childNodes[0].toDataURL()
             this.$gateway.send("core", "save_png", {img, type: "QR Code"})
@@ -152,14 +181,14 @@ export default {
             this.$q.notify({
                 type: "positive",
                 timeout: 1000,
-                message: "Address copied to clipboard"
+                message: this.$t("notification.positive.addressCopied")
             })
         }
     },
     components: {
         AddressHeader,
         TxList,
-        FormatRyo,
+        FormatArqma,
         QrcodeVue
     }
 }
