@@ -1,46 +1,47 @@
 <template>
-<div class="tx-list">
+<div>
 
     <template v-if="tx_list_paged.length === 0">
-        <p class="q-pa-md q-mb-none">{{ $t("strings.noTransactionsFound") }}</p>
+        <p class="q-pa-md q-mb-none">No transactions found</p>
     </template>
 
     <template v-else>
         <q-infinite-scroll :handler="loadMore" ref="scroller">
-            <q-list link no-border :dark="theme=='dark'" class="arqma-list tx-list">
-                <q-item class="arqma-list-item transaction" v-for="(tx, index) in tx_list_paged" :key="`${tx.txid}-${tx.type}`"
+            <q-list link no-border :dark="theme=='dark'" class="tx-list">
+                <q-item v-for="(tx, index) in tx_list_paged" :key="tx.txid"
                         @click.native="details(tx)" :class="'tx-'+tx.type">
-                    <q-item-side class="type">
-                        <div>{{ tx.type | typeToString }}</div>
+                    <q-item-side>
+                        <TxTypeIcon :type="tx.type" />
                     </q-item-side>
-                    <q-item-main class="main">
-                        <q-item-tile class="amount" label>
-                            <FormatArqma :amount="tx.amount" />
-                        </q-item-tile>
-                        <q-item-tile sublabel>{{ tx.txid }}</q-item-tile>
-                    </q-item-main>
-                    <q-item-side class="meta">
-                        <q-item-tile label>
-                            <timeago :datetime="tx.timestamp*1000" :auto-update="60" :locale="$i18n.locale"/>
-                        </q-item-tile>
+                    <q-item-main>
+                        <q-item-tile class="monospace ellipsis" label>{{ tx.txid }}</q-item-tile>
                         <q-item-tile sublabel>{{ formatHeight(tx) }}</q-item-tile>
+                    </q-item-main>
+                    <q-item-side>
+                        <q-item-tile label>
+                            <FormatRyo :amount="tx.amount" />
+                        </q-item-tile>
+                        <q-item-tile sublabel>
+                            <timeago :datetime="tx.timestamp*1000" :auto-update="60">
+                            </timeago>
+                        </q-item-tile>
                     </q-item-side>
 
                     <q-context-menu>
                         <q-list link separator style="min-width: 150px; max-height: 300px;">
                             <q-item v-close-overlay
                                     @click.native="details(tx)">
-                                <q-item-main :label="$t('menuItems.showDetails')" />
+                                <q-item-main label="Show details" />
                             </q-item>
 
                             <q-item v-close-overlay
                                     @click.native="copyTxid(tx.txid, $event)">
-                                <q-item-main :label="$t('menuItems.copyTransactionId')" />
+                                <q-item-main label="Copy transaction id" />
                             </q-item>
 
                             <q-item v-close-overlay
                                     @click.native="openExplorer(tx.txid)">
-                                <q-item-main :label="$t('menuItems.viewOnExplorer')" />
+                                <q-item-main label="View on explorer" />
                             </q-item>
                         </q-list>
                     </q-context-menu>
@@ -63,9 +64,7 @@ import { QSpinnerDots } from "quasar"
 import Identicon from "components/identicon"
 import TxTypeIcon from "components/tx_type_icon"
 import TxDetails from "components/tx_details"
-import FormatArqma from "components/format_arqma"
-import { i18n } from "plugins/i18n"
-
+import FormatRyo from "components/format_ryo"
 export default {
     name: "TxList",
     props: {
@@ -79,7 +78,7 @@ export default {
             required: false,
             default: "all"
         },
-        filter: {
+        txid: {
             type: String,
             required: false,
             default: ""
@@ -106,8 +105,7 @@ export default {
         theme: state => state.gateway.app.config.appearance.theme,
         current_height: state => state.gateway.daemon.info.height,
         wallet_height: state => state.gateway.wallet.info.height,
-        tx_list: state => state.gateway.wallet.transactions.tx_list,
-        address_book: state => state.gateway.wallet.address_list.address_book
+        tx_list: state => state.gateway.wallet.transactions.tx_list
     }),
     created () {
         this.filterTxList()
@@ -122,12 +120,8 @@ export default {
             }
         },
         tx_list: {
-            handler(val, old ) {
-                // Check if anything changed in the tx list
-                if(val.length == old.length) {
-                    const changed = val.filter((v, i) => v.note !== old[i].note)
-                    if (changed.length === 0) return
-                }
+            handler(val, old){
+                if(val.length == old.length) return
                 this.filterTxList()
                 this.pageTxList()
             }
@@ -145,7 +139,7 @@ export default {
                 this.pageTxList()
             }
         },
-        filter: {
+        txid: {
             handler(val, old){
                 if(val == old) return
                 if(this.$refs.scroller) {
@@ -159,50 +153,17 @@ export default {
             }
         },
     },
-    filters: {
-        typeToString: function (value) {
-            switch (value) {
-                case "in":
-                    return i18n.t("strings.transactions.received")
-                case "out":
-                    return i18n.t("strings.transactions.sent")
-                case "failed":
-                    return i18n.t("strings.transactions.types.failed")
-                case "pending":
-                case "pool":
-                    return i18n.t("strings.transactions.types.pending")
-                default:
-                    return "-"
-            }
-        }
-    },
     methods: {
         filterTxList () {
-            const all_in = ["in", "pool", "miner", "snode", "gov"]
-            const all_out = ["out", "pending", "stake"]
-            const all_pending = ["pending", "pool"]
             this.tx_list_filtered = this.tx_list.filter((tx) => {
                 let valid = true
-
-                if (this.type === "all_in" && !all_in.includes(tx.type)) {
-                    return false
-                }
-
-                if (this.type === "all_out" && !all_out.includes(tx.type)) {
-                    return false
-                }
-
-                if (this.type === "all_pending" && !all_pending.includes(tx.type)) {
-                    return false
-                }
-
-                if(!this.type.startsWith("all") && this.type !== tx.type) {
+                if(this.type !== "all" && this.type !== tx.type) {
                     valid = false
                     return valid
                 }
 
-                if(this.filter !== "") {
-                    valid = this.txContains(tx, this.filter)
+                if(this.txid !== "") {
+                    valid = tx.txid.toLowerCase().indexOf(this.txid.toLowerCase()) !== -1
                     return valid
                 }
 
@@ -222,25 +183,6 @@ export default {
 
                 return valid
             })
-        },
-        txContains(tx, value) {
-            // The tx can be searchable using:
-            // id, address, notes, amount, recipient name
-            const fields = [tx.txid, tx.note]
-
-            const formattedAmount = tx.amount / 1e9
-            fields.push(String(formattedAmount))
-
-            // Get all addresses and names and add them on
-            const destinations = (tx.destinations || []).map(d => d.address)
-            const addresses = [tx.address, ...destinations]
-            const contacts = addresses.map(this.getContact).filter(c => !!c).map(c => c.name)
-            fields.push(...addresses, ...contacts)
-
-            return !!fields.find(f => f.toLowerCase().includes(value.toLowerCase()))
-        },
-        getContact(address) {
-            return this.address_book.find(book => book.address === address)
         },
         pageTxList () {
             this.tx_list_paged = this.tx_list_filtered.slice(0, this.limit !== -1 ? this.limit : this.page * 24 + 24)
@@ -264,11 +206,11 @@ export default {
             let height = tx.height;
             let confirms = Math.max(0, this.wallet_height - height);
             if(height == 0)
-                return this.$t("strings.transactions.types.pending")
+                return "Pending"
             if(confirms < Math.max(10, tx.unlock_time - height))
-                return this.$t("strings.blockHeight") + `: ${height} (${confirms} confirm${confirms==1?'':'s'})`
+                return `Height: ${height} (${confirms} confirm${confirms==1?'':'s'})`
             else
-                return this.$t("strings.blockHeight") + `: ${height} (${this.$t("strings.transactionConfirmed")})`
+                return `Height: ${height} (confirmed)`
         },
         copyTxid (txid, event) {
             event.stopPropagation()
@@ -282,7 +224,7 @@ export default {
             this.$q.notify({
                 type: "positive",
                 timeout: 1000,
-                message: this.$t("notification.positive.copied", { item: "Txid" })
+                message: "Txid copied to clipboard"
             })
         },
         openExplorer (txid) {
@@ -294,34 +236,10 @@ export default {
         Identicon,
         TxTypeIcon,
         TxDetails,
-        FormatArqma
+        FormatRyo
     }
 }
 </script>
 
 <style lang="scss">
-.tx-list {
-    .arqma-list-item {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    .transaction {
-        .main {
-            margin: 0;
-            padding: 8px 10px;
-            div {
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        .type {
-
-            div {
-                min-width: 100px;
-                margin-right: 8px;
-            }
-        }
-    }
-}
 </style>
