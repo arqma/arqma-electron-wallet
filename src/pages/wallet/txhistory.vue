@@ -36,12 +36,12 @@ export default {
             tx_type: "all",
             tx_txid: "",
             tx_type_options: [
-                {label: "All", value: "all"},
-                {label: "Incoming", value: "in"},
-                {label: "Outgoing", value: "out"},
-                {label: "Pending incoming", value: "pool"},
-                {label: "Pending outgoing", value: "pending"},
-                {label: "Failed", value: "failed"},
+                {label: this.$t("strings.transactions.types.all"), value: "all"},
+                {label: this.$t("strings.transactions.types.incoming"), value: "in"},
+                {label: this.$t("strings.transactions.types.outgoing"), value: "out"},
+                {label: this.$t("strings.transactions.types.pendingIncoming"), value: "pool"},
+                {label: this.$t("strings.transactions.types.pendingOutgoing"), value: "pending"},
+                {label: this.$t("strings.transactions.types.failed"), value: "failed"},
             ]
 
         }
