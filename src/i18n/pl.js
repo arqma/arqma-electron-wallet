@@ -432,7 +432,7 @@ export default {
             timestamp: "Znak czasu",
             types: {
                 all: "Wszystkie",
-                incoming: "przychodzące",
+                incoming: "Przychodzące",
                 outgoing: "Wychodzące",
                 pending: "Oczekujące",
                 pendingIncoming: "Oczekujące przychodzące",
