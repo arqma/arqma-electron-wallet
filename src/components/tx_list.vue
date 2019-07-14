@@ -16,10 +16,11 @@
                     <q-item-main>
                         <q-item-tile class="monospace ellipsis" label>{{ tx.txid }}</q-item-tile>
                         <q-item-tile sublabel>{{ formatHeight(tx) }}</q-item-tile>
+
                     </q-item-main>
                     <q-item-side>
                         <q-item-tile label>
-                            <FormatRyo :amount="tx.amount" />
+                            <FormatRyo :amount="tx.amount" raw-value />
                         </q-item-tile>
                         <q-item-tile sublabel>
                             <timeago :datetime="tx.timestamp*1000" :auto-update="60">
