@@ -187,6 +187,7 @@ footer,
             font-size: 14px;
             margin-top: 8px;
             color: #cecece;
+            text-transform: uppercase;
         }
 
         .value {
@@ -251,8 +252,14 @@ footer,
         }
 
         div {
-            padding: 0 8px;
+        display: inline-block;
+        padding: 0 8px;
         }
+
+        div:last-child {
+        float:right;
+        }
+
     }
 
     .status-bars {
@@ -290,23 +297,27 @@ footer,
 
 .tx-list {
 
-    .meta {
-        text-align:right;
-    }
-
     .q-item.tx-in,
-    .q-item.tx-pool,
-    .q-item.tx-miner,
-    .q-item.tx-snode,
-    .q-item.tx-gov {
-        .amount span {
-            color: #42A5F5;
-            &:before {
-                content: "+";
-                color: #42A5F5;
-            }
+    .q-item.tx-pool {
+        .q-icon {
+            color: #333;
         }
-    }
+        .q-item-label {
+            color: #42A5F5;
+        }
+        &>div:last-child {
+            text-align:right;
+            &>div:first-child {
+                span {
+                    color: #42A5F5;
+                    &:before {
+                        content: "+";
+                        color: #42A5F5;
+                    }
+                }
+            }
+          }
+          }
 
     .q-item.tx-stake {
         .amount span {
@@ -316,15 +327,25 @@ footer,
 
     .q-item.tx-out,
     .q-item.tx-pending {
-        .amount span {
-            color: white;
-            &:before {
-                content: "-";
-                font-weight: bold;
-                color: white;
+    .q-icon {
+        color: #333;
+    }
+    .q-item-label {
+        color: gold;
+    }
+    &>div:last-child {
+        text-align:right;
+        &>div:first-child {
+            span {
+                color: gold;
+                &:before {
+                    content: "-";
+                    color: gold;
+                }
             }
         }
     }
+}
 
     .q-item.tx-failed {
         .amount span {

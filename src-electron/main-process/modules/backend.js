@@ -234,7 +234,7 @@ export class Backend {
             }
 
             if (path) {
-                const baseUrl = net_type === "testnet" ? "https://stageblocks.arqma.com/" : "https://blocks.arqma.com"
+                const baseUrl = net_type === "testnet" ? "https://stageblocks.arqma.com/" : "https://vision.arqma.com/#"
                 const url = `${baseUrl}/${path}/`
                 require("electron").shell.openExternal(url + params.id)
             }
