@@ -53,7 +53,7 @@
 <script>
 import { required } from "vuelidate/lib/validators"
 import { mapState } from "vuex"
-import ArqmaField from "components/Arqma_field"
+import ArqmaField from "components/arqma_field"
 export default {
     data () {
         return {
