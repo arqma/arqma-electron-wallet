@@ -1,6 +1,6 @@
 <template>
 <div v-if="visible" class="q-loading animate-fade fullscreen column flex-center">
-    <q-spinner color="white" size="80px" />
+    <q-spinner color="blue" size="80px" />
     <div v-if="textVisible" class="text-white">
         {{ message }}
     </div>
