@@ -2,6 +2,7 @@ export default {
     buttons: {
         // All button text is uppercased in the gui
         advanced: "ADVANCED",
+        addressBook: "ADDRESS BOOK",
         all: "ALL",
         back: "BACK",
         browse: "BROWSE",
@@ -38,8 +39,10 @@ export default {
         showTxDetails: "SHOW TX DETAILS",
         stake: "STAKE",
         sweepAll: "SWEEP ALL",
+        txHistory: "TX HISTORY",
         unlock: "UNLOCK",
-        viewOnExplorer: "VIEW ON EXPLORER"
+        viewOnExplorer: "VIEW ON EXPLORER",
+        wallet: "WALLET"
     },
     dialog: {
         // Generic buttons
@@ -335,7 +338,8 @@ export default {
         selectAFile: "Please select a file",
         transactionNotes: "Additional notes to attach to the transaction",
         walletName: "A name for your wallet",
-        walletPassword: "An optional password for the wallet"
+        walletPassword: "An optional password for the wallet",
+        operations: "Wallet actions"
     },
     strings: {
         addAddressBookEntry: "Add address book entry",

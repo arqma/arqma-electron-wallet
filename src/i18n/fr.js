@@ -2,6 +2,7 @@ export default {
     buttons: {
         // All button text is uppercased in the gui
         advanced: "ADVANCED",
+        addressBook: "CARNET D'ADRESSES",
         all: "TOUT",
         back: "RETOUR",
         browse: "NAVIGUER",
@@ -38,8 +39,10 @@ export default {
         showTxDetails: "AFFICHER LES DETAILS DE TRANSACTION",
         stake: "STAKE",
         sweepAll: "TOUT BALAYER",
-        unlock: "UNLOCK",
-        viewOnExplorer: "VUE SUR L’EXPLORATEUR"
+        unlock: "OUVRIR",
+        txHistory: "HISTOIRE DE TX",
+        viewOnExplorer: "VUE SUR L’EXPLORATEUR",
+        wallet: "PORTEFEUILLE"
     },
     dialog: {
         // Generic buttons
@@ -336,7 +339,8 @@ export default {
         selectAFile: "Veuillez sélectionner un fichier",
         transactionNotes: "Notes additionnelles attachées à la transaction",
         walletName: "Un nom pour votre portefeuille",
-        walletPassword: "Un mot de passe optionnel pour votre portefeuille"
+        walletPassword: "Un mot de passe optionnel pour votre portefeuille",
+        operations: "Actions de portefeuille"
     },
     strings: {
         addAddressBookEntry: "Ajoutez une entrée de carnet d'adresses",

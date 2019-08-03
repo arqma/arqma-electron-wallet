@@ -2,6 +2,7 @@ export default {
     buttons: {
         // All button text is uppercased in the gui
         advanced: "ZAAWANSOWANE",
+        addressBook: "KSIĄŻKA ADRESOWA",
         all: "WSZYSTKIE",
         back: "POWRÓT",
         browse: "PRZEGLĄDAJ",
@@ -38,8 +39,11 @@ export default {
         showTxDetails: "POKAŻ SZCZEGÓŁY TX",
         stake: "STAKE",
         sweepAll: "WYŚLIJ WSZYSTKIE",
+        txHistory: "HISTORIA TX",
         unlock: "ODBLOKUJ",
-        viewOnExplorer: "ZOBACZ W EXPLORER"
+        viewOnExplorer: "ZOBACZ W EXPLORER",
+        wallet: "PORTFEL"
+
     },
     dialog: {
         // Generic buttons
@@ -335,7 +339,8 @@ export default {
         selectAFile: "Wybierz plik",
         transactionNotes: "Dodatkowe uwagi do dołączenia do transakcji",
         walletName: "Nazwa twojego portfela",
-        walletPassword: "Opcjonalne hasło do portfela"
+        walletPassword: "Opcjonalne hasło do portfela",
+        operations: "Operacje"
     },
     strings: {
         addAddressBookEntry: "Dodaj wpis książki adresowej",

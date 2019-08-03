@@ -2,6 +2,7 @@ export default {
     buttons: {
         // All button text is uppercased in the gui
         advanced: "ADVANCED",
+        addressBook: "DIRECTORIO",
         all: "TODO",
         back: "ATRÁS",
         browse: "EXAMINAR",
@@ -38,8 +39,10 @@ export default {
         showTxDetails: "MOSTRAR DETALLES DE LA TRANSACCIÓN",
         stake: "RETENER PARTICIPACIÓN",
         sweepAll: "TRANSFERIR/BARRER TODO",
-        unlock: "UNLOCK",
-        viewOnExplorer: "VER EN EL EXPLORADOR"
+        unlock: "DESBLOQUEAR",
+        txHistory: "HISTORIA DE TX",
+        viewOnExplorer: "VER EN EL EXPLORADOR",
+        wallet: "BILLETERA"
     },
     dialog: {
         // Generic buttons
@@ -335,7 +338,8 @@ export default {
         selectAFile: "Seleccione un archivo por favor",
         transactionNotes: "Notas adicionales para agregar a la transacción",
         walletName: "Nombre para identificar su monedero",
-        walletPassword: "Contraseña opcional para proteger su monedero"
+        walletPassword: "Contraseña opcional para proteger su monedero",
+        operations: "Acciones de billetera"
     },
     strings: {
         addAddressBookEntry: "Agregar registro a la libreta de direcciones",
