@@ -3,12 +3,13 @@ import enUS from "./en-us"
 // ADD LANGUAGES HERE
 const languages = [
     { name: "English", code: "en-us", flag: "gb" },
-    { name: "Russian", code: "ru", flag: "ru" },
-    { name: "German", code: "de", flag: "de" },
-    { name: "French", code: "fr", flag: "fr" },
-    { name: "Spanish", code: "es", flag: "es" },
-    { name: "Portuguese", code: "pt-br", flag: "pt" },
-    { name: "Polish", code: "pl", flag: "pl" }
+    { name: "中文", code: "ru", flag: "ru" },
+    { name: "русский", code: "cn", flag: "cn" },
+    { name: "Deutsche", code: "de", flag: "de" },
+    { name: "Français", code: "fr", flag: "fr" },
+    { name: "Español", code: "es", flag: "es" },
+    { name: "Português", code: "pt-br", flag: "pt" },
+    { name: "Polski", code: "pl", flag: "pl" }
 ]
 
 export { languages }

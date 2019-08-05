@@ -40,7 +40,7 @@ export default {
         stake: "STAKE",
         sweepAll: "ALLES BEREINIGEN",
         unlock: "FREISCHALTEN",
-        txHistory: "TX GESCHICHTE",
+        txHistory: "TRANSAKTIONEN",
         viewOnExplorer: "IN EXPLORER ANZEIGEN",
         wallet: "BRIEFTASCHE"
     },
