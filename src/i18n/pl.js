@@ -137,7 +137,7 @@ export default {
             closeMessage: "Czy na pewno chcesz zamknąć bieżący portfel?",
             restartMessage: "Portfel RPC jest obecnie synchronizowany. \nJeśli chcesz zmienić portfele, musisz ponownie uruchomić aplikację. \nUtracisz postęp synchronizacji i będziesz musiał ponownie przeskanować blockchain."
         },
-        transactionDetails: {
+       transactionDetails: {
             title: "Szczegóły transakcji",
             ok: "ZAMKNIJ"
         },
@@ -480,7 +480,7 @@ export default {
             }
         },
         transactionDetails: "Szczegóły transakcji",
-        transactions: "Transakscje",
+        transactions: "Transakcje",
         wallet: {
             createNew: "Utwórz nowy portfel",
             createdOrRestored: "Portfel utworzony / przywrócony",
