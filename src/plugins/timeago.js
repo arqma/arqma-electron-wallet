@@ -15,7 +15,7 @@ export default ({
             es: require("date-fns/locale/es"),
             pt: require("date-fns/locale/pt"),
             pl: require("date-fns/locale/pl"),
-            cn: require("date-fns/locale/zh-cn")
+            cn: require("date-fns/locale/zh_cn")
         }
     })
 }
