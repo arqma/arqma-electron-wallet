@@ -1,7 +1,8 @@
 export default {
     buttons: {
         // All button text is uppercased in the gui
-        advanced: "ADVANCED",
+        advanced: "ERWEITERT",
+        addressBook: "ADRESSBUCH",
         all: "ALLES",
         back: "ZURÜCK",
         browse: "DURCHSUCHEN",
@@ -38,8 +39,10 @@ export default {
         showTxDetails: "TX DETAILS ANZEIGEN",
         stake: "STAKE",
         sweepAll: "ALLES BEREINIGEN",
-        unlock: "UNLOCK",
-        viewOnExplorer: "IN EXPLORER ANZEIGEN"
+        unlock: "FREISCHALTEN",
+        txHistory: "TRANSAKTIONEN",
+        viewOnExplorer: "IN EXPLORER ANZEIGEN",
+        wallet: "BRIEFTASCHE"
     },
     dialog: {
         // Generic buttons
@@ -334,7 +337,8 @@ export default {
         selectAFile: "Bitte Datei auswählen",
         transactionNotes: "Zusätzliche Notizen die an die Transaktions gehängt werden sollen",
         walletName: "Ein Name für deine Wallet",
-        walletPassword: "Ein optionales Passwort für die Wallet"
+        walletPassword: "Ein optionales Passwort für die Wallet",
+        operations: "Brieftaschenaktionen"
     },
     strings: {
         addAddressBookEntry: "Adressbuch Eintrag hinzufügen",

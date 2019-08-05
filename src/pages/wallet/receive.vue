@@ -4,7 +4,7 @@
     <div class="row q-pt-sm q-mx-md q-mb-none items-center non-selectable" style="height: 44px;">
 
         <div class="col-8">
-            <q-icon name="call_received" size="24px" /> Receive Arqma
+            <q-icon name="call_received" size="24px" /> {{ $t("buttons.receive") }}
         </div>
 
         <div class="col-4">
@@ -14,7 +14,7 @@
 
     <q-list link no-border :dark="theme=='dark'">
 
-        <q-list-header>My primary address</q-list-header>
+        <q-list-header>{{ $t("strings.addresses.myPrimaryAddress") }}</q-list-header>
         <q-item v-for="(address, index) in address_list.primary" @click.native="details(address)">
         <q-item-side>
             <div class="wallet-icon">
@@ -23,7 +23,7 @@
             </q-item-side>
             <q-item-main>
                 <q-item-tile class="monospace ellipsis" label>{{ address.address }}</q-item-tile>
-                <q-item-tile sublabel>Primary address</q-item-tile>
+                <q-item-tile sublabel>{{ $t("strings.addresses.myPrimaryAddress") }}</q-item-tile>
             </q-item-main>
             <q-item-side>
                 <q-btn
@@ -58,7 +58,7 @@
         </q-item>
 
         <template v-if="address_list.used.length">
-            <q-list-header>My used addresses</q-list-header>
+            <q-list-header>{{ $t("strings.addresses.myUsedAddresses") }}</q-list-header>
             <q-item v-for="(address, index) in address_list.used" @click.native="details(address)">
             <q-item-side>
                 <div class="wallet-icon">
@@ -67,7 +67,7 @@
                 </q-item-side>
                 <q-item-main>
                     <q-item-tile class="monospace ellipsis" label>{{ address.address }}</q-item-tile>
-                    <q-item-tile sublabel>Sub-address (Index {{ address.address_index }})</q-item-tile>
+                    <q-item-tile sublabel>{{ $t("strings.addresses.subAddress") }} (Index {{ address.address_index }})</q-item-tile>
                 </q-item-main>
                 <q-item-side>
                     <q-btn
@@ -104,7 +104,7 @@
 
 
         <template v-if="address_list.unused.length">
-            <q-list-header>My unused addresses</q-list-header>
+            <q-list-header>{{ $t("strings.addresses.myUnusedAddresses") }}</q-list-header>
             <q-item v-for="(address, index) in address_list.unused" @click.native="details(address)">
             <q-item-side>
             <div class="wallet-icon">
@@ -113,7 +113,7 @@
             </q-item-side>
                 <q-item-main>
                     <q-item-tile class="monospace ellipsis" label>{{ address.address }}</q-item-tile>
-                    <q-item-tile sublabel>Sub-address (Index {{ address.address_index }})</q-item-tile>
+                    <q-item-tile sublabel>{{ $t("strings.addresses.subAddress") }} (Index {{ address.address_index }})</q-item-tile>
                 </q-item-main>
                 <q-item-side>
                     <q-btn

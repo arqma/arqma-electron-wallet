@@ -5,7 +5,7 @@
            <img src="statics/arqma.svg" width="400" class="q-mb-md">
 
             <div class="q-mt-xl q-mb-lg">
-                <q-spinner color="primary" :size="30" />
+                <q-spinner color="blue" :size="30" />
             </div>
 
             <div class="message">

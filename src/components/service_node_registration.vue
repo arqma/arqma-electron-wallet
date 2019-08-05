@@ -22,7 +22,7 @@
     </div>
 
     <q-inner-loading :visible="registration_status.sending" :dark="theme=='dark'">
-        <q-spinner color="primary" :size="30" />
+        <q-spinner color="blue" :size="30" />
     </q-inner-loading>
 </div>
 </template>

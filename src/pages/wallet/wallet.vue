@@ -8,7 +8,7 @@
         <div class="infoBoxBalance">
             <div class="infoBox">
                 <div class="infoBoxContent">
-                    <div class="text"><span>Balance</span></div>
+                    <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
                     <div class="value"><span><FormatArqma :amount="info.balance" /></span></div>
                 </div>
             </div>
@@ -17,45 +17,44 @@
         <div>
             <div class="infoBox">
                 <div class="infoBoxContent">
-                    <div class="text"><span>Unlocked balance</span></div>
+                    <q-item-tile label>{{ $t("strings.arqmaUnlockedBalance") }}</q-item-tile>
                     <div class="value"><span><FormatArqma :amount="info.unlocked_balance" /></span></div>
                 </div>
             </div>
         </div>
-
         <div class="col text-right q-mr-sm">
-            <div class="infoBox q-pt-md">
-                <q-btn icon-right="more_vert" label="Wallet actions" size="md" flat>
+            <div class="infoBox">
+            <q-item-tile icon-right="more_vert" label>{{ $t("placeholders.operations") }} : </q-item-tile>
                     <q-popover anchor="bottom right" self="top right">
                         <q-list separator link>
                             <q-item :disabled="!is_ready"
                                     v-close-overlay @click.native="getPrivateKeys()">
                                 <q-item-main>
-                                    <q-item-tile label>Show Private Keys</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.showPrivateKeys") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
                                     v-close-overlay @click.native="showModal('change_password')">
                                 <q-item-main>
-                                    <q-item-tile label>Change Password</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.changePassword") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
                                     v-close-overlay @click.native="showModal('rescan')">
                                 <q-item-main>
-                                    <q-item-tile label>Rescan Wallet</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.rescanWallet") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
                                     v-close-overlay @click.native="showModal('key_image')">
                                 <q-item-main>
-                                    <q-item-tile label>Manage Key Images</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.manageKeyImages") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
                                     v-close-overlay @click.native="deleteWallet()">
                                 <q-item-main>
-                                    <q-item-tile label>Delete Wallet</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.deleteWallet") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                         </q-list>
@@ -66,7 +65,7 @@
 
     </div>
 
-    <h6 class="q-my-none">Recent transactions:</h6>
+    <h6 class="q-my-none">{{ $t("strings.recentTransactionsWithAddress") }}:</h6>
 
     <div style="margin: 0 -16px;">
         <TxList :limit="5" />

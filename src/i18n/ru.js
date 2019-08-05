@@ -1,7 +1,8 @@
 export default {
     buttons: {
         // All button text is uppercased in the gui
-        advanced: "ADVANCED",
+        advanced: "передовой",
+        addressBook: "АДРЕСНАЯ КНИГА",
         all: "ВСЕ",
         back: "НАЗАД",
         browse: "ОБЗОР",
@@ -38,8 +39,10 @@ export default {
         showTxDetails: "ПОКАЗАТЬ ДЕТАЛИ ТРАНЗАКЦИИ",
         stake: "СТЕЙК",
         sweepAll: "SWEEP ALL",
-        unlock: "UNLOCK",
-        viewOnExplorer: "ПОСМОТРЕТЬ В ЭКСПЛОРЕРЕ"
+        unlock: "ОТКРЫТЬ",
+        txHistory: "История TX",
+        viewOnExplorer: "ПОСМОТРЕТЬ В ЭКСПЛОРЕРЕ",
+        wallet: "КОШЕЛЕК"
     },
     dialog: {
         // Generic buttons
@@ -335,7 +338,8 @@ export default {
         selectAFile: "Пожалуйста, выберите файл",
         transactionNotes: "Дополнительные заметки для приосединения к транзакции",
         walletName: "Имя вашего кошелька",
-        walletPassword: "Пароль кошелька (необязательно)"
+        walletPassword: "Пароль кошелька (необязательно)",
+        operations: "Кошелек действия"
     },
     strings: {
         addAddressBookEntry: "Добавить запись в адресную книгу",
