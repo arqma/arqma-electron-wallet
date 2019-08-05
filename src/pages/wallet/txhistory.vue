@@ -4,7 +4,7 @@
     <div class="row q-pt-sm q-mx-md q-mb-sm items-center non-selectable">
 
         <div class="col-5">
-            <q-icon name="history" size="24px" /> Transaction history
+            <q-icon name="history" size="24px" /> {{ $t("titles.transactions") }}
         </div>
 
         <div class="col-5 q-px-sm">

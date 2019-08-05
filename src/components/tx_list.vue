@@ -2,7 +2,7 @@
 <div>
 
     <template v-if="tx_list_paged.length === 0">
-        <p class="q-pa-md q-mb-none">No transactions found</p>
+        <p class="q-pa-md q-mb-none">{{ $t("strings.noTransactionsFound") }}</p>
     </template>
 
     <template v-else>
