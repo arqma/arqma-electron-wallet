@@ -15,75 +15,52 @@
             <q-btn class="q-ml-sm" color="primary" @click="save()" :label="$t('buttons.save')" />
 
         </q-toolbar>
-        <div>
+        <div class="address-book-modal q-mx-md">
+            <ArqmaField :label="$t('fieldLabels.address')" :error="$v.newEntry.address.$error">
+                <q-input
+                    v-model="newEntry.address"
+                    :placeholder="address_placeholder"
+                    @blur="$v.newEntry.address.$touch"
+                    :dark="theme=='dark'"
+                    hide-underline
+                    />
+                <q-checkbox
+                    v-model="newEntry.starred"
+                    checked-icon="star"
+                    unchecked-icon="star_border"
+                    class="star-entry"
+                    dark
+                    />
+            </ArqmaField>
+            <ArqmaField :label="$t('fieldLabels.name')">
+                <q-input
+                    v-model="newEntry.name"
+                    :dark="theme=='dark'"
+                    hide-underline
+                    />
+            </ArqmaField>
+            <ArqmaField :label="$t('fieldLabels.paymentId')" :error="$v.newEntry.payment_id.$error" optional>
+                <q-input
+                    v-model="newEntry.payment_id"
+                    :placeholder="$t('placeholders.hexCharacters', { count: '16 or 64' })"
+                    @blur="$v.newEntry.payment_id.$touch"
+                    :dark="theme=='dark'"
+                    hide-underline
+                    />
+            </ArqmaField>
+            <ArqmaField :label="$t('fieldLabels.notes')" optional>
+                <q-input
+                    v-model="newEntry.description"
+                    :placeholder="$t('placeholders.additionalNotes')"
+                    type="textarea"
+                    :dark="theme=='dark'"
+                    hide-underline
+                    />
+            </ArqmaField>
 
-            <q-list no-border :dark="theme=='dark'">
-
-                <q-item>
-                    <q-item-side>
-                    <div class="wallet-icon">
-                           <svg width="48" viewBox="0 0 17 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-wallet"><defs class="si-glyph-fill"></defs><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(1.000000, 0.000000)" fill="#434343"><path d="M7.988,10.635 L7.988,8.327 C7.988,7.578 8.561,6.969 9.267,6.969 L13.964,6.969 L13.964,5.531 C13.964,4.849 13.56,4.279 13.007,4.093 L13.007,4.094 L11.356,4.08 L11.336,4.022 L3.925,4.022 L3.784,4.07 L1.17,4.068 L1.165,4.047 C0.529,4.167 0.017,4.743 0.017,5.484 L0.017,13.437 C0.017,14.269 0.665,14.992 1.408,14.992 L12.622,14.992 C13.365,14.992 13.965,14.316 13.965,13.484 L13.965,12.031 L9.268,12.031 C8.562,12.031 7.988,11.384 7.988,10.635 L7.988,10.635 Z" class="si-glyph-fill"></path><path d="M14.996,8.061 L14.947,8.061 L9.989,8.061 C9.46,8.061 9.031,8.529 9.031,9.106 L9.031,9.922 C9.031,10.498 9.46,10.966 9.989,10.966 L14.947,10.966 L14.996,10.966 C15.525,10.966 15.955,10.498 15.955,9.922 L15.955,9.106 C15.955,8.528 15.525,8.061 14.996,8.061 L14.996,8.061 Z M12.031,10.016 L9.969,10.016 L9.969,9 L12.031,9 L12.031,10.016 L12.031,10.016 Z" class="si-glyph-fill"></path><path d="M3.926,4.022 L10.557,1.753 L11.337,4.022 L12.622,4.022 C12.757,4.022 12.885,4.051 13.008,4.092 L11.619,0.051 L1.049,3.572 L1.166,4.048 C1.245,4.033 1.326,4.023 1.408,4.023 L3.926,4.023 L3.926,4.022 Z" class="si-glyph-fill"></path></g></g></svg>
-                    </div>
-
-                    </q-item-side>
-                    <q-item-main>
-                        <q-field>
-                            <q-input v-model="newEntry.address" :float-label="$t('fieldLabels.address')"
-                                     @blur="$v.newEntry.address.$touch"
-                                     :error="$v.newEntry.address.$error"
-                                     :dark="theme=='dark'"
-                                     />
-                        </q-field>
-                    </q-item-main>
-                </q-item>
-
-                <q-item>
-                    <q-item-main>
-                        <q-field>
-                            <q-input v-model="newEntry.name" :float-label="$t('fieldLabels.name')" :dark="theme=='dark'" />
-                        </q-field>
-                    </q-item-main>
-                    <q-item-side>
-                        <q-checkbox
-                            v-model="newEntry.starred"
-                            checked-icon="star"
-                            unchecked-icon="star_border"
-                            class="star-entry"
-                            />
-                    </q-item-side>
-                </q-item>
-
-                <q-item>
-                    <q-item-main>
-                        <q-field>
-                            <q-input v-model="newEntry.payment_id" :float-label="$t('strings.paymentID')"
-                                     @blur="$v.newEntry.payment_id.$touch"
-                                     :error="$v.newEntry.payment_id.$error"
-                                     :dark="theme=='dark'"
-                                     />
-                        </q-field>
-                    </q-item-main>
-                </q-item>
-
-                <q-item>
-                    <q-item-main>
-                        <q-field>
-                            <q-input v-model="newEntry.description" type="textarea" :float-label="$t('strings.notes')" :dark="theme=='dark'" />
-                        </q-field>
-                    </q-item-main>
-                </q-item>
-
-
-                <q-item v-if="mode=='edit'">
-                    <q-item-main>
-                        <q-field>
-                            <q-btn class="float-right" color="red" @click="deleteEntry()" :label="$t('buttons.delete')" />
-                        </q-field>
-                    </q-item-main>
-                </q-item>
-
-
-            </q-list>
+            <q-field v-if="mode=='edit'">
+                <q-btn class="float-right" color="red" @click="deleteEntry()" :label="$t('buttons.delete')" />
+            </q-field>
         </div>
     </q-modal-layout>
 
@@ -91,7 +68,7 @@
         <q-toolbar slot="header" color="dark" inverted>
             <q-btn flat round dense icon="reply" @click="close()" />
             <q-toolbar-title>
-                {{ $t("strings.addressBookDetails") }}
+                {{ $t('strings.addressBookDetails') }}
             </q-toolbar-title>
             <q-btn class="q-mr-sm"
                    flat no-ripple
@@ -110,19 +87,17 @@
                 <AddressHeader :address="entry.address"
                                :title="entry.name"
                                :payment_id="entry.payment_id"
-                               :extra="entry.description ? 'Notes: '+entry.description : ''"
+                               :extra="entry.description ? $t('strings.notes')+': '+entry.description : ''"
                                />
-
-
 
                 <div class="q-mt-lg">
 
                     <div class="non-selectable">
                         <q-icon name="history" size="24px" />
-                        <span class="vertical-middle q-ml-xs">{{ $t("strings.recentTransactionsWithAddress") }}</span>
+                        <span class="vertical-middle q-ml-xs">{{ $t('strings.recentTransactionsWithAddress') }}</span>
                     </div>
 
-                    <TxList type="in" :limit="5" :to-outgoing-address="entry.address" />
+                    <TxList type="all_in" :limit="5" :to-outgoing-address="entry.address" :key="entry.address"/>
 
                 </div>
 
@@ -140,6 +115,7 @@ import { mapState } from "vuex"
 import Identicon from "components/identicon"
 import AddressHeader from "components/address_header"
 import TxList from "components/tx_list"
+import ArqmaField from "components/arqma_field"
 import { payment_id, address } from "src/validators/common"
 import { required } from "vuelidate/lib/validators"
 export default {
@@ -164,11 +140,27 @@ export default {
         view_only: state => state.gateway.wallet.info.view_only,
         is_ready (state) {
             return this.$store.getters["gateway/isReady"]
+        },
+        address_placeholder (state) {
+            const wallet = state.gateway.wallet.info;
+            const prefix = (wallet && wallet.address && wallet.address[0]) || "L";
+            return `${prefix}..`;
         }
     }),
     validations: {
         newEntry: {
-            address: { required, address },
+            address: {
+                required,
+                isAddress(value) {
+                    if (value === '') return true
+
+                    return new Promise(resolve => {
+                        address(value, this.$gateway)
+                            .then(() => resolve(true))
+                            .catch(e => resolve(false))
+                    });
+                }
+            },
             payment_id: { payment_id }
         }
     },
@@ -180,7 +172,7 @@ export default {
                 this.$q.notify({
                     type: "negative",
                     timeout: 1000,
-                    message: "Address not valid"
+                    message: this.$t("notification.errors.invalidAddress")
                 })
                 return
             }
@@ -189,7 +181,7 @@ export default {
                 this.$q.notify({
                     type: "negative",
                     timeout: 1000,
-                    message: "Payment id not valid"
+                    message: this.$t("notification.errors.invalidPaymentId")
                 })
                 return
             }
@@ -238,7 +230,8 @@ export default {
     components: {
         AddressHeader,
         Identicon,
-        TxList
+        TxList,
+        ArqmaField
     }
 }
 </script>
@@ -246,12 +239,14 @@ export default {
 <style lang="scss">
 .address-book-details {
 
-    .q-field {
-        margin: 0 10px 20px;
-    }
-    .q-checkbox.star-entry .q-checkbox-icon {
-        font-size:40px;
-        margin-left: 10px;
+    .address-book-modal {
+        > .arqma-field {
+            margin-top: 16px;
+        }
+
+        .star-entry {
+            padding: 4px;
+        }
     }
 }
 </style>
