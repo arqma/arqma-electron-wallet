@@ -20,8 +20,8 @@ export class Daemon {
 
         // Settings for timestamp to height conversion
         // These are initial values used to calculate the height
-        this.PIVOT_BLOCK_HEIGHT = 119681
-        this.PIVOT_BLOCK_TIMESTAMP = 1539676273
+        this.PIVOT_BLOCK_HEIGHT = 150000
+        this.PIVOT_BLOCK_TIMESTAMP = 1554667008
         this.PIVOT_BLOCK_TIME = 120
     }
 

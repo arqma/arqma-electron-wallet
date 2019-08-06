@@ -174,8 +174,8 @@ export default {
             exportDirectory: "EXPORTNÍ ADRESÁŘ KEY IMAGE",// **
             importFile: "IMPORTUJ KEY IMAGE ZE SOUBORU"// **
         },
-        limitDownloadRate: "LIMIT PRO DOWNLOAD",
-        limitUploadRate: "LIMIT PRO UPLOAD",
+        limitDownloadRate: "LIMIT PRO STAHOVÁNÍ",
+        limitUploadRate: "LIMIT PRO ODESÍLÁNÍ",
         localDaemonIP: "IP LOKÁLNÍHO DAEMONA",
         localDaemonPort: "PORT LOKÁLNÍHO DAEMONA",
         maxIncomingPeers: "MAX PŘÍCHOZÍCH PEERS",
@@ -189,7 +189,7 @@ export default {
         password: "HESLO",
         paymentId: "ID PLATBY",
         priority: "PRIORITA",
-        remoteNodeHost: "VZDÁLENÝ HOST",
+        remoteNodeHost: "VZDÁLENÝ UZEL",
         remoteNodePort: "VZDÁLENÝ PORT",
         restoreFromBlockHeight: "OBNOVENÍ OD VÝŠKY BLOKU",
         restoreFromDate: "OBNOVIT OD DATA",
@@ -374,7 +374,7 @@ export default {
         daemon: {
             local: {
                 title: "Pouze lokální daemon",
-                description: "Plné zabezpečení, peněženka stáhne celý blockchain. Nebude možné provádět transakce, dokude nebude synchronizace dokončena."
+                description: "Plné zabezpečení, peněženka stáhne celý blockchain. Nebude možné provádět transakce dokud nebude synchronizace dokončena."
             },
             localRemote: {
                 title: "Lokální + Vzdálený daemon",
@@ -403,7 +403,7 @@ export default {
             fast: "Rychle",
             fastest: "Nejrychleji"
         },
-        proveTransactionDescription: "Generate a proof of your incoming/outgoing payment by supplying the transaction ID, the recipient address and an optional message.\nFor the case of outgoing payments, you can get a 'Spend Proof' that proves the authorship of a transaction. In this case, you don't need to specify the recipient address.",// **
+        proveTransactionDescription: "Vygenerujte doklad o své příchozí / odchozí platbě zadáním ID transakce, adresy příjemce a volitelné zprávy.\nV případě odchozích plateb můžete získat „Spend proof“, který prokazuje autorství transakce. V tomto případě nemusíte zadávat adresu příjemce.",// **
         readingWalletList: "Načítá se seznam peněženek",
         recentIncomingTransactionsToAddress: "Nedávné příchozí transakce na tuto adresu",
         recentTransactionsWithAddress: "Nedávné transakce s touto adresou",
@@ -435,8 +435,8 @@ export default {
                 incoming: "Příchozí",
                 outgoing: "Odchozí",
                 pending: "Čekající",
-                pendingIncoming: "Čeká na příchozí",
-                pendingOutgoing: "Čeká na odchozí",
+                pendingIncoming: "Čeká se na příchozí",
+                pendingOutgoing: "Čeká se na odchozí",
                 miner: "Těžař",
                 serviceNode: "Service Node",
                 governance: "Řízení",

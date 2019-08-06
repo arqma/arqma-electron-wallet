@@ -1945,12 +1945,12 @@ return{_strlen:lb,_ge_mul8:Va,_keccak:db,_ge_scalarmult:Ta,_ge_fromfe_frombytes_
 
 
 
-var lokiConfig = {
+var arqmaConfig = {
     coinUnitPlaces: 12,
-    coinSymbol: 'LOKI',
-    coinName: 'Loki',
-    coinUriPrefix: 'loki:',
-    addressPrefix: 114,
+    coinSymbol: 'ARQ',
+    coinName: 'Arqma',
+    coinUriPrefix: 'arqma:',
+    addressPrefix: 0x2cca
 };
 
 var cnUtilGen = function(initConfig) {
@@ -2389,7 +2389,7 @@ var cnUtilGen = function(initConfig) {
 
     return this;
 };
-var cnUtil = cnUtilGen(lokiConfig);
+var cnUtil = cnUtilGen(arqmaConfig);
 /*
  mnemonic.js : Converts between 4-byte aligned strings and a human-readable
  sequence of words. Uses 1626 common words taken from wikipedia article:
