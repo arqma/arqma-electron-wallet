@@ -521,7 +521,7 @@ export class WalletRPC {
     finalizeNewWallet (filename) {
         Promise.all([
             this.sendRPC("get_address"),
-            this.sendRPC("getheight"),
+            this.sendRPC("get_height"),
             this.sendRPC("getbalance", { account_index: 0 }),
             this.sendRPC("query_key", { key_type: "mnemonic" }),
             this.sendRPC("query_key", { key_type: "spend_key" }),
@@ -548,7 +548,7 @@ export class WalletRPC {
                 }
                 if (n.method == "get_address") {
                     wallet.info.address = n.result.address
-                } else if (n.method == "getheight") {
+                } else if (n.method == "get_height") {
                     wallet.info.height = n.result.height
                 } else if (n.method == "getbalance") {
                     wallet.info.balance = n.result.balance
@@ -637,7 +637,7 @@ export class WalletRPC {
     heartbeatAction (extended = false) {
         Promise.all([
             this.sendRPC("get_address", { account_index: 0 }, 5000),
-            this.sendRPC("getheight", {}, 5000),
+            this.sendRPC("get_height", {}, 5000),
             this.sendRPC("getbalance", { account_index: 0 }, 5000)
         ]).then((data) => {
             let didError = false
