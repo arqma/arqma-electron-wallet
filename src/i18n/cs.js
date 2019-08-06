@@ -403,7 +403,7 @@ export default {
             fast: "Rychle",
             fastest: "Nejrychleji"
         },
-        proveTransactionDescription: "Generate a proof of your incoming/outgoing payment by supplying the transaction ID, the recipient address and an optional message.\nFor the case of outgoing payments, you can get a 'Spend Proof' that proves the authorship of a transaction. In this case, you don't need to specify the recipient address.",// **
+        proveTransactionDescription: "Vygenerujte doklad o své příchozí / odchozí platbě zadáním ID transakce, adresy příjemce a volitelné zprávy.\nV případě odchozích plateb můžete získat „Spend proof“, který prokazuje autorství transakce. V tomto případě nemusíte zadávat adresu příjemce.",// **
         readingWalletList: "Načítá se seznam peněženek",
         recentIncomingTransactionsToAddress: "Nedávné příchozí transakce na tuto adresu",
         recentTransactionsWithAddress: "Nedávné transakce s touto adresou",
