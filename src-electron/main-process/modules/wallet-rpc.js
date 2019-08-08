@@ -29,22 +29,26 @@ export class WalletRPC {
         this.last_height_send_time = Date.now()
 
         this.height_regexes = [
-            {
-                string: /Processed block: <([a-f0-9]+)>, height (\d+)/,
-                height: (match) => match[2]
-            },
-            {
-                string: /Skipped block by height: (\d+)/,
-                height: (match) => match[1]
-            },
-            {
-                string: /Skipped block by timestamp, height: (\d+)/,
-                height: (match) => match[1]
-            },
-            {
-                string: /Blockchain sync progress: <([a-f0-9]+)>, height (\d+)/,
-                height: (match) => match[2]
-            }
+//             {
+//                 string: /Processed block: <([a-f0-9]+)>, height (\d+)/,
+//                 height: (match) => match[2]
+//             },
+//             {
+//                 string: /Skipped block by height: (\d+)/,
+//                 height: (match) => match[1]
+//             },
+//             {
+//                 string: /Skipped block by timestamp, height: (\d+)/,
+//                 height: (match) => match[1]
+//             },
+//             {
+//                 string: /Blockchain sync progress: <([a-f0-9]+)>, height (\d+)/,
+//                 height: (match) => match[2]
+//             }
+               {
+                   string: /height: (\d+)/,
+                   height: (match) => match[1]
+               }
         ]
 
         this.agent = new http.Agent({ keepAlive: true, maxSockets: 1 })
