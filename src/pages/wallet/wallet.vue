@@ -17,7 +17,7 @@
             <div class="infoBox">
                 <div class="infoBoxContent">
                     <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
-                    <div class="value"><span><FormatBitcoin :amount="market.arq.btc" /></span></div>
+                    <div class="value"><span><FormatBitcoin :amount="info.balance" :btcAmount="market.arq.btc" /></span></div>
                 </div>
             </div>
         </div>

@@ -29,4 +29,5 @@ export const set_check_transaction_status = (state, data) => {
 }
 export const set_market_data = (state, data) => {
     state.market = objectAssignDeep.noMutate(state.market, data)
+    console.log(state.market)
 }

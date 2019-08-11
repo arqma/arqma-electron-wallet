@@ -25,6 +25,7 @@ export class Market {
     }
 
     handle (data) {
+        console.log('received ', data)
     }
 
     startHeartbeat () {
@@ -54,8 +55,7 @@ export class Market {
                     if (!data[symbol]) data[symbol] = {};
                     data[symbol][target] = price;
                 }
-                console.log(data)
-                this.sendGateway("set_market_data", {info: {data}})
+                this.sendGateway("set_market_data", {info: data})
             });
     }
 

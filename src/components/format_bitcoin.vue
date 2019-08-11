@@ -8,6 +8,9 @@
 export default {
     name: "FormatBitcoin",
     props: {
+        btcAmount: {
+            required: true
+        },
         amount: {
             required: true
         },
@@ -24,10 +27,9 @@ export default {
     },
     computed: {
         value () {
-            let value = this.amount
-            //if(this.round)
-            //    value = value.toFixed(3)
-            return this.rawValue ? value : value.toLocaleString()
+            let value = this.btcAmount * (this.amount / 1e9)
+            value = value.toFixed(8)
+            return value
         }
 
     }
