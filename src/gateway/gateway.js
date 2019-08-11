@@ -194,7 +194,11 @@ export class Gateway extends EventEmitter {
                 // short delay to prevent wallet data reaching the
                 // websocket moments after we close and reset data
                 this.app.store.dispatch("gateway/resetWalletData")
+                this.app.store.dispatch("gateway/resetMarketData")
             }, 250)
+            break
+        case "set_market_data":
+            this.app.store.commit("gateway/set_market_data", decrypted_data.data)
             break
         }
     }
