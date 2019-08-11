@@ -1,6 +1,6 @@
 <template>
 <q-page class="advanced-page">
-    <div class="header row items-center justify-center q-pt-md">
+    <div class="row q-pt-sm q-mx-md q-mb-sm items-center non-selectable">
         <q-btn-toggle
             v-model="screen"
             toggle-color="primary"
