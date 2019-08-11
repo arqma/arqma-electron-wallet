@@ -1,10 +1,15 @@
+/**
+ * arqma-electron-wallet
+ * https://github.com/arqma/arqma-electron-wallet
+ *
+ * market.js
+ * 
+ **/
+
 import child_process from "child_process"
 const request = require("request-promise")
 const queue = require("promise-queue")
 const https = require("https")
-//const fs = require("fs")
-//const path = require("path")
-//const portscanner = require("portscanner")
 
 export class Market {
     constructor (backend) {
