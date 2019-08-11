@@ -76,6 +76,7 @@ export default {
                 // short delay to prevent wallet data reaching the
                 // websocket moments after we close and reset data
                 this.$store.dispatch("gateway/resetWalletData")
+                this.$store.dispatch("gateway/resetMarketData")
             }, 250);
         }
     },

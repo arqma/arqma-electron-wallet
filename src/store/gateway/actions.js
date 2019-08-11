@@ -29,6 +29,17 @@ export const resetWalletData = (state) => {
     })
 }
 
+export const resetMarketData = (state) => {
+    state.commit("set_market_data", {
+        info: {
+            arq: {
+                btc: 0,
+                cnyt: 0
+            }
+        }
+    })
+}
+
 export const resetWalletStatus = (state) => {
     state.commit("set_wallet_data", {
         status: {

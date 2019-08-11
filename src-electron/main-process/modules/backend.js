@@ -1,5 +1,6 @@
 import { Daemon } from "./daemon"
 import { WalletRPC } from "./wallet-rpc"
+import { Market } from "./market"
 import { SCEE } from "./SCEE-Node"
 import { dialog } from "electron"
 
@@ -14,6 +15,7 @@ export class Backend {
         this.mainWindow = mainWindow
         this.daemon = null
         this.walletd = null
+        this.market = null
         this.wss = null
         this.token = null
         this.config_dir = null
@@ -126,7 +128,6 @@ export class Backend {
             event,
             data
         }
-
         let encrypted_data = this.scee.encryptString(JSON.stringify(message), this.token)
 
         this.wss.clients.forEach(function each (client) {
@@ -152,6 +153,10 @@ export class Backend {
         case "wallet":
             if (this.walletd) {
                 this.walletd.handle(decrypted_data)
+            }
+        case "market":
+            if (this.market) {
+                this.market.handle(decrypted_data)
             }
             break
         }
@@ -374,6 +379,7 @@ export class Backend {
 
             this.daemon = new Daemon(this)
             this.walletd = new WalletRPC(this)
+            this.market = new Market(this)
 
             this.send("set_app_data", {
                 status: {
@@ -513,6 +519,14 @@ export class Backend {
                     })
                 })
             })
+
+            this.market.start(this.config_data)
+                .then(() => {
+
+                })
+                .catch(error => {
+
+                })
         })
     }
 
@@ -521,6 +535,7 @@ export class Backend {
             let process = []
             if (this.daemon) { process.push(this.daemon.quit()) }
             if (this.walletd) { process.push(this.walletd.quit()) }
+            if (this.market) { process.push(this.market.quit())}
             if (this.wss) { this.wss.close() }
 
             Promise.all(process).then(() => {
