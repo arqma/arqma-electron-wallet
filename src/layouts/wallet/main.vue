@@ -19,7 +19,9 @@
             <q-route-tab to="/wallet/txhistory" slot="title">
                 <span><q-icon name="history" /> {{ $t("buttons.txHistory") }}</span>
             </q-route-tab>
-
+            <q-route-tab to="/wallet/advanced" slot="title">
+                <span><q-icon name="tune" /> {{ $t("buttons.advanced") }}</span>
+            </q-route-tab>
         </q-tabs>
     </q-layout-header>
 
