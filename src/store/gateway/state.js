@@ -107,5 +107,13 @@ export default {
         bans: [],
         tx_pool_backlog: [],
         service_nodes: []
+    },
+    market: {
+        info: {
+            arq: {
+                btc: 0,
+                cnyt: 0
+            }
+        }
     }
 }

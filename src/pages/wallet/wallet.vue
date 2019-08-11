@@ -13,7 +13,14 @@
                 </div>
             </div>
         </div>
-
+        <div class="infoBoxBalance">
+            <div class="infoBox">
+                <div class="infoBoxContent">
+                    <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
+                    <div class="value"><span><FormatBitcoin :amount="market.arq.btc" /></span></div>
+                </div>
+            </div>
+        </div>
         <div>
             <div class="infoBox">
                 <div class="infoBoxContent">
@@ -262,16 +269,18 @@ const { clipboard } = require("electron")
 import { mapState } from "vuex"
 import AddressHeader from "components/address_header"
 import FormatArqma from "components/format_arqma"
+import FormatBitcoin from "components/format_bitcoin"
 import TxList from "components/tx_list"
 export default {
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
+        market: state => state.gateway.market.info,
         info: state => state.gateway.wallet.info,
         secret: state => state.gateway.wallet.secret,
         data_dir: state => state.gateway.app.config.app.data_dir,
         is_ready (state) {
             return this.$store.getters["gateway/isReady"]
-        }
+        },
     }),
     data () {
         return {
@@ -545,6 +554,7 @@ export default {
     },
     components: {
         FormatArqma,
+        FormatBitcoin,
         AddressHeader,
         TxList
     },
