@@ -103,6 +103,9 @@ export class Gateway extends EventEmitter {
         let encrypted_data = this.scee.encryptString(JSON.stringify(message), this.token)
         this.ws.send(encrypted_data)
     }
+    geti18n (key) {
+      return Array.isArray(key) ? i18n.t(...key) : i18n.t(key)
+    }
 
     receive (message) {
         // should wrap this in a try catch, and if fail redirect to error screen
@@ -148,7 +151,23 @@ export class Gateway extends EventEmitter {
         case "set_snode_status":
             this.app.store.commit("gateway/set_snode_status", decrypted_data.data)
             break
+        case "set_prove_transaction_status": {
+            const data = { ...decrypted_data.data }
 
+            if (data.i18n) {
+                data.message = this.geti18n(data.i18n)
+          }
+          this.app.store.commit("gateway/set_prove_transaction_status", data)
+          break
+        }
+        case "set_check_transaction_status": {
+          const data = { ...decrypted_data.data }
+            if (data.i18n) {
+              data.message = this.geti18n(data.i18n)
+            }
+        this.app.store.commit("gateway/set_check_transaction_status", data)
+        break
+        }
         case "set_old_gui_import_status":
             this.app.store.commit("gateway/set_old_gui_import_status", decrypted_data.data)
             break
