@@ -273,7 +273,7 @@ export default {
             cannotAccessRemoteNode: "Nelze získat přístup k vzdálenému node, zkuste jiný vzdálený node",
             changingPassword: "Chyba při změně hesla",
             copyWalletFail: "Nepodařilo se zkopírovat peněženku",
-            copyingPrivateKeys: "Chyba při kopírování private keys", 
+            copyingPrivateKeys: "Chyba při kopírování private keys",
             dataPathNotFound: "Cesta k adresáři s daty nebyla nalezena",
             differentNetType: "Vzdálený uzel používá jiný typ sítě",
             enterSeedWords: "Vložte seed slova",
@@ -329,7 +329,7 @@ export default {
         hexCharacters: "{count} hexadecimální znaky",
         mnemonicSeed: "25 (or 24) mnemotechnických slov",
         pasteTransactionId: "Vložit ID transakce",
-        pasteTransactionProof: "Paste transaction proof",// **
+        pasteTransactionProof: "Paste transaction proof",
         proveOptionalMessage: "Volitelná zpráva, na jejímž základě je podpis podepsán",
         recipientWalletAddress: "Adresa peněženky příjemce",
         selectAFile: "Vyberte prosím soubor",
