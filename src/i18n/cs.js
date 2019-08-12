@@ -335,7 +335,8 @@ export default {
         selectAFile: "Vyberte prosím soubor",
         transactionNotes: "Další poznámky k transakci",
         walletName: "Jméno pro vaši peněženku",
-        walletPassword: "Volitelné heslo pro peněženku"
+        walletPassword: "Volitelné heslo pro peněženku",
+        operations: "Akce peněženky"
     },
     strings: {
         addAddressBookEntry: "Přidat položku adresáře",
