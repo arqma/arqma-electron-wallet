@@ -39,7 +39,9 @@ export default {
         stake: "STAKE",
         sweepAll: "VYČISTIT VŠE",
         unlock: "ODEMKNOUT",
-        viewOnExplorer: "ZOBRAZIT V PROHLÍŽEČI"
+        viewOnExplorer: "ZOBRAZIT V PROHLÍŽEČI",
+        txHistory: "TX HISTORIE",
+        wallet: "PENĚŽENKA"
     },
     dialog: {
         // Generic buttons
