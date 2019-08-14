@@ -158,7 +158,7 @@ export default {
         padding-top: 12px;
         padding-bottom: 12px;
 
-        .q-item-sublabel,  {
+        .q-item-sublabel  {
             font-size: 14px;
         }
 
