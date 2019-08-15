@@ -339,7 +339,8 @@ export default {
         transactionNotes: "附加到交易的附加说明",
         walletName: "钱包的名称",
         walletPassword: "钱包的可选密码",
-        operations: "钱包行动"
+        operations: "钱包行动",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "添加地址簿条目",

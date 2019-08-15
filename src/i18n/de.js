@@ -338,7 +338,8 @@ export default {
         transactionNotes: "Zusätzliche Notizen die an die Transaktions gehängt werden sollen",
         walletName: "Ein Name für deine Wallet",
         walletPassword: "Ein optionales Passwort für die Wallet",
-        operations: "Brieftaschenaktionen"
+        operations: "Brieftaschenaktionen",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Adressbuch Eintrag hinzufügen",

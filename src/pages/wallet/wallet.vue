@@ -31,7 +31,8 @@
         </div>
         <div class="col text-right q-mr-sm">
             <div class="infoBox">
-            <q-item-tile icon-right="more_vert" label>{{ $t("placeholders.operations") }} : </q-item-tile>
+            <q-item-tile icon-right="more_vert" label>{{ $t("placeholders.operations") }}</q-item-tile>
+                <q-btn>{{ $t("placeholders.walletOperations") }}:
                     <q-popover anchor="bottom right" self="top right">
                         <q-list separator link>
                             <q-item :disabled="!is_ready"

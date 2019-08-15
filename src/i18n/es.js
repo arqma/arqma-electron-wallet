@@ -339,7 +339,8 @@ export default {
         transactionNotes: "Notas adicionales para agregar a la transacción",
         walletName: "Nombre para identificar su monedero",
         walletPassword: "Contraseña opcional para proteger su monedero",
-        operations: "Acciones de billetera"
+        operations: "Acciones de billetera",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Agregar registro a la libreta de direcciones",

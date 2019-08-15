@@ -339,7 +339,8 @@ export default {
         transactionNotes: "Additional notes to attach to the transaction",
         walletName: "A name for your wallet",
         walletPassword: "An optional password for the wallet",
-        operations: "Wallet actions"
+        operations: "Wallet actions",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Add address book entry",

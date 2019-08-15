@@ -339,7 +339,8 @@ export default {
         transactionNotes: "Дополнительные заметки для приосединения к транзакции",
         walletName: "Имя вашего кошелька",
         walletPassword: "Пароль кошелька (необязательно)",
-        operations: "Кошелек действия"
+        operations: "Кошелек действия",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Добавить запись в адресную книгу",

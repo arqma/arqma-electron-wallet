@@ -339,7 +339,8 @@ export default {
         transactionNotes: "Notas adicionais para anexar à transação",
         walletName: "Um nome para a sua carteira",
         walletPassword: "Uma palavra-passe opcional para a carteira",
-        operations: "Ações da carteira"
+        operations: "Ações da carteira",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Adicionar registo ao livro de endereços",

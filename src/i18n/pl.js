@@ -137,7 +137,7 @@ export default {
             closeMessage: "Czy na pewno chcesz zamknąć bieżący portfel?",
             restartMessage: "Portfel RPC jest obecnie synchronizowany. \nJeśli chcesz zmienić portfele, musisz ponownie uruchomić aplikację. \nUtracisz postęp synchronizacji i będziesz musiał ponownie przeskanować blockchain."
         },
-       transactionDetails: {
+        transactionDetails: {
             title: "Szczegóły transakcji",
             ok: "ZAMKNIJ"
         },
@@ -340,7 +340,8 @@ export default {
         transactionNotes: "Dodatkowe uwagi do dołączenia do transakcji",
         walletName: "Nazwa twojego portfela",
         walletPassword: "Opcjonalne hasło do portfela",
-        operations: "Operacje"
+        operations: "Operacje",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Dodaj wpis książki adresowej",
