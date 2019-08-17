@@ -35,21 +35,21 @@
                     <q-popover anchor="bottom right" self="top right">
                         <q-list separator link>
                             <q-item :disabled="!is_ready"
-                                    v-close-overlay @click.native="getPrivateKeys()">
-                                <q-item-main>
-                                    <q-item-tile label>{{ $t("menuItems.showPrivateKeys") }}</q-item-tile>
-                                </q-item-main>
-                            </q-item>
-                            <q-item :disabled="!is_ready"
                                     v-close-overlay @click.native="showModal('change_password')">
                                 <q-item-main>
                                     <q-item-tile label>{{ $t("menuItems.changePassword") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
-                                    v-close-overlay @click.native="showModal('rescan')">
+                                    v-close-overlay @click.native="deleteWallet()">
                                 <q-item-main>
-                                    <q-item-tile label>{{ $t("menuItems.rescanWallet") }}</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.deleteWallet") }}</q-item-tile>
+                                </q-item-main>
+                            </q-item>
+                            <q-item :disabled="!is_ready"
+                                    v-close-overlay @click.native="showModal('export_wallet')">
+                                <q-item-main>
+                                    <q-item-tile label>{{ $t("menuItems.exportWallet") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
@@ -59,9 +59,15 @@
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
-                                    v-close-overlay @click.native="deleteWallet()">
+                                    v-close-overlay @click.native="showModal('rescan')">
                                 <q-item-main>
-                                    <q-item-tile label>{{ $t("menuItems.deleteWallet") }}</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.rescanWallet") }}</q-item-tile>
+                                </q-item-main>
+                            </q-item>
+                            <q-item :disabled="!is_ready"
+                                    v-close-overlay @click.native="getPrivateKeys()">
+                                <q-item-main>
+                                    <q-item-tile label>{{ $t("menuItems.showPrivateKeys") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                         </q-list>
@@ -261,6 +267,35 @@
         </div>
     </q-modal>
 
+    <q-modal minimized v-model="modals.export_wallet.visible">
+        <div class="modal-header">{{ $t("menuItems.exportWallet") }}</div>
+        <div class="q-ma-lg">
+            <q-field style="width:450px">
+                <div class="row gutter-sm">
+                    <div class="col-9">
+                        <q-input v-model="modals.export_wallet.export_path" stack-label="wallet export directory" disable />
+                        <input type="file" webkitdirectory directory id="walletExportPath" v-on:change="setWalletExportPath" ref="walletExportSelect" hidden />
+                    </div>
+                    <div class="col-3">
+                        <q-btn class="float-right" v-on:click="selectWalletExportPath">Browse</q-btn>
+                    </div>
+                </div>
+            </q-field>
+            <div class="q-mt-xl text-right">
+                <q-btn
+                    flat class="q-mr-sm"
+                    @click="hideModal('export_wallet')"
+                    :label="$t('buttons.close')"
+                    />
+                <q-btn
+                    color="primary"
+                    @click="doExportWallet()"
+                    :label="$t('buttons.export')"
+                    />
+            </div>
+        </div>
+    </q-modal>
+
 </q-page>
 </template>
 
@@ -281,6 +316,7 @@ export default {
         is_ready (state) {
             return this.$store.getters["gateway/isReady"]
         },
+        tx_list: state => state.gateway.wallet.transactions.tx_list
     }),
     data () {
         return {
@@ -304,6 +340,10 @@ export default {
                     new_password: "",
                     new_password_confirm: "",
                 },
+                export_wallet: {
+                    export_path: "",
+                    visible: false,
+                },
             }
         }
     },
@@ -311,6 +351,7 @@ export default {
         const path = require("path")
         this.modals.key_image.export_path = path.join(this.data_dir, "gui")
         this.modals.key_image.import_path = path.join(this.data_dir, "gui", "key_image_export")
+        this.modals.export_wallet.export_path = path.join(this.data_dir, "exports")
     },
     watch: {
         secret: {
@@ -550,6 +591,18 @@ export default {
                 })
             }).catch(() => {
             })
+        },
+        doExportWallet () {
+            this.hideModal("export_wallet")
+            //console.log(this.tx_list)
+            //this.$gateway.send("wallet", "export_wallet", this.tx_list)
+        },
+        selectWalletExportPath () {
+            this.$refs.walletExportSelect.click()
+        },
+        setWalletExportPath (file) {
+            if (file.target.files)
+                this.modals.export_wallet.export_path = file.target.files[0].path
         }
     },
     components: {
