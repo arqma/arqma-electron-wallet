@@ -340,7 +340,7 @@ export default {
         walletName: "Nombre para identificar su monedero",
         walletPassword: "Contraseña opcional para proteger su monedero",
         operations: "Acciones de billetera",
-        walletOperations: "Show"
+        walletOperations: "Abrir"
     },
     strings: {
         addAddressBookEntry: "Agregar registro a la libreta de direcciones",

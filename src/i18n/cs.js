@@ -113,7 +113,7 @@ export default {
         },
         showPrivateKeys: {
             title: "Zobrazit private keys",
-            message: "Do you want to view your private keys?",
+            message: "Chcete si nechat zobrazit private keys?",
             ok: "ZOBRAZIT"
         },
         stake: {

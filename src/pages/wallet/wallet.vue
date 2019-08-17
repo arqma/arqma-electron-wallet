@@ -154,7 +154,7 @@
     <q-modal minimized v-model="modals.rescan.visible">
         <div class="modal-header">{{ $t("menuItems.rescanWallet") }}</div>
         <div class="q-ma-lg">
-            <p>Select full rescan or rescan of spent outputs only.</p>
+            <p>{{ $t("strings.rescanModalDescription") }}</p>
 
             <div class="q-mt-lg">
                 <q-radio v-model="modals.rescan.type" val="full" :label="$t('fieldLabels.rescanFullBlockchain')" />
@@ -198,7 +198,7 @@
                             <input type="file" webkitdirectory directory id="keyImageExportPath" v-on:change="setKeyImageExportPath" ref="keyImageExportSelect" hidden />
                         </div>
                         <div class="col-3">
-                            <q-btn class="float-right" v-on:click="selectKeyImageExportPath">Browse</q-btn>
+                            <q-btn class="float-right" v-on:click="selectKeyImageExportPath"> {{ $t("buttons.browse") }}</q-btn>
                         </div>
                     </div>
                 </q-field>
@@ -394,18 +394,18 @@ export default {
         getPrivateKeys () {
             if(!this.is_ready) return
             this.$q.dialog({
-                title: "Show private keys",
-                message: "Enter wallet password to continue.",
+                title: this.$t('dialog.showPrivateKeys.title'),
+                message: this.$t('dialog.showPrivateKeys.message'),
                 prompt: {
                     model: "",
                     type: "password"
                 },
                 ok: {
-                    label: "SHOW"
+                    label: this.$t('dialog.showPrivateKeys.ok')
                 },
                 cancel: {
                     flat: true,
-                    label: "CANCEL",
+                    label: this.$t('dialog.buttons.cancel'),
                     color: this.theme=="dark"?"white":"dark"
                 }
             }).then(password => {
@@ -517,15 +517,15 @@ export default {
         },
         deleteWallet () {
             this.$q.dialog({
-                title: "Delete wallet",
-                message: "Are you absolutely sure you want to delete your wallet?\nMake sure you have your private keys backed up.\nTHIS PROCESS IS NOT REVERSIBLE!",
+                title: this.$t('dialog.deleteWallet.title'),
+                message: this.$t('dialog.deleteWallet.message'),
                 ok: {
-                    label: "DELETE",
+                    label: this.$t('dialog.deleteWallet.ok'),
                     color: "red"
                 },
                 cancel: {
                     flat: true,
-                    label: "CANCEL",
+                    label: this.$t('dialog.buttons.cancel'),
                     color: this.theme=="dark"?"white":"dark"
                 }
             }).then(() => {

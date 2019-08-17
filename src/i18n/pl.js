@@ -341,7 +341,7 @@ export default {
         walletName: "Nazwa twojego portfela",
         walletPassword: "Opcjonalne hasło do portfela",
         operations: "Operacje",
-        walletOperations: "Show"
+        walletOperations: "Pokaż"
     },
     strings: {
         addAddressBookEntry: "Dodaj wpis książki adresowej",

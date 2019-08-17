@@ -340,7 +340,7 @@ export default {
         walletName: "Имя вашего кошелька",
         walletPassword: "Пароль кошелька (необязательно)",
         operations: "Кошелек действия",
-        walletOperations: "Show"
+        walletOperations: "Посмотреть"
     },
     strings: {
         addAddressBookEntry: "Добавить запись в адресную книгу",

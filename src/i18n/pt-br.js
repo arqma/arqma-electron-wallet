@@ -340,7 +340,7 @@ export default {
         walletName: "Um nome para a sua carteira",
         walletPassword: "Uma palavra-passe opcional para a carteira",
         operations: "Ações da carteira",
-        walletOperations: "Show"
+        walletOperations: "Mostrar"
     },
     strings: {
         addAddressBookEntry: "Adicionar registo ao livro de endereços",

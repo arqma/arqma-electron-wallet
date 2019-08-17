@@ -340,7 +340,7 @@ export default {
         walletName: "钱包的名称",
         walletPassword: "钱包的可选密码",
         operations: "钱包行动",
-        walletOperations: "Show"
+        walletOperations: "查看"
     },
     strings: {
         addAddressBookEntry: "添加地址簿条目",

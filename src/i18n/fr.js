@@ -341,7 +341,7 @@ export default {
         walletName: "Un nom pour votre portefeuille",
         walletPassword: "Un mot de passe optionnel pour votre portefeuille",
         operations: "Actions de portefeuille",
-        walletOperations: "Show"
+        walletOperations: "Afficher"
     },
     strings: {
         addAddressBookEntry: "Ajoutez une entrée de carnet d'adresses",

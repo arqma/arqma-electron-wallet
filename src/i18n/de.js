@@ -339,7 +339,7 @@ export default {
         walletName: "Ein Name für deine Wallet",
         walletPassword: "Ein optionales Passwort für die Wallet",
         operations: "Brieftaschenaktionen",
-        walletOperations: "Show"
+        walletOperations: "Anzeige"
     },
     strings: {
         addAddressBookEntry: "Adressbuch Eintrag hinzufügen",
