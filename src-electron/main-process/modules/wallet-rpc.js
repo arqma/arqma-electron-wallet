@@ -298,6 +298,10 @@ export class WalletRPC {
         case "delete_wallet":
             this.deleteWallet(params.password)
             break
+        case "export_transactions":
+            this.exportTransactions(params)
+            break
+
 
         default:
         }
@@ -1710,6 +1714,13 @@ export class WalletRPC {
             } else {
                 resolve()
             }
+        })
+    }
+
+    exportTransactions(params) {
+        return new Promise((resolve, reject) => {
+            console.log(params);
+            resolve();
         })
     }
 }

@@ -236,7 +236,7 @@ export default {
         copyViewKey: "Zkopírovat view key",
         createNewWallet: "Vytvořit novou peněženku",
         deleteWallet: "Smazat Peněženku",
-        exportWallet: "exportovat peněženku",
+        exportTransactions: "exportovat peněženku",
         exit: "Ukončit Arqma GUI Peněženku",
         importOldGUIWallet: "Import peněženky ze starého GUI",
         manageKeyImages: "Správa Key Images",

@@ -236,7 +236,7 @@ export default {
         copyViewKey: "View Key kopieren",
         createNewWallet: "Neue Wallet erstellen",
         deleteWallet: "Wallet löschen",
-        exportWallet: "Export Brieftasche",
+        exportTransactions: "Export Brieftasche",
         exit: "Arqma GUI Wallet schliessen",
         importOldGUIWallet: "Wallets von alter GUI importieren",
         manageKeyImages: "Key Images verwalten",

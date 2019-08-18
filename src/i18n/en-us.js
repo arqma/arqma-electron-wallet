@@ -237,7 +237,7 @@ export default {
         copyViewKey: "Copy view key",
         createNewWallet: "Create new wallet",
         deleteWallet: "Delete Wallet",
-        exportWallet: "Export Wallet",
+        exportTransactions: "Export Transactions",
         exit: "Exit Arqma GUI Wallet",
         importOldGUIWallet: "Import wallets from old GUI",
         manageKeyImages: "Manage Key Images",

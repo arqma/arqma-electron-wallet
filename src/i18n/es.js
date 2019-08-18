@@ -237,7 +237,7 @@ export default {
         copyViewKey: "Copiar clave de visualización",
         createNewWallet: "Crear nuevo monedero",
         deleteWallet: "Eliminar monedero",
-        exportWallet: "billetera de exportación",
+        exportTransactions: "billetera de exportación",
         exit: "Cerrar la interfaz del monedero Arqma",
         importOldGUIWallet: "Importar monedero de una interfaz gráfica antigua",
         manageKeyImages: "Administrar Imágenes de Clave",

@@ -47,9 +47,9 @@
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
-                                    v-close-overlay @click.native="showModal('export_wallet')">
+                                    v-close-overlay @click.native="showModal('export_transactions')">
                                 <q-item-main>
-                                    <q-item-tile label>{{ $t("menuItems.exportWallet") }}</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.exportTransactions") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
@@ -267,17 +267,17 @@
         </div>
     </q-modal>
 
-    <q-modal minimized v-model="modals.export_wallet.visible">
-        <div class="modal-header">{{ $t("menuItems.exportWallet") }}</div>
+    <q-modal minimized v-model="modals.export_transactions.visible">
+        <div class="modal-header">{{ $t("menuItems.exportTransactions") }}</div>
         <div class="q-ma-lg">
             <q-field style="width:450px">
                 <div class="row gutter-sm">
                     <div class="col-9">
-                        <q-input v-model="modals.export_wallet.export_path" stack-label="wallet export directory" disable />
-                        <input type="file" webkitdirectory directory id="walletExportPath" v-on:change="setWalletExportPath" ref="walletExportSelect" hidden />
+                        <q-input v-model="modals.export_transactions.export_path" stack-label="transactions export directory" disable />
+                        <input type="file" webkitdirectory directory id="transactionsExportPath" v-on:change="setTransactionsExportPath" ref="transactionsExportSelect" hidden />
                     </div>
                     <div class="col-3">
-                        <q-btn class="float-right" v-on:click="selectWalletExportPath">Browse</q-btn>
+                        <q-btn class="float-right" v-on:click="selectTransactionsExportPath">Browse</q-btn>
                     </div>
                 </div>
             </q-field>
@@ -289,7 +289,7 @@
                     />
                 <q-btn
                     color="primary"
-                    @click="doExportWallet()"
+                    @click="doExportTransactions()"
                     :label="$t('buttons.export')"
                     />
             </div>
@@ -340,7 +340,7 @@ export default {
                     new_password: "",
                     new_password_confirm: "",
                 },
-                export_wallet: {
+                export_transactions: {
                     export_path: "",
                     visible: false,
                 },
@@ -351,7 +351,7 @@ export default {
         const path = require("path")
         this.modals.key_image.export_path = path.join(this.data_dir, "gui")
         this.modals.key_image.import_path = path.join(this.data_dir, "gui", "key_image_export")
-        this.modals.export_wallet.export_path = path.join(this.data_dir, "exports")
+        this.modals.export_transactions.export_path = path.join(this.data_dir, "exports")
     },
     watch: {
         secret: {
@@ -592,17 +592,17 @@ export default {
             }).catch(() => {
             })
         },
-        doExportWallet () {
-            this.hideModal("export_wallet")
+        doExportTransactions () {
+            this.hideModal("export_transactions")
             //console.log(this.tx_list)
-            //this.$gateway.send("wallet", "export_wallet", this.tx_list)
+            //this.$gateway.send("wallet", "export_transactions", this.tx_list)
         },
-        selectWalletExportPath () {
+        selectTransactionsExportPath () {
             this.$refs.walletExportSelect.click()
         },
-        setWalletExportPath (file) {
+        setTransactionsExportPath (file) {
             if (file.target.files)
-                this.modals.export_wallet.export_path = file.target.files[0].path
+                this.modals.export_transactions.export_path = file.target.files[0].path
         }
     },
     components: {
