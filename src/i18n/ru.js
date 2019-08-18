@@ -393,6 +393,7 @@ export default {
         },
         destinationUnknown: "Назначение Неизвестно",
         editAddressBookEntry: "Редактировать запись адресной книги",
+        loading: "Загрузка...",
         loadingSettings: "Загрузка настроек",
         arqmaBalance: "Баланс",
         arqmaUnlockedBalance: "Разблокированый баланс",

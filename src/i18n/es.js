@@ -393,6 +393,7 @@ export default {
         },
         destinationUnknown: "Destino Desconocido",
         editAddressBookEntry: "Modificar un registro de la libreta de direcciones",
+        loading: "Cargando...",
         loadingSettings: "Cargando configuración",
         arqmaBalance: "Saldo",
         arqmaUnlockedBalance: "Saldo libre",

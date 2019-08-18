@@ -204,7 +204,7 @@
                             <input type="file" webkitdirectory directory id="keyImageExportPath" v-on:change="setKeyImageExportPath" ref="keyImageExportSelect" hidden />
                         </div>
                         <div class="col-3">
-                            <q-btn class="float-right" v-on:click="selectKeyImageExportPath"> {{ $t("buttons.browse") }}</q-btn>
+                            <q-btn class="float-right" v-on:click="selectKeyImageExportPath">{{ $t("buttons.browse") }}</q-btn>
                         </div>
                     </div>
                 </q-field>
@@ -217,7 +217,7 @@
                             <input type="file" id="keyImageImportPath" v-on:change="setKeyImageImportPath" ref="keyImageImportSelect" hidden />
                         </div>
                         <div class="col-3">
-                            <q-btn class="float-right" v-on:click="selectKeyImageImportPath">Browse</q-btn>
+                            <q-btn class="float-right" v-on:click="selectKeyImageImportPath">{{ $t("buttons.browse") }}</q-btn>
                         </div>
                     </div>
                 </q-field>
@@ -278,7 +278,7 @@
                         <input type="file" webkitdirectory directory id="walletExportPath" v-on:change="setWalletExportPath" ref="walletExportSelect" hidden />
                     </div>
                     <div class="col-3">
-                        <q-btn class="float-right" v-on:click="selectWalletExportPath">Browse</q-btn>
+                        <q-btn class="float-right" v-on:click="selectWalletExportPath">{{ $t("buttons.browse") }}</q-btn>
                     </div>
                 </div>
             </q-field>

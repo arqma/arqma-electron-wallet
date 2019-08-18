@@ -394,6 +394,7 @@ export default {
         },
         destinationUnknown: "Miejsce docelowe nieznane",
         editAddressBookEntry: "Edytuj wpis książki adresowej",
+        loading: "Ładowanie...",
         loadingSettings: "Ładowanie ustawień",
         arqmaBalance: "Saldo",
         arqmaUnlockedBalance: "Odblokowane saldo",

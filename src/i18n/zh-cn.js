@@ -393,6 +393,7 @@ export default {
         },
         destinationUnknown: "未知目的地",
         editAddressBookEntry: "编辑地址簿条目",
+        loading: "加载...",
         loadingSettings: "加载设置",
         arqmaBalance: "平衡",
         arqmaUnlockedBalance: "解锁平衡",
