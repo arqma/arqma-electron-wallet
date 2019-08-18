@@ -343,6 +343,8 @@ export default {
                 export_transactions: {
                     export_path: "",
                     visible: false,
+                    options: { in: true, out: true, pending: false, failed: false, pool: false },
+                    header: true
                 },
             }
         }
@@ -594,8 +596,7 @@ export default {
         },
         doExportTransactions () {
             this.hideModal("export_transactions")
-            //console.log(this.tx_list)
-            //this.$gateway.send("wallet", "export_transactions", this.tx_list)
+            this.$gateway.send("wallet", "export_transactions", this.modals.export_transactions)
         },
         selectTransactionsExportPath () {
             this.$refs.walletExportSelect.click()
