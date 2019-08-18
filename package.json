@@ -1,7 +1,7 @@
 {
   "name": "arqma-electron-wallet",
-  "version": "1.0.8",
-  "daemonVersion": "4.0.0",
+  "version": "2.0.0",
+  "daemonVersion": "5.1",
   "description": "Modern GUI interface for Arqma Currency",
   "productName": "Arqma Electron Wallet",
   "repository": {
@@ -33,6 +33,7 @@
     "electron-window-state": "^5.0.3",
     "flag-icon-css": "^3.3.0",
     "fs-extra": "^7.0.1",
+    "graceful-fs": "^4.2.1",
     "object-assign-deep": "^0.4.0",
     "portscanner": "^2.2.0",
     "promise-queue": "^2.2.5",
