@@ -293,16 +293,16 @@
             </q-field>
             <div class="row q-mb-md">
                 <div class="q-mr-xl">
-                    <q-checkbox v-model="modals.export_transactions.options.in" label="In" />
+                    <q-checkbox v-model="modals.export_transactions.options.in" :label="$t('strings.transactions.types.incoming')" />
                 </div>
                 <div>
-                    <q-checkbox v-model="modals.export_transactions.options.out" label="Out" />
+                    <q-checkbox v-model="modals.export_transactions.options.out" :label="$t('strings.transactions.types.outgoing')" />
                 </div>
                 <div class="q-mr-xl">
-                    <q-checkbox v-model="modals.export_transactions.options.pending" label="Pending" />
+                    <q-checkbox v-model="modals.export_transactions.options.pending" :label="$t('strings.transactions.types.pending')" />
                 </div>
                 <div>
-                    <q-checkbox v-model="modals.export_transactions.options.failed" label="Failed" />
+                    <q-checkbox v-model="modals.export_transactions.options.failed" :label="$t('strings.transactions.types.failed')" />
                 </div>
                 <div>
                     <q-checkbox v-model="modals.export_transactions.options.pool" label="Pool" />
