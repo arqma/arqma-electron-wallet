@@ -232,7 +232,7 @@
                 <q-btn
                     color="primary"
                     @click="doKeyImages()"
-                    :label="modals.key_image.type"
+                    :label="$t('buttons.export')"
                     />
             </div>
         </div>
