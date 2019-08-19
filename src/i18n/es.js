@@ -237,6 +237,8 @@ export default {
         copyViewKey: "Copiar clave de visualización",
         createNewWallet: "Crear nuevo monedero",
         deleteWallet: "Eliminar monedero",
+        exportWallet: "Billetera de exportación",
+        exportTransactions: "Transacciones de exportación",
         exit: "Cerrar la interfaz del monedero Arqma",
         importOldGUIWallet: "Importar monedero de una interfaz gráfica antigua",
         manageKeyImages: "Administrar Imágenes de Clave",
@@ -339,7 +341,8 @@ export default {
         transactionNotes: "Notas adicionales para agregar a la transacción",
         walletName: "Nombre para identificar su monedero",
         walletPassword: "Contraseña opcional para proteger su monedero",
-        operations: "Acciones de billetera"
+        operations: "Acciones de billetera",
+        walletOperations: "Abrir"
     },
     strings: {
         addAddressBookEntry: "Agregar registro a la libreta de direcciones",
@@ -391,6 +394,7 @@ export default {
         },
         destinationUnknown: "Destino Desconocido",
         editAddressBookEntry: "Modificar un registro de la libreta de direcciones",
+        loading: "Cargando...",
         loadingSettings: "Cargando configuración",
         arqmaBalance: "Saldo",
         arqmaUnlockedBalance: "Saldo libre",

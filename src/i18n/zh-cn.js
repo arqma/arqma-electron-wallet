@@ -237,6 +237,8 @@ export default {
         copyViewKey: "复制视图键",
         createNewWallet: "创造新的钱包",
         deleteWallet: "删除电子钱包",
+        exportTransactions: "出口交易",
+        exportWallet: "出口錢包",
         exit: "出口 Arqma GUI Wallet",
         importOldGUIWallet: "从旧的进口钱包 GUI",
         manageKeyImages: "管理关键图像",
@@ -339,7 +341,8 @@ export default {
         transactionNotes: "附加到交易的附加说明",
         walletName: "钱包的名称",
         walletPassword: "钱包的可选密码",
-        operations: "钱包行动"
+        operations: "钱包行动",
+        walletOperations: "查看"
     },
     strings: {
         addAddressBookEntry: "添加地址簿条目",
@@ -391,6 +394,7 @@ export default {
         },
         destinationUnknown: "未知目的地",
         editAddressBookEntry: "编辑地址簿条目",
+        loading: "加载...",
         loadingSettings: "加载设置",
         arqmaBalance: "平衡",
         arqmaUnlockedBalance: "解锁平衡",

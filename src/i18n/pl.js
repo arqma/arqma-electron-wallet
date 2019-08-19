@@ -137,7 +137,7 @@ export default {
             closeMessage: "Czy na pewno chcesz zamknąć bieżący portfel?",
             restartMessage: "Portfel RPC jest obecnie synchronizowany. \nJeśli chcesz zmienić portfele, musisz ponownie uruchomić aplikację. \nUtracisz postęp synchronizacji i będziesz musiał ponownie przeskanować blockchain."
         },
-       transactionDetails: {
+        transactionDetails: {
             title: "Szczegóły transakcji",
             ok: "ZAMKNIJ"
         },
@@ -238,6 +238,8 @@ export default {
         copyViewKey: "Kopiuj klucz podglądu",
         createNewWallet: "Utwórz nowy portfel",
         deleteWallet: "Usuń portfel",
+        exportTransactions: "Export transakcji",
+        exportWallet: "Eksport portfela",
         exit: "Wyjdź Arqma GUI Wallet",
         importOldGUIWallet: "Importuj portfel z starego GUI",
         manageKeyImages: "Zarządzaj kluczami",
@@ -340,7 +342,8 @@ export default {
         transactionNotes: "Dodatkowe uwagi do dołączenia do transakcji",
         walletName: "Nazwa twojego portfela",
         walletPassword: "Opcjonalne hasło do portfela",
-        operations: "Operacje"
+        operations: "Operacje",
+        walletOperations: "Pokaż"
     },
     strings: {
         addAddressBookEntry: "Dodaj wpis książki adresowej",
@@ -392,6 +395,7 @@ export default {
         },
         destinationUnknown: "Miejsce docelowe nieznane",
         editAddressBookEntry: "Edytuj wpis książki adresowej",
+        loading: "Ładowanie...",
         loadingSettings: "Ładowanie ustawień",
         arqmaBalance: "Saldo",
         arqmaUnlockedBalance: "Odblokowane saldo",

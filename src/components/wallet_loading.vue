@@ -25,7 +25,7 @@ export default {
             if(this.wallet.info.height) {
                 return `Scanning... ${this.wallet.info.height} / ${this.target_height} (${this.wallet_pct}%)`
             }
-            return "Loading..."
+            return this.$t('strings.loading')
         },
         target_height() {
             if(this.config.daemon.type === "local" && !this.daemon.info.is_ready) {
