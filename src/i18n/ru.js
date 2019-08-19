@@ -237,7 +237,7 @@ export default {
         copyViewKey: "Копировать Ключ Просмотра",
         createNewWallet: "Создать новый кошелек",
         deleteWallet: "Удалить Кошелек",
-        exportTransactions: "экспортный кошелек",
+        exportTransactions: "Экспортные транзакции",
         exit: "Закрыть Кошелек Arqma",
         importOldGUIWallet: "Импортировать кошельки из старого GUI",
         manageKeyImages: "Управлять Ключевыми Образами",

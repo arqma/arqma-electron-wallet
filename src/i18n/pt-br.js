@@ -237,7 +237,7 @@ export default {
         copyViewKey: "Copiar chave de visualização",
         createNewWallet: "Criar nova carteira",
         deleteWallet: "Apagar carteira",
-        exportTransactions: "carteira de exportação",
+        exportTransactions: "Transações de exportação",
         exit: "Saír da Carteira GUI Arqma",
         importOldGUIWallet: "Importar carteiras da antiga carteira GUI",
         manageKeyImages: "Administrar Imagens de Chave",

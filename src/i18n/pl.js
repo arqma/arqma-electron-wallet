@@ -238,7 +238,7 @@ export default {
         copyViewKey: "Kopiuj klucz podglądu",
         createNewWallet: "Utwórz nowy portfel",
         deleteWallet: "Usuń portfel",
-        exportTransactions: "portfel eksportowy",
+        exportTransactions: "Export transakcji",
         exit: "Wyjdź Arqma GUI Wallet",
         importOldGUIWallet: "Importuj portfel z starego GUI",
         manageKeyImages: "Zarządzaj kluczami",

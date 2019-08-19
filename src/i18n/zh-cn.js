@@ -237,7 +237,7 @@ export default {
         copyViewKey: "复制视图键",
         createNewWallet: "创造新的钱包",
         deleteWallet: "删除电子钱包",
-        exportTransactions: "出口錢包",
+        exportTransactions: "出口交易",
         exit: "出口 Arqma GUI Wallet",
         importOldGUIWallet: "从旧的进口钱包 GUI",
         manageKeyImages: "管理关键图像",
