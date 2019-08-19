@@ -24,13 +24,22 @@ export class Market {
     start (options) {
 
         return new Promise((resolve, reject) => {
-            this.startHeartbeat()
             resolve()
         })
     }
 
     handle (data) {
-        console.log('received ', data)
+        let params = data.data
+        switch (data.method) {
+            case "open_wallet":
+                this.startHeartbeat()
+                break
+            case "close_wallet":
+                this.clearInterval(this.heartbeat)
+                break
+            default:
+        }
+        
     }
 
     startHeartbeat () {

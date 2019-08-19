@@ -269,22 +269,49 @@
 
     <q-modal minimized v-model="modals.export_transactions.visible">
         <div class="modal-header">{{ $t("menuItems.exportTransactions") }}</div>
-        <div class="q-ma-lg">
-            <q-field style="width:450px">
-                <div class="row gutter-sm">
+            <div class="q-ma-lg">
+                <q-field style="width:450px">
+                    <div class="row gutter-sm">
+                        <div class="col-9">
+                            <q-input v-model="modals.export_transactions.export_path" stack-label="transactions export directory" disable />
+                            <input type="file" webkitdirectory directory id="transactionsExportPath" v-on:change="setTransactionsExportPath" ref="transactionsExportSelect" hidden />
+                        </div>
+                        <div class="col-3">
+                            <q-btn class="float-right" v-on:click="selectTransactionsExportPath">Browse</q-btn>
+                        </div>
+                    </div>
+                </q-field>
+            </div>
+        <div class="modal-header">Export Options</div>
+            <div class="q-ma-lg">
+                <q-field style="width:450px">
+                    <div class="row gutter-sm">
                     <div class="col-9">
-                        <q-input v-model="modals.export_transactions.export_path" stack-label="transactions export directory" disable />
-                        <input type="file" webkitdirectory directory id="transactionsExportPath" v-on:change="setTransactionsExportPath" ref="transactionsExportSelect" hidden />
-                    </div>
-                    <div class="col-3">
-                        <q-btn class="float-right" v-on:click="selectTransactionsExportPath">Browse</q-btn>
-                    </div>
+                    <q-checkbox v-model="modals.export_transactions.header" label="Include header"/>
                 </div>
+            </div>
             </q-field>
+            <div class="row q-mb-md">
+                <div class="q-mr-xl">
+                    <q-checkbox v-model="modals.export_transactions.options.in" label="In" />
+                </div>
+                <div>
+                    <q-checkbox v-model="modals.export_transactions.options.out" label="Out" />
+                </div>
+                <div class="q-mr-xl">
+                    <q-checkbox v-model="modals.export_transactions.options.pending" label="Pending" />
+                </div>
+                <div>
+                    <q-checkbox v-model="modals.export_transactions.options.failed" label="Failed" />
+                </div>
+                <div>
+                    <q-checkbox v-model="modals.export_transactions.options.pool" label="Pool" />
+                </div>
+            </div>
             <div class="q-mt-xl text-right">
                 <q-btn
                     flat class="q-mr-sm"
-                    @click="hideModal('export_wallet')"
+                    @click="hideModal('export_transactions')"
                     :label="$t('buttons.close')"
                     />
                 <q-btn
