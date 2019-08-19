@@ -238,6 +238,7 @@ export default {
         createNewWallet: "Create new wallet",
         deleteWallet: "Delete Wallet",
         exportTransactions: "Export Transactions",
+        exportWallet: "Export Wallet",
         exit: "Exit Arqma GUI Wallet",
         importOldGUIWallet: "Import wallets from old GUI",
         manageKeyImages: "Manage Key Images",
@@ -340,7 +341,8 @@ export default {
         transactionNotes: "Additional notes to attach to the transaction",
         walletName: "A name for your wallet",
         walletPassword: "An optional password for the wallet",
-        operations: "Wallet actions"
+        operations: "Wallet actions",
+        walletOperations: "Show"
     },
     strings: {
         addAddressBookEntry: "Add address book entry",
@@ -392,6 +394,7 @@ export default {
         },
         destinationUnknown: "Destination Unknown",
         editAddressBookEntry: "Edit address book entry",
+        loading: "Loading...",
         loadingSettings: "Loading settings",
         arqmaBalance: "Balance",
         arqmaUnlockedBalance: "Unlocked balance",

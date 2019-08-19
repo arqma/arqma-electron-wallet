@@ -236,7 +236,8 @@ export default {
         copyViewKey: "View Key kopieren",
         createNewWallet: "Neue Wallet erstellen",
         deleteWallet: "Wallet löschen",
-        exportTransactions: "Export Brieftasche",
+        exportWallet: "Export Brieftasche",
+        exportTransactions: "Transaktionen exportieren",
         exit: "Arqma GUI Wallet schliessen",
         importOldGUIWallet: "Wallets von alter GUI importieren",
         manageKeyImages: "Key Images verwalten",
@@ -339,7 +340,8 @@ export default {
         transactionNotes: "Zusätzliche Notizen die an die Transaktions gehängt werden sollen",
         walletName: "Ein Name für deine Wallet",
         walletPassword: "Ein optionales Passwort für die Wallet",
-        operations: "Brieftaschenaktionen"
+        operations: "Brieftaschenaktionen",
+        walletOperations: "Anzeige"
     },
     strings: {
         addAddressBookEntry: "Adressbuch Eintrag hinzufügen",
@@ -391,6 +393,7 @@ export default {
         },
         destinationUnknown: "Ziel unbekannt",
         editAddressBookEntry: "Adressbucheintrag bearbeiten",
+        loading: "Beladung...",
         loadingSettings: "Einstellungen werden geladen",
         arqmaBalance: "Guthaben",
         arqmaUnlockedBalance: "frei verfügbares Guthaben",

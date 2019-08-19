@@ -238,6 +238,7 @@ export default {
         createNewWallet: "Создать новый кошелек",
         deleteWallet: "Удалить Кошелек",
         exportTransactions: "Экспортные транзакции",
+        exportWallet: "экспортный кошелек",
         exit: "Закрыть Кошелек Arqma",
         importOldGUIWallet: "Импортировать кошельки из старого GUI",
         manageKeyImages: "Управлять Ключевыми Образами",
@@ -340,7 +341,8 @@ export default {
         transactionNotes: "Дополнительные заметки для приосединения к транзакции",
         walletName: "Имя вашего кошелька",
         walletPassword: "Пароль кошелька (необязательно)",
-        operations: "Кошелек действия"
+        operations: "Кошелек действия",
+        walletOperations: "Посмотреть"
     },
     strings: {
         addAddressBookEntry: "Добавить запись в адресную книгу",
@@ -392,6 +394,7 @@ export default {
         },
         destinationUnknown: "Назначение Неизвестно",
         editAddressBookEntry: "Редактировать запись адресной книги",
+        loading: "Загрузка...",
         loadingSettings: "Загрузка настроек",
         arqmaBalance: "Баланс",
         arqmaUnlockedBalance: "Разблокированый баланс",

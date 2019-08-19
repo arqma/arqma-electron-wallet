@@ -238,6 +238,7 @@ export default {
         copyViewKey: "Copier la clé de visibilité",
         createNewWallet: "Créer un nouveau portefeuille",
         deleteWallet: "Supprimer le portefeuille",
+        exportWallet: "Portefeuille d'exportation",
         exportTransactions: "Transactions d'exportation",
         exit: "Quitter le portefeuille Arqma GUI",
         importOldGUIWallet: "Importer le portefeuille depuis l’ancien GUI",
@@ -341,7 +342,8 @@ export default {
         transactionNotes: "Notes additionnelles attachées à la transaction",
         walletName: "Un nom pour votre portefeuille",
         walletPassword: "Un mot de passe optionnel pour votre portefeuille",
-        operations: "Actions de portefeuille"
+        operations: "Actions de portefeuille",
+        walletOperations: "Afficher"
     },
     strings: {
         addAddressBookEntry: "Ajoutez une entrée de carnet d'adresses",
@@ -394,6 +396,7 @@ export default {
         },
         destinationUnknown: "Destination inconnue",
         editAddressBookEntry: "Modifiez l'entrée du carnet d'adresses",
+        loading: "Chargement...",
         loadingSettings: "Chargement des réglages",
         arqmaBalance: "Solde",
         arqmaUnlockedBalance: "Solde débloqué",

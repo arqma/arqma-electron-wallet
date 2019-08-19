@@ -2,6 +2,7 @@ export default {
     buttons: {
         // All button text is uppercased in the gui
         advanced: "POKROČILÉ",
+        addressBook: "ADRESÁŘ",
         all: "VŠE",
         back: "ZPĚT",
         browse: "PROCHÁZET",
@@ -81,8 +82,8 @@ export default {
             ok: "UKONČIT"
         },
         keyImages: {
-            title: "{type} key images",// **
-            message: "Do you want to {type} key images?",// **
+            title: "{type} key images", // **
+            message: "Do you want to {type} key images?", // **
             export: "Export",
             import: "Import"
         },
@@ -112,7 +113,7 @@ export default {
         },
         showPrivateKeys: {
             title: "Zobrazit private keys",
-            message: "Do you want to view your private keys?",
+            message: "Chcete si nechat zobrazit private keys?",
             ok: "ZOBRAZIT"
         },
         stake: {
@@ -156,7 +157,7 @@ export default {
         },
         unlockServiceNodeWarning: {
             title: "Odemknout varování service node",
-            message: "Unlocking a partial stake in a node will also unstake for any other participants, if staking in a shared node its best to let the operator and other participants know you are unstaking.",// **
+            message: "Unlocking a partial stake in a node will also unstake for any other participants, if staking in a shared node its best to let the operator and other participants know you are unstaking.", // **
             ok: "POKRAČOVAT"
         }
     },
@@ -173,7 +174,7 @@ export default {
         filterTransactionType: "FILTER PODLE TYPU TRANSAKCE",
         internalWalletPort: "INTERNÍ PORT PENĚŽENKY",
         keyImages: {
-            exportDirectory: "EXPORTNÍ ADRESÁŘ KEY IMAGE",// **
+            exportDirectory: "EXPORTNÍ ADRESÁŘ KEY IMAGE", // **
             importFile: "IMPORTUJ KEY IMAGE ZE SOUBORU"// **
         },
         limitDownloadRate: "LIMIT PRO STAHOVÁNÍ",
@@ -236,6 +237,7 @@ export default {
         copyViewKey: "Zkopírovat view key",
         createNewWallet: "Vytvořit novou peněženku",
         deleteWallet: "Smazat Peněženku",
+        exportWallet: "Exportovat peněženku",
         exportTransactions: "Exportní transakce",
         exit: "Ukončit Arqma GUI Peněženku",
         importOldGUIWallet: "Import peněženky ze starého GUI",
@@ -268,7 +270,7 @@ export default {
             registerServiceNodeSuccess: "Úspěšně zaregistrovaný service node",
             sendSuccess: "Transakce byla úspěšně odeslána",
             signatureCopied: "Podpis zkopírován do schránky",
-            stakeSuccess: "Successfully staked",// ?
+            stakeSuccess: "Successfully staked", // ?
             transactionNotesSaved: "Poznámky k transakcím byly uloženy"
         },
         errors: {
@@ -281,7 +283,7 @@ export default {
             differentNetType: "Vzdálený uzel používá jiný typ sítě",
             enterSeedWords: "Vložte seed slova",
             enterTransactionId: "Vložte ID transakce",
-            enterTransactionProof: "Enter transaction proof",// **
+            enterTransactionProof: "Enter transaction proof", // **
             enterWalletName: "Vložte jméno peněženky",
             errorSavingItem: "Chyba při ukládání {item}",
             failedServiceNodeUnlock: "Nepodařilo se odemknout service node",
@@ -339,7 +341,8 @@ export default {
         transactionNotes: "Další poznámky k transakci",
         walletName: "Jméno pro vaši peněženku",
         walletPassword: "Volitelné heslo pro peněženku",
-        operations: "Akce peněženky"
+        operations: "Akce peněženky",
+        walletOperations: "Zobrazit"
     },
     strings: {
         addAddressBookEntry: "Přidat položku adresáře",
@@ -391,6 +394,7 @@ export default {
         },
         destinationUnknown: "Neznámý cíl",
         editAddressBookEntry: "Editovat položku adresáře",
+        loading: "Načítání...",
         loadingSettings: "Načítání nastavení",
         arqmaBalance: "Zůstatek",
         arqmaUnlockedBalance: "Odemčený zůstatek",
@@ -407,7 +411,7 @@ export default {
             fast: "Rychle",
             fastest: "Nejrychleji"
         },
-        proveTransactionDescription: "Vygenerujte doklad o své příchozí / odchozí platbě zadáním ID transakce, adresy příjemce a volitelné zprávy.\nV případě odchozích plateb můžete získat „Spend proof“, který prokazuje autorství transakce. V tomto případě nemusíte zadávat adresu příjemce.",// **
+        proveTransactionDescription: "Vygenerujte doklad o své příchozí / odchozí platbě zadáním ID transakce, adresy příjemce a volitelné zprávy.\nV případě odchozích plateb můžete získat „Spend proof“, který prokazuje autorství transakce. V tomto případě nemusíte zadávat adresu příjemce.", // **
         readingWalletList: "Načítá se seznam peněženek",
         recentIncomingTransactionsToAddress: "Nedávné příchozí transakce na tuto adresu",
         recentTransactionsWithAddress: "Nedávné transakce s touto adresou",
@@ -463,7 +467,7 @@ export default {
         },
         changePassword: "Změnit heslo",
         configure: "Konfigurace",
-        currentlyStakedNodes: "Currently staked nodes",// **
+        currentlyStakedNodes: "Currently staked nodes", // **
         privateKeys: "Private keys",
         rescanWallet: "Prohledat znovu peněženku",
         serviceNode: {
