@@ -35,7 +35,8 @@ export class Market {
                 this.startHeartbeat()
                 break
             case "close_wallet":
-                this.clearInterval(this.heartbeat)
+                clearInterval(this.heartbeat)
+                clearInterval(this.heartbeat_slow)
                 break
             default:
         }
@@ -131,6 +132,7 @@ export class Market {
 
     quit () {
         clearInterval(this.heartbeat)
+        clearInterval(this.heartbeat_slow)
         return new Promise((resolve, reject) => {
             resolve()
         })
