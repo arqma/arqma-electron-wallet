@@ -57,19 +57,21 @@ export class Market {
     heartbeatSlowAction () {
         this.sendRPC({}, this.options.market.exchange)
             .then(response => {
-                let result = JSON.parse(response.result)
-                let data = []
-                for (let index in result.tickers) {
-                    let ticker = result.tickers[index]
-                    let key = ticker.market.name
-                    let symbol = ticker.target //btc
-                    let label = `${key} ${symbol}`
-                    let price = +ticker.last
-                    if (price === 0) continue;
-                    data.push({key: key, label: label, symbol: symbol, value: price})
-                    
-                }
-                this.sendGateway("set_market_data", {info: {exchanges: data}})
+                try {
+                    let result = JSON.parse(response.result)
+                    let data = []
+                    for (let index in result.tickers) {
+                        let ticker = result.tickers[index]
+                        let key = ticker.market.name
+                        let symbol = ticker.target //btc
+                        let label = `${key} ${symbol}`
+                        let price = +ticker.last
+                        if (price === 0) continue;
+                        data.push({key: key, label: label, symbol: symbol, value: price})
+                        
+                    }
+                    this.sendGateway("set_market_data", {info: {exchanges: data}})
+                } catch(error){}
             });
     }
 
