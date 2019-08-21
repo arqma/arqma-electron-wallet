@@ -208,6 +208,10 @@ export default {
         walletStoragePath: "ПАПКА КОШЕЛЬКА",
 
         // These are specific labels which do not get uppercased
+        protocol: "протокол",
+        hostname: "имя хоста",
+        endpoint: "конечная точка",
+        port: "порт",
         confirmNewPassword: "Подтвердите Новый Пароль",
         newPassword: "Новый Пароль",
         oldPassword: "Старый Пароль",
@@ -478,7 +482,8 @@ export default {
             tabs: {
                 general: "Общие",
                 language: "Язык",
-                peers: "Пиры"
+                peers: "Пиры",
+                exchange: "обмен"
             }
         },
         transactionDetails: "Данные транзакции",

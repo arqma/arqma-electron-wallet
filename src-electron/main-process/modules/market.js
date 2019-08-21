@@ -19,11 +19,14 @@ export class Market {
 
         this.agent = new https.Agent({ keepAlive: true, maxSockets: 1 })
         this.queue = new queue(1, Infinity)
+        this.options = null
+        this.endpoint = `/api/v3/coins/arqma/tickers`
     }
 
     start (options) {
 
         return new Promise((resolve, reject) => {
+            this.options = options
             resolve()
         })
     }
@@ -52,11 +55,7 @@ export class Market {
     }
 
     heartbeatSlowAction () {
-        let options = {protocol: 'https://', 
-                       hostname: 'api.coingecko.com', 
-                       port: 443}
-
-        this.sendRPC('arqma', {}, options)
+        this.sendRPC({}, this.options.market.exchange)
             .then(response => {
                 let result = JSON.parse(response.result)
                 let data = []
@@ -78,15 +77,17 @@ export class Market {
         this.backend.send(method, data)
     }
 
-    sendRPC (coin, params = {}, options = {}) {
+    sendRPC (params = {}, options = {}) {
         let id = this.id++
-
         const protocol = options.protocol || this.protocol
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
+        const endpoint = options.endpoint || this.endpoint
+
+        console.log(`${protocol}${hostname}:${port}${endpoint}`)
 
         let requestOptions = {
-            uri: `${protocol}${hostname}:${port}/api/v3/coins/${coin}/tickers`,
+            uri: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
             headers : { 
                         'Accept': 'application/json'
@@ -96,7 +97,6 @@ export class Market {
         if (Object.keys(params).length !== 0) {
             requestOptions.json.params = params
         }
-        console.log(requestOptions.uri)
         return this.queue.add(() => {
             return request(requestOptions)
                 .then((response) => {

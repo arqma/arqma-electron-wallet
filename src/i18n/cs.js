@@ -206,6 +206,10 @@ export default {
         walletName: "JMÉNO PENĚŽENKY",
         walletRPCPort: "RPC PORT PENĚŽENKY",
         walletStoragePath: "CESTA K ADRESÁŘI S PENĚŽENKOU",
+        protocol: "PROTOKOL",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPOINT",
+        port: "PŘÍSTAV",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potvrďte nové heslo",
@@ -479,7 +483,8 @@ export default {
             tabs: {
                 general: "General",
                 language: "Jazyk",
-                peers: "Peers"
+                peers: "Peers",
+                exchange: "Výměna"
             }
         },
         transactionDetails: "Detaily transakce",

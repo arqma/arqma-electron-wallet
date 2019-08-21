@@ -207,6 +207,10 @@ export default {
         walletName: "PORTFEL NAZWA",
         walletRPCPort: "PORTFEL RPC PORT",
         walletStoragePath: "PORTFEL STORAGE PATH",
+        protocol: "PROTOKÓŁ",
+        hostname: "NAZWA HOSTA",
+        endpoint: "KONIEC",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potwierdź nowe hasło",
@@ -480,7 +484,8 @@ export default {
             tabs: {
                 general: "Ogólne",
                 language: "Język",
-                peers: "Podłączeni"
+                peers: "Podłączeni",
+                exchange: "Wymieniać się"
             }
         },
         transactionDetails: "Szczegóły transakcji",

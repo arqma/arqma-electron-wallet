@@ -206,6 +206,10 @@ export default {
         walletName: "NOMBRE MONEDERO",
         walletRPCPort: "PUERTO RPC MONEDERO",
         walletStoragePath: "RUTA DE ALMACENAMIENTO DEL MONEDERO",
+        protocol: "PROTOCOLO",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPOINT",
+        port: "PUERTO",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Confirme la nueva contraseña",
@@ -478,7 +482,8 @@ export default {
             tabs: {
                 general: "General",
                 language: "Idioma",
-                peers: "Pares"
+                peers: "Pares",
+                exchange: "Intercambiar"
             }
         },
         transactionDetails: "Detalles de la transacción",
