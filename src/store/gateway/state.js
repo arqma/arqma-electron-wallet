@@ -110,10 +110,8 @@ export default {
     },
     market: {
         info: {
-            arq: {
-                btc: 0,
-                cnyt: 0
-            }
+            default: 0,
+            exchanges: []
         }
     }
 }

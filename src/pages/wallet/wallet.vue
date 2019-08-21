@@ -13,14 +13,18 @@
                 </div>
             </div>
         </div>
+
+
+
         <div class="infoBoxBalance">
             <div class="infoBox">
                 <div class="infoBoxContent">
                     <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
-                    <div class="value"><span><FormatBitcoin :amount="info.balance" :btcAmount="market.arq.btc" /></span></div>
+                    <div class="value"><span><FormatBitcoin/></span></div>
                 </div>
             </div>
         </div>
+
         <div>
             <div class="infoBox">
                 <div class="infoBoxContent">
@@ -336,7 +340,6 @@ import TxList from "components/tx_list"
 export default {
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
-        market: state => state.gateway.market.info,
         info: state => state.gateway.wallet.info,
         secret: state => state.gateway.wallet.secret,
         data_dir: state => state.gateway.app.config.app.data_dir,
