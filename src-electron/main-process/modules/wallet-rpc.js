@@ -1736,10 +1736,11 @@ export class WalletRPC {
                         resolve()
                     })
                     .catch( error => {
-                        reject()
+                        reject(error)
                     })
+            } else {
+                reject('No export_path provided!')
             }
-            reject()
         })
     }
 }
