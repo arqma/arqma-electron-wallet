@@ -485,7 +485,7 @@ export default {
                 general: "Ogólne",
                 language: "Język",
                 peers: "Podłączeni",
-                exchange: "Wymieniać się"
+                exchange: "Giełda"
             }
         },
         transactionDetails: "Szczegóły transakcji",
