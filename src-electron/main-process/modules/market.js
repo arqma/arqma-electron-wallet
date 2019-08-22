@@ -85,9 +85,6 @@ export class Market {
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
         const endpoint = options.endpoint || this.endpoint
-
-        console.log(`${protocol}${hostname}:${port}${endpoint}`)
-
         let requestOptions = {
             uri: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
