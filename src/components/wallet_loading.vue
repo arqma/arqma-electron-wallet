@@ -28,7 +28,7 @@ export default {
             return this.$t('strings.loading')
         },
         target_height() {
-            if(this.config.daemon.type === "local" && !this.daemon.info.is_ready) {
+            if(this.config.daemon && this.config.daemon.type === "local" && !this.daemon.info.is_ready) {
                 return Math.max(this.daemon.info.height, this.daemon.info.target_height)
             } else {
                 return this.daemon.info.height
