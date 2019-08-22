@@ -629,7 +629,7 @@ export default {
             this.$gateway.send("wallet", "export_transactions", this.modals.export_transactions)
         },
         selectTransactionsExportPath () {
-            this.$refs.walletExportSelect.click()
+            this.$refs.transactionsExportSelect.click()
         },
         setTransactionsExportPath (file) {
             if (file.target.files)
