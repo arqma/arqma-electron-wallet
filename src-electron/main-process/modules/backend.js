@@ -93,6 +93,19 @@ export class Backend {
             wallet: {
                 rpc_bind_port: 19999,
                 log_level: 0
+            },
+            market: {
+                info: {
+                    default: 0,
+                    exchanges: []
+                },
+                exchange: {
+                    protocol: 'https://',
+                    hostname: 'api.coingecko.com',
+                    port: 443,
+                    coin: 'arqma',
+                    endpoint: '/api/v3/coins/arqma/tickers'
+                }
             }
         }
 
