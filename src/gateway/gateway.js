@@ -82,7 +82,7 @@ export class Gateway extends EventEmitter {
             cancel: {
                 flat: true,
                 label: i18n.t("dialog.buttons.cancel"),
-                color: this.app.store.state.gateway.app.config.appearance.theme == "dark" ? "white" : "dark"
+                color: this.app.store.state.gateway.app.config.appearance.theme === "dark" ? "white" : "dark"
             }
         }).then(() => {
             this.closeDialog = false

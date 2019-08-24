@@ -20,7 +20,7 @@ export class Market {
         this.agent = new https.Agent({ keepAlive: true, maxSockets: 1 })
         this.queue = new queue(1, Infinity)
         this.options = null
-        this.endpoint = `/api/v3/coins/arqma/tickers`
+        this.endpoint = "/api/v3/coins/arqma/tickers"
     }
 
     start (options) {
@@ -33,14 +33,14 @@ export class Market {
     handle (data) {
         let params = data.data
         switch (data.method) {
-            case "open_wallet":
-                this.startHeartbeat()
-                break
-            case "close_wallet":
-                clearInterval(this.heartbeat)
-                clearInterval(this.heartbeat_slow)
-                break
-            default:
+        case "open_wallet":
+            this.startHeartbeat()
+            break
+        case "close_wallet":
+            clearInterval(this.heartbeat)
+            clearInterval(this.heartbeat_slow)
+            break
+        default:
         }
     }
 
@@ -61,15 +61,14 @@ export class Market {
                     for (let index in result.tickers) {
                         let ticker = result.tickers[index]
                         let key = ticker.market.name
-                        let symbol = ticker.target //btc
+                        let symbol = ticker.target // btc
                         let label = `${key} ${symbol}`
                         let price = +ticker.last
                         if (price === 0) continue;
-                        data.push({key: key, label: label, symbol: symbol, value: price})
-                        
+                        data.push({ key: key, label: label, symbol: symbol, value: price })
                     }
-                    this.sendGateway("set_market_data", {info: {exchanges: data}})
-                } catch(error){}
+                    this.sendGateway("set_market_data", { info: { exchanges: data } })
+                } catch (error) {}
             });
     }
 
@@ -87,7 +86,7 @@ export class Market {
             uri: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
             headers: {
-                'Accept': 'application/json'
+                "Accept": "application/json"
             },
             agent: this.agent
         }
