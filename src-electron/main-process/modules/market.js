@@ -3,7 +3,7 @@
  * https://github.com/arqma/arqma-electron-wallet
  *
  * market.js
- * 
+ *
  **/
 
 import child_process from "child_process"
@@ -22,7 +22,6 @@ export class Market {
     }
 
     start (options) {
-
         return new Promise((resolve, reject) => {
             this.startHeartbeat()
             resolve()
@@ -30,7 +29,7 @@ export class Market {
     }
 
     handle (data) {
-        console.log('received ', data)
+        console.log("received ", data)
     }
 
     startHeartbeat () {
@@ -42,9 +41,9 @@ export class Market {
     }
 
     heartbeatSlowAction () {
-        let options = {protocol: 'https://', 
-                       hostname: 'api.coingecko.com', 
-                       port: 443}
+        let options = { protocol: 'https://',
+            hostname: 'api.coingecko.com',
+            port: 443 }
 
         this.sendRPC('arqma', {}, options)
             .then(response => {
@@ -60,7 +59,7 @@ export class Market {
                     if (!data[symbol]) data[symbol] = {};
                     data[symbol][target] = price;
                 }
-                this.sendGateway("set_market_data", {info: data})
+                this.sendGateway("set_market_data", { info: data })
             });
     }
 
@@ -83,9 +82,9 @@ export class Market {
             //     id: id,
             //     method: method
             // },
-            headers : { 
-                        'Accept': 'application/json'
-                     },
+            headers: {
+                'Accept': 'application/json'
+            },
             agent: this.agent
         }
         if (Object.keys(params).length !== 0) {
