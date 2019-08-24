@@ -3,7 +3,7 @@
  * https://github.com/arqma/arqma-electron-wallet
  *
  * market.js
- * 
+ *
  **/
 
 import child_process from "child_process"
@@ -24,7 +24,6 @@ export class Market {
     }
 
     start (options) {
-
         return new Promise((resolve, reject) => {
             this.options = options
             resolve()
@@ -43,7 +42,6 @@ export class Market {
                 break
             default:
         }
-        
     }
 
     startHeartbeat () {
@@ -88,9 +86,9 @@ export class Market {
         let requestOptions = {
             uri: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
-            headers : { 
-                        'Accept': 'application/json'
-                     },
+            headers: {
+                'Accept': 'application/json'
+            },
             agent: this.agent
         }
         if (Object.keys(params).length !== 0) {

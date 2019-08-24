@@ -548,7 +548,7 @@ export class Backend {
             let process = []
             if (this.daemon) { process.push(this.daemon.quit()) }
             if (this.walletd) { process.push(this.walletd.quit()) }
-            if (this.market) { process.push(this.market.quit())}
+            if (this.market) { process.push(this.market.quit()) }
             if (this.wss) { this.wss.close() }
 
             Promise.all(process).then(() => {

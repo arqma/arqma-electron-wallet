@@ -33,7 +33,7 @@ const PBKDF2_SALT_SIZE = 16;
 const PBKDF2_ITERATIONS = 32767;
 
 export class SCEE {
-    encryptString(plaintext, password) {
+    encryptString (plaintext, password) {
         // Generate a 128-bit salt using a CSPRNG.
         let salt = crypto.randomBytes(PBKDF2_SALT_SIZE);
 
@@ -47,7 +47,7 @@ export class SCEE {
         return ciphertextAndNonceAndSalt.toString("base64");
     }
 
-    decryptString(base64CiphertextAndNonceAndSalt, password) {
+    decryptString (base64CiphertextAndNonceAndSalt, password) {
         // Decode the base64.
         let ciphertextAndNonceAndSalt = Buffer.from(base64CiphertextAndNonceAndSalt, "base64");
 
@@ -62,7 +62,7 @@ export class SCEE {
         return this.decrypt(ciphertextAndNonce, key).toString("utf8");
     }
 
-    encrypt(plaintext, key) {
+    encrypt (plaintext, key) {
         // Generate a 96-bit nonce using a CSPRNG.
         let nonce = crypto.randomBytes(ALGORITHM_NONCE_SIZE);
 
@@ -75,7 +75,7 @@ export class SCEE {
         return Buffer.concat([ nonce, ciphertext, cipher.getAuthTag() ]);
     }
 
-    decrypt(ciphertextAndNonce, key) {
+    decrypt (ciphertextAndNonce, key) {
         // Create buffers of nonce, ciphertext and tag.
         let nonce = ciphertextAndNonce.slice(0, ALGORITHM_NONCE_SIZE);
         let ciphertext = ciphertextAndNonce.slice(ALGORITHM_NONCE_SIZE, ciphertextAndNonce.length - ALGORITHM_TAG_SIZE);
