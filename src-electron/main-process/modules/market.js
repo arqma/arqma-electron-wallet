@@ -19,17 +19,29 @@ export class Market {
 
         this.agent = new https.Agent({ keepAlive: true, maxSockets: 1 })
         this.queue = new queue(1, Infinity)
+        this.options = null
+        this.endpoint = `/api/v3/coins/arqma/tickers`
     }
 
     start (options) {
         return new Promise((resolve, reject) => {
-            this.startHeartbeat()
+            this.options = options
             resolve()
         })
     }
 
     handle (data) {
-        console.log("received ", data)
+        let params = data.data
+        switch (data.method) {
+            case "open_wallet":
+                this.startHeartbeat()
+                break
+            case "close_wallet":
+                clearInterval(this.heartbeat)
+                clearInterval(this.heartbeat_slow)
+                break
+            default:
+        }
     }
 
     startHeartbeat () {
@@ -41,25 +53,23 @@ export class Market {
     }
 
     heartbeatSlowAction () {
-        let options = { protocol: 'https://',
-            hostname: 'api.coingecko.com',
-            port: 443 }
-
-        this.sendRPC('arqma', {}, options)
+        this.sendRPC({}, this.options.market.exchange)
             .then(response => {
-                let result = JSON.parse(response.result.toLowerCase())
-                let data = {}
-                for (let ticker in result.tickers) {
-                    let target = result.tickers[ticker].target
-                    let symbol = result.tickers[ticker].base
-
-                    let price = +result.tickers[ticker].last
-                    if (price === 0) continue;
-
-                    if (!data[symbol]) data[symbol] = {};
-                    data[symbol][target] = price;
-                }
-                this.sendGateway("set_market_data", { info: data })
+                try {
+                    let result = JSON.parse(response.result)
+                    let data = []
+                    for (let index in result.tickers) {
+                        let ticker = result.tickers[index]
+                        let key = ticker.market.name
+                        let symbol = ticker.target //btc
+                        let label = `${key} ${symbol}`
+                        let price = +ticker.last
+                        if (price === 0) continue;
+                        data.push({key: key, label: label, symbol: symbol, value: price})
+                        
+                    }
+                    this.sendGateway("set_market_data", {info: {exchanges: data}})
+                } catch(error){}
             });
     }
 
@@ -67,21 +77,15 @@ export class Market {
         this.backend.send(method, data)
     }
 
-    sendRPC (coin, params = {}, options = {}) {
+    sendRPC (params = {}, options = {}) {
         let id = this.id++
-
         const protocol = options.protocol || this.protocol
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
-
+        const endpoint = options.endpoint || this.endpoint
         let requestOptions = {
-            uri: `${protocol}${hostname}:${port}/api/v3/coins/${coin}/tickers`,
+            uri: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
-            // json: {
-            //     jsonrpc: "2.0",
-            //     id: id,
-            //     method: method
-            // },
             headers: {
                 'Accept': 'application/json'
             },
@@ -95,19 +99,16 @@ export class Market {
                 .then((response) => {
                     if (response.hasOwnProperty("error")) {
                         return {
-                            // method: method,
                             params: params,
                             error: response.error
                         }
                     }
                     return {
-                        // method: method,
                         params: params,
                         result: response
                     }
                 }).catch(error => {
                     return {
-                        // method: method,
                         params: params,
                         error: {
                             code: -1,
@@ -121,6 +122,7 @@ export class Market {
 
     quit () {
         clearInterval(this.heartbeat)
+        clearInterval(this.heartbeat_slow)
         return new Promise((resolve, reject) => {
             resolve()
         })

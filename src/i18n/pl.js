@@ -207,6 +207,10 @@ export default {
         walletName: "PORTFEL NAZWA",
         walletRPCPort: "PORTFEL RPC PORT",
         walletStoragePath: "PORTFEL STORAGE PATH",
+        protocol: "PROTOKÓŁ",
+        hostname: "NAZWA HOSTA",
+        endpoint: "KONIEC",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potwierdź nowe hasło",
@@ -238,7 +242,8 @@ export default {
         copyViewKey: "Kopiuj klucz podglądu",
         createNewWallet: "Utwórz nowy portfel",
         deleteWallet: "Usuń portfel",
-        exportWallet: "portfel eksportowy",
+        exportTransactions: "Export transakcji",
+        exportWallet: "Eksport portfela",
         exit: "Wyjdź Arqma GUI Wallet",
         importOldGUIWallet: "Importuj portfel z starego GUI",
         manageKeyImages: "Zarządzaj kluczami",
@@ -479,7 +484,8 @@ export default {
             tabs: {
                 general: "Ogólne",
                 language: "Język",
-                peers: "Podłączeni"
+                peers: "Podłączeni",
+                exchange: "Giełda"
             }
         },
         transactionDetails: "Szczegóły transakcji",

@@ -206,6 +206,10 @@ export default {
         walletName: "钱包名称",
         walletRPCPort: "钱包RPC端口",
         walletStoragePath: "钱包存储路径",
+        protocol: "協議",
+        hostname: "主機名",
+        endpoint: "端點",
+        port: "港口",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "确认新密码",
@@ -237,6 +241,7 @@ export default {
         copyViewKey: "复制视图键",
         createNewWallet: "创造新的钱包",
         deleteWallet: "删除电子钱包",
+        exportTransactions: "出口交易",
         exportWallet: "出口錢包",
         exit: "出口 Arqma GUI Wallet",
         importOldGUIWallet: "从旧的进口钱包 GUI",
@@ -478,7 +483,8 @@ export default {
             tabs: {
                 general: "一般",
                 language: "语言",
-                peers: "同行"
+                peers: "同行",
+                exchange: "交換"
             }
         },
         transactionDetails: "交易明细",

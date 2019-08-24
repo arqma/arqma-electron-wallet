@@ -206,6 +206,10 @@ export default {
         walletName: "NOMBRE MONEDERO",
         walletRPCPort: "PUERTO RPC MONEDERO",
         walletStoragePath: "RUTA DE ALMACENAMIENTO DEL MONEDERO",
+        protocol: "PROTOCOLO",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPOINT",
+        port: "PUERTO",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Confirme la nueva contraseña",
@@ -237,7 +241,8 @@ export default {
         copyViewKey: "Copiar clave de visualización",
         createNewWallet: "Crear nuevo monedero",
         deleteWallet: "Eliminar monedero",
-        exportWallet: "billetera de exportación",
+        exportWallet: "Billetera de exportación",
+        exportTransactions: "Transacciones de exportación",
         exit: "Cerrar la interfaz del monedero Arqma",
         importOldGUIWallet: "Importar monedero de una interfaz gráfica antigua",
         manageKeyImages: "Administrar Imágenes de Clave",
@@ -477,7 +482,8 @@ export default {
             tabs: {
                 general: "General",
                 language: "Idioma",
-                peers: "Pares"
+                peers: "Pares",
+                exchange: "Intercambiar"
             }
         },
         transactionDetails: "Detalles de la transacción",

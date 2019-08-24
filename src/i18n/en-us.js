@@ -206,6 +206,10 @@ export default {
         walletName: "WALLET NAME",
         walletRPCPort: "WALLET RPC PORT",
         walletStoragePath: "WALLET STORAGE PATH",
+        protocol: "PROTOCOL",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPOINT",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Confirm New Password",
@@ -237,6 +241,7 @@ export default {
         copyViewKey: "Copy view key",
         createNewWallet: "Create new wallet",
         deleteWallet: "Delete Wallet",
+        exportTransactions: "Export Transactions",
         exportWallet: "Export Wallet",
         exit: "Exit Arqma GUI Wallet",
         importOldGUIWallet: "Import wallets from old GUI",
@@ -478,7 +483,8 @@ export default {
             tabs: {
                 general: "General",
                 language: "Language",
-                peers: "Peers"
+                peers: "Peers",
+                exchange: "Exchange"
             }
         },
         transactionDetails: "Transaction details",

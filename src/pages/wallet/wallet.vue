@@ -13,14 +13,18 @@
                 </div>
             </div>
         </div>
+
+
+
         <div class="infoBoxBalance">
             <div class="infoBox">
                 <div class="infoBoxContent">
                     <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
-                    <div class="value"><span><FormatBitcoin :amount="info.balance" :btcAmount="market.arq.btc" /></span></div>
+                    <div class="value"><span><FormatBitcoin/></span></div>
                 </div>
             </div>
         </div>
+
         <div>
             <div class="infoBox">
                 <div class="infoBoxContent">
@@ -48,9 +52,9 @@
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
-                                    v-close-overlay @click.native="showModal('export_wallet')">
+                                    v-close-overlay @click.native="showModal('export_transactions')">
                                 <q-item-main>
-                                    <q-item-tile label>{{ $t("menuItems.exportWallet") }}</q-item-tile>
+                                    <q-item-tile label>{{ $t("menuItems.exportTransactions") }}</q-item-tile>
                                 </q-item-main>
                             </q-item>
                             <q-item :disabled="!is_ready"
@@ -268,29 +272,57 @@
         </div>
     </q-modal>
 
-    <q-modal minimized v-model="modals.export_wallet.visible">
-        <div class="modal-header">{{ $t("menuItems.exportWallet") }}</div>
-        <div class="q-ma-lg">
-            <q-field style="width:450px">
-                <div class="row gutter-sm">
+
+    <q-modal minimized v-model="modals.export_transactions.visible">
+        <div class="modal-header">{{ $t("menuItems.exportTransactions") }}</div>
+            <div class="q-ma-lg">
+                <q-field style="width:450px">
+                    <div class="row gutter-sm">
+                        <div class="col-9">
+                            <q-input v-model="modals.export_transactions.export_path" stack-label="transactions export directory" disable />
+                            <input type="file" webkitdirectory directory id="transactionsExportPath" v-on:change="setTransactionsExportPath" ref="transactionsExportSelect" hidden />
+                        </div>
+                        <div class="col-3">
+                            <q-btn class="float-right" v-on:click="selectTransactionsExportPath">{{ $t("buttons.browse") }}</q-btn>
+                        </div>
+                    </div>
+                </q-field>
+            </div>
+        <div class="modal-header">Export Options</div>
+            <div class="q-ma-lg">
+                <q-field style="width:450px">
+                    <div class="row gutter-sm">
                     <div class="col-9">
-                        <q-input v-model="modals.export_wallet.export_path" stack-label="wallet export directory" disable />
-                        <input type="file" webkitdirectory directory id="walletExportPath" v-on:change="setWalletExportPath" ref="walletExportSelect" hidden />
-                    </div>
-                    <div class="col-3">
-                        <q-btn class="float-right" v-on:click="selectWalletExportPath">{{ $t("buttons.browse") }}</q-btn>
-                    </div>
+                    <q-checkbox v-model="modals.export_transactions.header" label="Include header"/>
                 </div>
+            </div>
             </q-field>
+            <div class="row q-mb-md">
+                <div class="q-mr-xl">
+                    <q-checkbox v-model="modals.export_transactions.options.in" :label="$t('strings.transactions.types.incoming')" />
+                </div>
+                <div>
+                    <q-checkbox v-model="modals.export_transactions.options.out" :label="$t('strings.transactions.types.outgoing')" />
+                </div>
+                <div class="q-mr-xl">
+                    <q-checkbox v-model="modals.export_transactions.options.pending" :label="$t('strings.transactions.types.pending')" />
+                </div>
+                <div>
+                    <q-checkbox v-model="modals.export_transactions.options.failed" :label="$t('strings.transactions.types.failed')" />
+                </div>
+                <div>
+                    <q-checkbox v-model="modals.export_transactions.options.pool" label="Pool" />
+                </div>
+            </div>
             <div class="q-mt-xl text-right">
                 <q-btn
                     flat class="q-mr-sm"
-                    @click="hideModal('export_wallet')"
+                    @click="hideModal('export_transactions')"
                     :label="$t('buttons.close')"
                     />
                 <q-btn
                     color="primary"
-                    @click="doExportWallet()"
+                    @click="doExportTransactions()"
                     :label="$t('buttons.export')"
                     />
             </div>
@@ -310,7 +342,6 @@ import TxList from "components/tx_list"
 export default {
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
-        market: state => state.gateway.market.info,
         info: state => state.gateway.wallet.info,
         secret: state => state.gateway.wallet.secret,
         data_dir: state => state.gateway.app.config.app.data_dir,
@@ -341,9 +372,11 @@ export default {
                     new_password: "",
                     new_password_confirm: "",
                 },
-                export_wallet: {
+                export_transactions: {
                     export_path: "",
                     visible: false,
+                    options: { in: true, out: true, pending: false, failed: false, pool: false },
+                    header: true
                 },
             }
         }
@@ -352,7 +385,7 @@ export default {
         const path = require("path")
         this.modals.key_image.export_path = path.join(this.data_dir, "gui")
         this.modals.key_image.import_path = path.join(this.data_dir, "gui", "key_image_export")
-        this.modals.export_wallet.export_path = path.join(this.data_dir, "exports")
+        this.modals.export_transactions.export_path = path.join(this.data_dir, "exports")
     },
     watch: {
         secret: {
@@ -593,17 +626,16 @@ export default {
             }).catch(() => {
             })
         },
-        doExportWallet () {
-            this.hideModal("export_wallet")
-            //console.log(this.tx_list)
-            //this.$gateway.send("wallet", "export_wallet", this.tx_list)
+        doExportTransactions () {
+            this.hideModal("export_transactions")
+            this.$gateway.send("wallet", "export_transactions", this.modals.export_transactions)
         },
-        selectWalletExportPath () {
-            this.$refs.walletExportSelect.click()
+        selectTransactionsExportPath () {
+            this.$refs.transactionsExportSelect.click()
         },
-        setWalletExportPath (file) {
+        setTransactionsExportPath (file) {
             if (file.target.files)
-                this.modals.export_wallet.export_path = file.target.files[0].path
+                this.modals.export_transactions.export_path = file.target.files[0].path
         }
     },
     components: {

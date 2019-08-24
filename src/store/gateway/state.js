@@ -110,10 +110,15 @@ export default {
     },
     market: {
         info: {
-            arq: {
-                btc: 0,
-                cnyt: 0
-            }
+            default: 0,
+            exchanges: []
+        },
+        exchange: {
+            protocol: 'https://',
+            hostname: 'api.coingecko.com',
+            port: 443,
+            coin: 'arqma',
+            endpoint: '/api/v3/coins/arqma/tickers'
         }
     }
 }

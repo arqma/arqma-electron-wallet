@@ -206,6 +206,10 @@ export default {
         walletName: "NOME DA CARTEIRA",
         walletRPCPort: "PORTA RPC DA CARTEIRA",
         walletStoragePath: "DIRECTORIA DE SALVAMENTO DA CARTEIRA",
+        protocol: "PROTOCOLO",
+        hostname: "NOME DE ANFITRIÃO",
+        endpoint: "ENDPOINT",
+        port: "PORTA",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Confirmar Nova Palavra-Passe",
@@ -237,7 +241,8 @@ export default {
         copyViewKey: "Copiar chave de visualização",
         createNewWallet: "Criar nova carteira",
         deleteWallet: "Apagar carteira",
-        exportWallet: "carteira de exportação",
+        exportTransactions: "Transações de exportação",
+        exportWallet: "Carteira de exportação",
         exit: "Saír da Carteira GUI Arqma",
         importOldGUIWallet: "Importar carteiras da antiga carteira GUI",
         manageKeyImages: "Administrar Imagens de Chave",
@@ -477,7 +482,8 @@ export default {
             tabs: {
                 general: "Geral",
                 language: "Língua",
-                peers: "Pares"
+                peers: "Pares",
+                exchange: "Troca"
             }
         },
         transactionDetails: "Detalhes das transações",
