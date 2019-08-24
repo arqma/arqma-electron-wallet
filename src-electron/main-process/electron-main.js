@@ -23,6 +23,7 @@ let showConfirmClose = true
 let forceQuit = false
 let installUpdate = false
 
+// eslint-disable-next-line no-unused-vars
 const title = `${productName} v${version}`
 
 const selectionMenu = Menu.buildFromTemplate([
@@ -61,7 +62,7 @@ function createWindow () {
     })
 
     mainWindow.on("close", (e) => {
-      // Don't ask for confirmation if we're installing an update
+        // Don't ask for confirmation if we're installing an update
         if (installUpdate) { return }
 
         if (process.platform === "darwin") {
@@ -115,9 +116,9 @@ function createWindow () {
             }
 
             portscanner.checkPortStatus(config.port, "127.0.0.1", (e, status) => {
-          //      if (error) {
-          //      console.error(error)
-          //      }
+                //      if (error) {
+                //      console.error(error)
+                //      }
 
                 if (status === "closed") {
                     backend = new Backend(mainWindow)
@@ -153,16 +154,16 @@ function createWindow () {
 
 app.on("ready", () => {
     checkForUpdate(autoUpdater => {
-      if (mainWindow) {
-        mainWindow.webContents.send("showQuitScreen")
-    }
+        if (mainWindow) {
+            mainWindow.webContents.send("showQuitScreen")
+        }
 
-    const promise = backend ? backend.quit() : Promise.resolve()
-    promise.then(() => {
-        installUpdate = true
-        backend = null
-        autoUpdater.quitAndInstall()
-      })
+        const promise = backend ? backend.quit() : Promise.resolve()
+        promise.then(() => {
+            installUpdate = true
+            backend = null
+            autoUpdater.quitAndInstall()
+        })
     })
     if (process.platform === "darwin") {
         const menu = Menu.buildFromTemplate(menuTemplate)
@@ -186,9 +187,9 @@ app.on("activate", () => {
 })
 
 app.on("before-quit", () => {
-  // Quit instantly if we are installing an update
+    // Quit instantly if we are installing an update
     if (installUpdate) {
-      return
+        return
     }
     if (process.platform === "darwin") {
         forceQuit = true
