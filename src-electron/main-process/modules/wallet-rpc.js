@@ -302,7 +302,6 @@ export class WalletRPC {
             this.exportTransactions(params)
             break
 
-
         default:
         }
     }
@@ -1717,17 +1716,17 @@ export class WalletRPC {
         })
     }
 
-    exportTransactions(params) {
+    exportTransactions (params) {
         return new Promise((resolve, reject) => {
             if (params.hasOwnProperty("export_path")) {
-                if (!fs.existsSync(params.export_path)) 
+                if (!fs.existsSync(params.export_path))
                     fs.mkdirpSync(params.export_path)
                 this.getTransactions(params.options)
                     .then(data => {
-                        let filename =  `transactions-${new Date().toISOString()}.csv`
+                        let filename = `transactions-${new Date().toISOString()}.csv`
                         filename = filename.replace(/:\s*/g, ".")
-                        let csv = fs.createWriteStream(path.join(params.export_path, filename),  {encoding: 'utf8', flags: 'wx'})
-                         if (params.header)
+                        let csv = fs.createWriteStream(path.join(params.export_path, filename), { encoding: 'utf8', flags: 'wx' })
+                        if (params.header)
                             csv.write(`address,amount,confirmations,double_spend_seen,fee,height,note,payment_id,suggested_confirmations_threshold,timestamp,txid,type,unlock_time\n`)
                         for (const [key, transaction] of Object.entries(data.transactions.tx_list)) {
                             csv.write(`${transaction.address},${transaction.amount / 1e9},${transaction.confirmations},${transaction.double_spend_seen},${transaction.fee / 1e9},${transaction.height},${transaction.note},${transaction.payment_id},${transaction.suggested_confirmations_threshold},${new Date(transaction.timestamp * 1000).toISOString()},${transaction.txid},${transaction.type},${transaction.unlock_time}\n`)
@@ -1744,4 +1743,3 @@ export class WalletRPC {
         })
     }
 }
-

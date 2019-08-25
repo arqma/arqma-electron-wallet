@@ -100,11 +100,11 @@ export class Backend {
                     exchanges: []
                 },
                 exchange: {
-                    protocol: 'https://',
-                    hostname: 'api.coingecko.com',
+                    protocol: "https://",
+                    hostname: "api.coingecko.com",
                     port: 443,
-                    coin: 'arqma',
-                    endpoint: '/api/v3/coins/arqma/tickers'
+                    coin: "arqma",
+                    endpoint: "/api/v3/coins/arqma/tickers"
                 }
             }
         }
@@ -167,6 +167,7 @@ export class Backend {
             if (this.walletd) {
                 this.walletd.handle(decrypted_data)
             }
+        // eslint-disable-next-line no-fallthrough
         case "market":
             if (this.market) {
                 this.market.handle(decrypted_data)
