@@ -12,7 +12,7 @@ export default [
             {
                 path: "/quit",
                 component: () =>
-                    import ("pages/init/quit")
+                    import("pages/init/quit")
             }
         ]
     },

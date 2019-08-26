@@ -115,8 +115,10 @@ export class WalletRPC {
                 portscanner.checkPortStatus(this.port, this.hostname).catch(e => "closed").then(status => {
                     if (status === "closed") {
                         if (process.platform === "win32") {
+                            // eslint-disable-next-line no-undef
                             this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc.exe"), args)
                         } else {
+                            // eslint-disable-next-line no-undef
                             this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc"), args, {
                                 detached: true
                             })
@@ -1725,20 +1727,26 @@ export class WalletRPC {
                     .then(data => {
                         let filename = `transactions-${new Date().toISOString()}.csv`
                         filename = filename.replace(/:\s*/g, ".")
-                        let csv = fs.createWriteStream(path.join(params.export_path, filename), { encoding: 'utf8', flags: 'wx' })
-                        if (params.header)
+
+                        let csv = fs.createWriteStream(path.join(params.export_path, filename),  {encoding: 'utf8', flags: 'wx'})
+                         if (params.header)
                             csv.write(`address,amount,confirmations,double_spend_seen,fee,height,note,payment_id,suggested_confirmations_threshold,timestamp,txid,type,unlock_time\n`)
+
+                        let csv = fs.createWriteStream(path.join(params.export_path, filename), { encoding: "utf8", flags: "wx" })
+                        if (params.header)
+                            csv.write("address,amount,confirmations,double_spend_seen,fee,height,note,payment_id,suggested_confirmations_threshold,timestamp,txid,type,unlock_time\n")
+
                         for (const [key, transaction] of Object.entries(data.transactions.tx_list)) {
                             csv.write(`${transaction.address},${transaction.amount / 1e9},${transaction.confirmations},${transaction.double_spend_seen},${transaction.fee / 1e9},${transaction.height},${transaction.note},${transaction.payment_id},${transaction.suggested_confirmations_threshold},${new Date(transaction.timestamp * 1000).toISOString()},${transaction.txid},${transaction.type},${transaction.unlock_time}\n`)
                         }
                         csv.end()
                         resolve()
                     })
-                    .catch( error => {
+                    .catch(error => {
                         reject(error)
                     })
             } else {
-                reject('No export_path provided!')
+                reject("No export_path provided!")
             }
         })
     }
