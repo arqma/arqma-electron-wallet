@@ -209,7 +209,7 @@ export default {
         protocol: "PROTOKOL",
         hostname: "HOSTNAME",
         endpoint: "ENDPOINT",
-        port: "PŘÍSTAV",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potvrďte nové heslo",
