@@ -401,6 +401,7 @@ export default {
         loading: "Loading...",
         loadingSettings: "Loading settings",
         arqmaBalance: "Balance",
+        arqmaExchangeBalance: "Balance",
         arqmaUnlockedBalance: "Unlocked balance",
         arqmaUnlockedShort: "Unlocked",
         noTransactionsFound: "No transactions found",

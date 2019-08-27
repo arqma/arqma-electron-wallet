@@ -403,6 +403,7 @@ export default {
         arqmaBalance: "Zůstatek",
         arqmaUnlockedBalance: "Odemčený zůstatek",
         arqmaUnlockedShort: "Odemčeno",
+        arqmaExchangeBalance: "Stavy na burzách",
         noTransactionsFound: "Nebyly nalezeny žádné transakce",
         notes: "Poznámky",
         numberOfUnspentOutputs: "Dostupné prostředky",

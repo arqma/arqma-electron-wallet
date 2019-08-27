@@ -400,6 +400,7 @@ export default {
         loading: "Beladung...",
         loadingSettings: "Einstellungen werden geladen",
         arqmaBalance: "Guthaben",
+        arqmaExchangeBalance: "Guthaben",
         arqmaUnlockedBalance: "frei verfügbares Guthaben",
         arqmaUnlockedShort: "frei verfügbar",
         noTransactionsFound: "Keine Transaktionen gefunden",
