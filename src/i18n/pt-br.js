@@ -499,5 +499,20 @@ export default {
         },
         welcome: "Bem-vindo",
         yourWallets: "Suas carteiras"
+    },
+    headers: {
+        address: "Address",
+        amount: "Amount",
+        confirmations: "Confirmations",
+        double_spend_seen: "Double Spend Seen",
+        fee: "Fee",
+        height: "Height",
+        note: "Note",
+        paymentid: "PaymentID",
+        suggestedConfirmationsThreshold: "Suggested Confirmations Threshold",
+        timestamp: "Time Stamp",
+        txid: "TxID",
+        type: "Type",
+        unlockTime: "Unlock Time"
     }
 }
