@@ -500,5 +500,20 @@ export default {
         },
         welcome: "Vítejte",
         yourWallets: "Vaše peněženky"
+    },
+    headers: {
+        address: "Adresa",
+        amount: "Množství",
+        confirmations: "Potvrzení",
+        double_spend_seen: "Dvojitá útrata viděna",
+        fee: "Poplatek",
+        height: "Výška",
+        note: "Poznámka",
+        paymentid: "ID platby",
+        suggestedConfirmationsThreshold: "Doporučená prahová hodnota pro potvrzení",
+        timestamp: "Časové razítko",
+        txid: "TxID",
+        type: "Typ",
+        unlockTime: "Odemkněte čas"
     }
 }

@@ -498,5 +498,20 @@ export default {
         },
         welcome: "Willkommen",
         yourWallets: "Deine Wallets"
+    },
+    headers: {
+        address: "Adresse",
+        amount: "Menge",
+        confirmations: "Bestätigungen",
+        double_spend_seen: "Doppelte Ausgaben gesehen",
+        fee: "Gebühr",
+        height: "Höhe",
+        note: "Hinweis",
+        paymentid: "Zahlungs ID",
+        suggestedConfirmationsThreshold: "Vorgeschlagener Schwellenwert für Bestätigungen",
+        timestamp: "Zeitstempel",
+        txid: "TxID",
+        type: "Art",
+        unlockTime: "Zeit freischalten"
     }
 }

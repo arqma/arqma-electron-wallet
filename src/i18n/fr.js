@@ -501,5 +501,20 @@ export default {
         },
         welcome: "Bienvenue",
         yourWallets: "Vos portefeuilles"
+    },
+    headers: {
+        address: "Adresse",
+        amount: "Montant",
+        confirmations: "Les confirmations",
+        double_spend_seen: "Double dépenses vues",
+        fee: "Frais",
+        height: "la taille",
+        note: "Remarque",
+        paymentid: "ID de paiement",
+        suggestedConfirmationsThreshold: "Seuil de confirmation suggéré",
+        timestamp: "Horodatage",
+        txid: "TxID",
+        type: "Type",
+        unlockTime: "Débloquer le temps"
     }
 }

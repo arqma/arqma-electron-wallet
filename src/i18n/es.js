@@ -499,5 +499,20 @@ export default {
         },
         welcome: "Bienvenido/a",
         yourWallets: "Sus Monederos"
+    },
+    headers: {
+        address: "Dirección",
+        amount: "Cantidad",
+        confirmations: "Confirmaciones",
+        double_spend_seen: "Doble gasto visto",
+        fee: "Cuota",
+        height: "Altura",
+        note: "Nota",
+        paymentid: "ID de pago",
+        suggestedConfirmationsThreshold: "Umbral de confirmaciones sugerido",
+        timestamp: "Sello de tiempo",
+        txid: "TxID",
+        type: "Tipo",
+        unlockTime: "Tiempo de desbloqueo"
     }
 }
