@@ -1740,7 +1740,8 @@ export class WalletRPC {
                         reject(error)
                     })
             } else {
-                reject("No export_path provided!")
+                var reason = new Error("No export_path provided!")
+                reject(reason)
             }
         })
     }
