@@ -209,7 +209,7 @@ export default {
         protocol: "PROTOKOL",
         hostname: "HOSTNAME",
         endpoint: "ENDPOINT",
-        port: "PŘÍSTAV",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potvrďte nové heslo",
@@ -403,6 +403,7 @@ export default {
         arqmaBalance: "Zůstatek",
         arqmaUnlockedBalance: "Odemčený zůstatek",
         arqmaUnlockedShort: "Odemčeno",
+        arqmaExchangeBalance: "Stavy na burzách",
         noTransactionsFound: "Nebyly nalezeny žádné transakce",
         notes: "Poznámky",
         numberOfUnspentOutputs: "Dostupné prostředky",

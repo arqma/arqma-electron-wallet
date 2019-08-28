@@ -401,6 +401,7 @@ export default {
         loading: "Cargando...",
         loadingSettings: "Cargando configuración",
         arqmaBalance: "Saldo",
+        arqmaExchangeBalance: "Saldo",
         arqmaUnlockedBalance: "Saldo libre",
         arqmaUnlockedShort: "Libre",
         noTransactionsFound: "No se han encontrado transacciones",
