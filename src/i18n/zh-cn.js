@@ -401,6 +401,7 @@ export default {
         loading: "加载...",
         loadingSettings: "加载设置",
         arqmaBalance: "平衡",
+        arqmaExchangeBalance: "平衡",
         arqmaUnlockedBalance: "解锁平衡",
         arqmaUnlockedShort: "解锁",
         noTransactionsFound: "没有发现交易",

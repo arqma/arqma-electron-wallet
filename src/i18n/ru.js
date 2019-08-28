@@ -401,6 +401,7 @@ export default {
         loading: "Загрузка...",
         loadingSettings: "Загрузка настроек",
         arqmaBalance: "Баланс",
+        arqmaExchangeBalance: "Баланс",
         arqmaUnlockedBalance: "Разблокированый баланс",
         arqmaUnlockedShort: "Разблокировано",
         noTransactionsFound: "Транзакции не найдены",

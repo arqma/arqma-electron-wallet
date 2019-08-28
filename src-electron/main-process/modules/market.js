@@ -64,12 +64,6 @@ export class Market {
                         let symbol = ticker.target // btc
                         let label = `${key} ${symbol}`
                         let price = +ticker.last
-                        if (price === 0) continue;
-                        data.push({ key: key, label: label, symbol: symbol, value: price })
-                    }
-                    this.sendGateway("set_market_data", { info: { exchanges: data } })
-                } catch (error) {}
-            });
                         if (price === 0) continue
                         data.push({ key: key, label: label, symbol: symbol, value: price })
                     }

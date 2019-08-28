@@ -19,7 +19,7 @@
         <div class="infoBoxBalance">
             <div class="infoBox">
                 <div class="infoBoxContent">
-                    <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
+                    <q-item-tile label>{{ $t("strings.arqmaExchangeBalance") }}</q-item-tile>
                     <div class="value"><span><FormatBitcoin/></span></div>
                 </div>
             </div>
