@@ -114,11 +114,11 @@ export default {
             exchanges: []
         },
         exchange: {
-            protocol: 'https://',
-            hostname: 'api.coingecko.com',
+            protocol: "https://",
+            hostname: "api.coingecko.com",
             port: 443,
-            coin: 'arqma',
-            endpoint: '/api/v3/coins/arqma/tickers'
+            coin: "arqma",
+            endpoint: "/api/v3/coins/arqma/tickers"
         }
     }
 }

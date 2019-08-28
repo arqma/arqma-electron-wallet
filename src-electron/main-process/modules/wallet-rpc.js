@@ -115,8 +115,10 @@ export class WalletRPC {
                 portscanner.checkPortStatus(this.port, this.hostname).catch(e => "closed").then(status => {
                     if (status === "closed") {
                         if (process.platform === "win32") {
+                            // eslint-disable-next-line no-undef
                             this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc.exe"), args)
                         } else {
+                            // eslint-disable-next-line no-undef
                             this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc"), args, {
                                 detached: true
                             })
@@ -1734,11 +1736,12 @@ export class WalletRPC {
                         csv.end()
                         resolve()
                     })
-                    .catch( error => {
+                    .catch(error => {
                         reject(error)
                     })
             } else {
-                reject("No export_path provided!")
+                var reason = new Error("No export_path provided!")
+                reject(reason)
             }
         })
     }

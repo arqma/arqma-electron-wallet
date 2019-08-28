@@ -28,6 +28,7 @@ export class Daemon {
     checkVersion () {
         return new Promise((resolve, reject) => {
             if (process.platform === "win32") {
+                // eslint-disable-next-line no-undef
                 let arqmad_path = path.join(__ryo_bin, "arqmad.exe")
                 let arqmad_version_cmd = `"${arqmad_path}" --version`
                 if (!fs.existsSync(arqmad_path)) { resolve(false) }
@@ -36,6 +37,7 @@ export class Daemon {
                     resolve(stdout)
                 })
             } else {
+                // eslint-disable-next-line no-undef
                 let arqmad_path = path.join(__ryo_bin, "arqmad")
                 let arqmad_version_cmd = `"${arqmad_path}" --version`
                 if (!fs.existsSync(arqmad_path)) { resolve(false) }
@@ -139,8 +141,10 @@ export class Daemon {
             portscanner.checkPortStatus(this.port, this.hostname).catch(e => "closed").then(status => {
                 if (status === "closed") {
                     if (process.platform === "win32") {
+                        // eslint-disable-next-line no-undef
                         this.daemonProcess = child_process.spawn(path.join(__ryo_bin, "arqmad.exe"), args)
                     } else {
+                        // eslint-disable-next-line no-undef
                         this.daemonProcess = child_process.spawn(path.join(__ryo_bin, "arqmad"), args, {
                             detached: true
                         })
