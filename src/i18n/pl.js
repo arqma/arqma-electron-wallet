@@ -502,5 +502,20 @@ export default {
         },
         welcome: "Witamy",
         yourWallets: "Twoje Portfele"
+    },
+    headers: {
+        address: "Adres",
+        amount: "Ilość",
+        confirmations: "Potwierdzenia",
+        double_spend_seen: "Widoczne podwójne wydatki",
+        fee: "Opłata",
+        height: "Wysokość",
+        note: "Uwaga",
+        paymentid: "Identyfikator płatności",
+        suggestedConfirmationsThreshold: "Sugerowany próg potwierdzeń",
+        timestamp: "Znak czasu",
+        txid: "TxID",
+        type: "Rodzaj",
+        unlockTime: "Czas odblokowania"
     }
 }

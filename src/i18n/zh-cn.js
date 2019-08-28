@@ -501,5 +501,20 @@ export default {
         },
         welcome: "欢迎",
         yourWallets: "你的钱包"
+    },
+    headers: {
+        address: "地址",
+        amount: "量",
+        confirmations: "確認",
+        double_spend_seen: "看到雙倍花費",
+        fee: "費用",
+        height: "高度",
+        note: "注意",
+        paymentid: "付款ID",
+        suggestedConfirmationsThreshold: "建議的確認閾值",
+        timestamp: "時間戳",
+        txid: "TxID",
+        type: "類型",
+        unlockTime: "地址"
     }
 }

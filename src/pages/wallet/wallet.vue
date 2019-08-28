@@ -628,6 +628,8 @@ export default {
         },
         doExportTransactions () {
             this.hideModal("export_transactions")
+            this.modals.export_transactions.headers = `${this.$i18n.t("headers.address")},${this.$i18n.t("headers.amount")},${this.$i18n.t("headers.confirmations")},${this.$i18n.t("headers.double_spend_seen")},${this.$i18n.t("headers.fee")},${this.$i18n.t("headers.height")},${this.$i18n.t("headers.note")},${this.$i18n.t("headers.paymentid")},${this.$i18n.t("headers.suggestedConfirmationsThreshold")},${this.$i18n.t("headers.timestamp")},${this.$i18n.t("headers.txid")},${this.$i18n.t("headers.type")},${this.$i18n.t("headers.unlockTime")}\n`
+
             this.$gateway.send("wallet", "export_transactions", this.modals.export_transactions)
         },
         selectTransactionsExportPath () {

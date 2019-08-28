@@ -500,5 +500,20 @@ export default {
         },
         welcome: "Добро пожаловать",
         yourWallets: "Ваши Кошельки"
+    },
+    headers: {
+        address: "Адрес",
+        amount: "Количество",
+        confirmations: "Подтверждения",
+        double_spend_seen: "Удвоенный расход видел",
+        fee: "плата",
+        height: "Рост",
+        note: "Заметка",
+        paymentid: "Идентификатор платежа",
+        suggestedConfirmationsThreshold: "Предложенный порог подтверждений",
+        timestamp: "Отметка времени",
+        txid: "TxID",
+        type: "Тип",
+        unlockTime: "Время разблокировки"
     }
 }
