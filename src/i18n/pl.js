@@ -207,6 +207,10 @@ export default {
         walletName: "PORTFEL NAZWA",
         walletRPCPort: "PORTFEL RPC PORT",
         walletStoragePath: "PORTFEL STORAGE PATH",
+        protocol: "PROTOKÓŁ",
+        hostname: "NAZWA HOSTA",
+        endpoint: "KONIEC",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potwierdź nowe hasło",
@@ -398,6 +402,7 @@ export default {
         loading: "Ładowanie...",
         loadingSettings: "Ładowanie ustawień",
         arqmaBalance: "Saldo",
+        arqmaExchangeBalance: "Saldo",
         arqmaUnlockedBalance: "Odblokowane saldo",
         arqmaUnlockedShort: "Odblokowane",
         noTransactionsFound: "Nie znaleziono transakcji",
@@ -480,7 +485,8 @@ export default {
             tabs: {
                 general: "Ogólne",
                 language: "Język",
-                peers: "Podłączeni"
+                peers: "Podłączeni",
+                exchange: "Giełda"
             }
         },
         transactionDetails: "Szczegóły transakcji",
@@ -496,5 +502,20 @@ export default {
         },
         welcome: "Witamy",
         yourWallets: "Twoje Portfele"
+    },
+    headers: {
+        address: "Adres",
+        amount: "Ilość",
+        confirmations: "Potwierdzenia",
+        double_spend_seen: "Widoczne podwójne wydatki",
+        fee: "Opłata",
+        height: "Wysokość",
+        note: "Uwaga",
+        paymentid: "Identyfikator płatności",
+        suggestedConfirmationsThreshold: "Sugerowany próg potwierdzeń",
+        timestamp: "Znak czasu",
+        txid: "TxID",
+        type: "Rodzaj",
+        unlockTime: "Czas odblokowania"
     }
 }

@@ -206,6 +206,10 @@ export default {
         walletName: "钱包名称",
         walletRPCPort: "钱包RPC端口",
         walletStoragePath: "钱包存储路径",
+        protocol: "協議",
+        hostname: "主機名",
+        endpoint: "端點",
+        port: "港口",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "确认新密码",
@@ -397,6 +401,7 @@ export default {
         loading: "加载...",
         loadingSettings: "加载设置",
         arqmaBalance: "平衡",
+        arqmaExchangeBalance: "平衡",
         arqmaUnlockedBalance: "解锁平衡",
         arqmaUnlockedShort: "解锁",
         noTransactionsFound: "没有发现交易",
@@ -479,7 +484,8 @@ export default {
             tabs: {
                 general: "一般",
                 language: "语言",
-                peers: "同行"
+                peers: "同行",
+                exchange: "交換"
             }
         },
         transactionDetails: "交易明细",
@@ -495,5 +501,20 @@ export default {
         },
         welcome: "欢迎",
         yourWallets: "你的钱包"
+    },
+    headers: {
+        address: "地址",
+        amount: "量",
+        confirmations: "確認",
+        double_spend_seen: "看到雙倍花費",
+        fee: "費用",
+        height: "高度",
+        note: "注意",
+        paymentid: "付款ID",
+        suggestedConfirmationsThreshold: "建議的確認閾值",
+        timestamp: "時間戳",
+        txid: "TxID",
+        type: "類型",
+        unlockTime: "地址"
     }
 }

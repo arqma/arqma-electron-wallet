@@ -208,6 +208,10 @@ export default {
         walletName: "WALLET NAME",
         walletRPCPort: "WALLET RPC PORT",
         walletStoragePath: "WALLET SICHERUNGSPFAD",
+        protocol: "PROTOKOLL",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPUNKT",
+        port: "HAFEN",
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Neues Passwort bestätigen",
         newPassword: "Neues Passwort",
@@ -396,6 +400,7 @@ export default {
         loading: "Beladung...",
         loadingSettings: "Einstellungen werden geladen",
         arqmaBalance: "Guthaben",
+        arqmaExchangeBalance: "Guthaben",
         arqmaUnlockedBalance: "frei verfügbares Guthaben",
         arqmaUnlockedShort: "frei verfügbar",
         noTransactionsFound: "Keine Transaktionen gefunden",
@@ -477,7 +482,8 @@ export default {
             tabs: {
                 general: "Allgemein",
                 language: "Sprache",
-                peers: "Peers"
+                peers: "Peers",
+                exchange: "Austausch"
             }
         },
         transactionDetails: "Transaktionsdetails",
@@ -493,5 +499,20 @@ export default {
         },
         welcome: "Willkommen",
         yourWallets: "Deine Wallets"
+    },
+    headers: {
+        address: "Adresse",
+        amount: "Menge",
+        confirmations: "Bestätigungen",
+        double_spend_seen: "Doppelte Ausgaben gesehen",
+        fee: "Gebühr",
+        height: "Höhe",
+        note: "Hinweis",
+        paymentid: "Zahlungs ID",
+        suggestedConfirmationsThreshold: "Vorgeschlagener Schwellenwert für Bestätigungen",
+        timestamp: "Zeitstempel",
+        txid: "TxID",
+        type: "Art",
+        unlockTime: "Zeit freischalten"
     }
 }

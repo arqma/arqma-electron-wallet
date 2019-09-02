@@ -206,6 +206,10 @@ export default {
         walletName: "NOMBRE MONEDERO",
         walletRPCPort: "PUERTO RPC MONEDERO",
         walletStoragePath: "RUTA DE ALMACENAMIENTO DEL MONEDERO",
+        protocol: "PROTOCOLO",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPOINT",
+        port: "PUERTO",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Confirme la nueva contraseña",
@@ -397,6 +401,7 @@ export default {
         loading: "Cargando...",
         loadingSettings: "Cargando configuración",
         arqmaBalance: "Saldo",
+        arqmaExchangeBalance: "Saldo",
         arqmaUnlockedBalance: "Saldo libre",
         arqmaUnlockedShort: "Libre",
         noTransactionsFound: "No se han encontrado transacciones",
@@ -478,7 +483,8 @@ export default {
             tabs: {
                 general: "General",
                 language: "Idioma",
-                peers: "Pares"
+                peers: "Pares",
+                exchange: "Intercambiar"
             }
         },
         transactionDetails: "Detalles de la transacción",
@@ -494,5 +500,20 @@ export default {
         },
         welcome: "Bienvenido/a",
         yourWallets: "Sus Monederos"
+    },
+    headers: {
+        address: "Dirección",
+        amount: "Cantidad",
+        confirmations: "Confirmaciones",
+        double_spend_seen: "Doble gasto visto",
+        fee: "Cuota",
+        height: "Altura",
+        note: "Nota",
+        paymentid: "ID de pago",
+        suggestedConfirmationsThreshold: "Umbral de confirmaciones sugerido",
+        timestamp: "Sello de tiempo",
+        txid: "TxID",
+        type: "Tipo",
+        unlockTime: "Tiempo de desbloqueo"
     }
 }

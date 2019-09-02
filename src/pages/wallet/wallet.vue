@@ -13,14 +13,18 @@
                 </div>
             </div>
         </div>
+
+
+
         <div class="infoBoxBalance">
             <div class="infoBox">
                 <div class="infoBoxContent">
-                    <q-item-tile label>{{ $t("strings.arqmaBalance") }}</q-item-tile>
-                    <div class="value"><span><FormatBitcoin :amount="info.balance" :btcAmount="market.arq.btc" /></span></div>
+                    <q-item-tile label>{{ $t("strings.arqmaExchangeBalance") }}</q-item-tile>
+                    <div class="value"><span><FormatBitcoin/></span></div>
                 </div>
             </div>
         </div>
+
         <div>
             <div class="infoBox">
                 <div class="infoBoxContent">
@@ -31,7 +35,8 @@
         </div>
         <div class="col text-right q-mr-sm">
             <div class="infoBox">
-            <q-item-tile icon-right="more_vert" label>{{ $t("placeholders.operations") }} : </q-item-tile>
+            <q-item-tile icon-right="more_vert" label>{{ $t("placeholders.operations") }}</q-item-tile>
+                <q-btn>{{ $t("placeholders.walletOperations") }}:
                     <q-popover anchor="bottom right" self="top right">
                         <q-list separator link>
                             <q-item :disabled="!is_ready"
@@ -231,7 +236,7 @@
                 <q-btn
                     color="primary"
                     @click="doKeyImages()"
-                    :label="modals.key_image.type"
+                    :label="$t('buttons.export')"
                     />
             </div>
         </div>
@@ -266,6 +271,7 @@
             </div>
         </div>
     </q-modal>
+
 
     <q-modal minimized v-model="modals.export_transactions.visible">
         <div class="modal-header">{{ $t("menuItems.exportTransactions") }}</div>
@@ -336,7 +342,6 @@ import TxList from "components/tx_list"
 export default {
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
-        market: state => state.gateway.market.info,
         info: state => state.gateway.wallet.info,
         secret: state => state.gateway.wallet.secret,
         data_dir: state => state.gateway.app.config.app.data_dir,
@@ -623,10 +628,12 @@ export default {
         },
         doExportTransactions () {
             this.hideModal("export_transactions")
+            this.modals.export_transactions.headers = `${this.$i18n.t("headers.address")},${this.$i18n.t("headers.amount")},${this.$i18n.t("headers.confirmations")},${this.$i18n.t("headers.double_spend_seen")},${this.$i18n.t("headers.fee")},${this.$i18n.t("headers.height")},${this.$i18n.t("headers.note")},${this.$i18n.t("headers.paymentid")},${this.$i18n.t("headers.suggestedConfirmationsThreshold")},${this.$i18n.t("headers.timestamp")},${this.$i18n.t("headers.txid")},${this.$i18n.t("headers.type")},${this.$i18n.t("headers.unlockTime")}\n`
+
             this.$gateway.send("wallet", "export_transactions", this.modals.export_transactions)
         },
         selectTransactionsExportPath () {
-            this.$refs.walletExportSelect.click()
+            this.$refs.transactionsExportSelect.click()
         },
         setTransactionsExportPath (file) {
             if (file.target.files)

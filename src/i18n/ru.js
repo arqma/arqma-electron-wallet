@@ -208,6 +208,10 @@ export default {
         walletStoragePath: "ПАПКА КОШЕЛЬКА",
 
         // These are specific labels which do not get uppercased
+        protocol: "протокол",
+        hostname: "имя хоста",
+        endpoint: "конечная точка",
+        port: "порт",
         confirmNewPassword: "Подтвердите Новый Пароль",
         newPassword: "Новый Пароль",
         oldPassword: "Старый Пароль",
@@ -397,6 +401,7 @@ export default {
         loading: "Загрузка...",
         loadingSettings: "Загрузка настроек",
         arqmaBalance: "Баланс",
+        arqmaExchangeBalance: "Баланс",
         arqmaUnlockedBalance: "Разблокированый баланс",
         arqmaUnlockedShort: "Разблокировано",
         noTransactionsFound: "Транзакции не найдены",
@@ -478,7 +483,8 @@ export default {
             tabs: {
                 general: "Общие",
                 language: "Язык",
-                peers: "Пиры"
+                peers: "Пиры",
+                exchange: "обмен"
             }
         },
         transactionDetails: "Данные транзакции",
@@ -494,5 +500,20 @@ export default {
         },
         welcome: "Добро пожаловать",
         yourWallets: "Ваши Кошельки"
+    },
+    headers: {
+        address: "Адрес",
+        amount: "Количество",
+        confirmations: "Подтверждения",
+        double_spend_seen: "Удвоенный расход видел",
+        fee: "плата",
+        height: "Рост",
+        note: "Заметка",
+        paymentid: "Идентификатор платежа",
+        suggestedConfirmationsThreshold: "Предложенный порог подтверждений",
+        timestamp: "Отметка времени",
+        txid: "TxID",
+        type: "Тип",
+        unlockTime: "Время разблокировки"
     }
 }

@@ -115,8 +115,10 @@ export class WalletRPC {
                 portscanner.checkPortStatus(this.port, this.hostname).catch(e => "closed").then(status => {
                     if (status === "closed") {
                         if (process.platform === "win32") {
+                            // eslint-disable-next-line no-undef
                             this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc.exe"), args)
                         } else {
+                            // eslint-disable-next-line no-undef
                             this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc"), args, {
                                 detached: true
                             })
@@ -301,7 +303,6 @@ export class WalletRPC {
         case "export_transactions":
             this.exportTransactions(params)
             break
-
 
         default:
         }
@@ -1717,31 +1718,31 @@ export class WalletRPC {
         })
     }
 
-    exportTransactions(params) {
+    exportTransactions (params) {
         return new Promise((resolve, reject) => {
             if (params.hasOwnProperty("export_path")) {
-                if (!fs.existsSync(params.export_path)) 
+                if (!fs.existsSync(params.export_path))
                     fs.mkdirpSync(params.export_path)
                 this.getTransactions(params.options)
                     .then(data => {
-                            //console.log(params)
-                            let filename =  `transactions-${new Date().toISOString()}.csv`
-                            filename = filename.replace(/:\s*/g, ".")
-                            let csv = fs.createWriteStream(path.join(params.export_path, filename),  {encoding: 'utf8', flags: 'wx'})
-                             if (params.header)
-                                csv.write(`address,amount,confirmations,double_spend_seen,fee,height,note,payment_id,suggested_confirmations_threshold,timestamp,txid,type,unlock_time\n`)
-                            for (const [key, transaction] of Object.entries(data.transactions.tx_list)) {
-                                csv.write(`${transaction.address},${transaction.amount / 1e9},${transaction.confirmations},${transaction.double_spend_seen},${transaction.fee / 1e9},${transaction.height},${transaction.note},${transaction.payment_id},${transaction.suggested_confirmations_threshold},${new Date(transaction.timestamp * 1000).toISOString()},${transaction.txid},${transaction.type},${transaction.unlock_time}\n`)
-                            }
-                            csv.end()
-                            resolve()
-                        })
-                    .catch( error => {
-                        reject()
+                        let filename = `transactions-${new Date().toISOString()}.csv`
+                        filename = filename.replace(/:\s*/g, ".")
+                        let csv = fs.createWriteStream(path.join(params.export_path, filename), { encoding: "utf8", flags: "wx" })
+                        if (params.header)
+                            csv.write(params.headers)
+                        for (const [key, transaction] of Object.entries(data.transactions.tx_list)) {
+                            csv.write(`${transaction.address},${transaction.amount / 1e9},${transaction.confirmations},${transaction.double_spend_seen},${transaction.fee / 1e9},${transaction.height},${transaction.note},${transaction.payment_id},${transaction.suggested_confirmations_threshold},${new Date(transaction.timestamp * 1000).toISOString()},${transaction.txid},${transaction.type},${transaction.unlock_time}\n`)
+                        }
+                        csv.end()
+                        resolve()
                     })
+                    .catch(error => {
+                        reject(error)
+                    })
+            } else {
+                var reason = new Error("No export_path provided!")
+                reject(reason)
             }
-
         })
     }
 }
-

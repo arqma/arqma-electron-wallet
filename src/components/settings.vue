@@ -20,6 +20,12 @@
             <q-btn color="primary" @click="save" :label="$t('buttons.save')" />
         </q-toolbar>
 
+        <div v-if="page=='exchange'">
+            <div class="q-pa-lg">
+                <SettingsExchange ref="settingsExchange"></SettingsExchange>
+            </div>
+        </div>
+
         <div v-if="page=='general'">
             <div class="q-pa-lg">
                 <SettingsGeneral ref="settingsGeneral"></SettingsGeneral>
@@ -30,7 +36,7 @@
             <q-list :dark="theme=='dark'" no-border>
                 <q-list-header>{{ $t("strings.peerList") }}</q-list-header>
 
-                <q-item link v-for="(entry, index) in daemon.connections" @click.native="showPeerDetails(entry)">
+                <q-item link v-for="(entry, index) in daemon.connections" :key="index" @click.native="showPeerDetails(entry)">
                     <q-item-main>
                         <q-item-tile label>{{ entry.address }}</q-item-tile>
                         <q-item-tile sublabel>{{ $t("strings.blockHeight") }}: {{ entry.height }}</q-item-tile>
@@ -40,7 +46,7 @@
                 <template v-if="daemon.bans.length">
 
                     <q-list-header>{{ $t("strings.bannedPeers.title") }}</q-list-header>
-                    <q-item v-for="(entry, index) in daemon.bans">
+                    <q-item v-for="(entry, index) in daemon.bans" :key="index">
                         <q-item-main>
                             <q-item-tile label>{{ entry.host }}</q-item-tile>
                             <q-item-tile sublabel>{{ $t("strings.bannedPeers.bannedUntil", { time: new Date(Date.now() + entry.seconds * 1000).toLocaleString() }) }}</q-item-tile>
@@ -66,6 +72,7 @@
 import { mapState } from "vuex"
 import SettingsGeneral from "components/settings_general"
 import LanguageSelect from "components/language_select"
+import SettingsExchange from "components/settings_exchange"
 
 export default {
     name: "SettingsModal",
@@ -79,6 +86,7 @@ export default {
             let tabs = [
                 { label: this.$t("titles.settings.tabs.general"), value: 'general', icon: 'settings' },
                 { label: this.$t("titles.settings.tabs.language"), value: 'language', icon: 'language' },
+                { label: this.$t("titles.settings.tabs.exchange"), value: 'exchange', icon: 'settings' },
             ]
             if(daemons[app.net_type].type != 'remote') {
                 tabs.push({ label: this.$t("titles.settings.tabs.peers"), value: 'peers', icon: 'cloud_queue' })
@@ -147,7 +155,8 @@ export default {
     },
     components: {
         LanguageSelect,
-        SettingsGeneral
+        SettingsGeneral,
+        SettingsExchange
     }
 }
 </script>

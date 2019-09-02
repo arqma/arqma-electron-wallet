@@ -118,7 +118,7 @@
                         {{ $t("strings.transactions.sentTo", { type: $t("strings.transactions.types.outgoing") }) }}:
                     </q-list-header>
                     <template v-if="out_destinations">
-                        <q-item class="q-px-none" v-for="destination in out_destinations">
+                        <q-item class="q-px-none" v-for="(destination, index) in out_destinations" :key="index">
                             <q-item-main>
                                 <q-item-tile label>{{ destination.name }}</q-item-tile>
                                 <q-item-tile class="monospace ellipsis" sublabel>{{ destination.address }}</q-item-tile>

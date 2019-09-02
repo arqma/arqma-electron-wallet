@@ -46,7 +46,7 @@ export class Gateway extends EventEmitter {
         })
 
         ipcRenderer.on("confirmClose", () => {
-            this.confirmClose("Are you sure you want to exit?")
+            this.confirmClose(i18n.t("dialog.exit.message"))
         })
 
         ipcRenderer.on("showQuitScreen", () => {
@@ -82,7 +82,7 @@ export class Gateway extends EventEmitter {
             cancel: {
                 flat: true,
                 label: i18n.t("dialog.buttons.cancel"),
-                color: this.app.store.state.gateway.app.config.appearance.theme == "dark" ? "white" : "dark"
+                color: this.app.store.state.gateway.app.config.appearance.theme === "dark" ? "white" : "dark"
             }
         }).then(() => {
             this.closeDialog = false
@@ -104,7 +104,7 @@ export class Gateway extends EventEmitter {
         this.ws.send(encrypted_data)
     }
     geti18n (key) {
-      return Array.isArray(key) ? i18n.t(...key) : i18n.t(key)
+        return Array.isArray(key) ? i18n.t(...key) : i18n.t(key)
     }
 
     receive (message) {
@@ -156,17 +156,17 @@ export class Gateway extends EventEmitter {
 
             if (data.i18n) {
                 data.message = this.geti18n(data.i18n)
-          }
-          this.app.store.commit("gateway/set_prove_transaction_status", data)
-          break
+            }
+            this.app.store.commit("gateway/set_prove_transaction_status", data)
+            break
         }
         case "set_check_transaction_status": {
-          const data = { ...decrypted_data.data }
+            const data = { ...decrypted_data.data }
             if (data.i18n) {
-              data.message = this.geti18n(data.i18n)
+                data.message = this.geti18n(data.i18n)
             }
-        this.app.store.commit("gateway/set_check_transaction_status", data)
-        break
+            this.app.store.commit("gateway/set_check_transaction_status", data)
+            break
         }
         case "set_old_gui_import_status":
             this.app.store.commit("gateway/set_old_gui_import_status", decrypted_data.data)
@@ -177,7 +177,7 @@ export class Gateway extends EventEmitter {
             break
 
         case "settings_changed_reboot":
-            this.confirmClose("Changes require restart. Would you like to restart now?", true)
+            this.confirmClose(i18n.t("dialog.restart.message"), true)
             break
 
         case "show_notification":

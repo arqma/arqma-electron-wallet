@@ -93,6 +93,19 @@ export class Backend {
             wallet: {
                 rpc_bind_port: 19999,
                 log_level: 0
+            },
+            market: {
+                info: {
+                    default: 0,
+                    exchanges: []
+                },
+                exchange: {
+                    protocol: "https://",
+                    hostname: "api.coingecko.com",
+                    port: 443,
+                    coin: "arqma",
+                    endpoint: "/api/v3/coins/arqma/tickers"
+                }
             }
         }
 
@@ -154,6 +167,7 @@ export class Backend {
             if (this.walletd) {
                 this.walletd.handle(decrypted_data)
             }
+        // eslint-disable-next-line no-fallthrough
         case "market":
             if (this.market) {
                 this.market.handle(decrypted_data)
@@ -191,6 +205,7 @@ export class Backend {
                     if (this.config_data[i][j] !== params[i][j]) { config_changed = true }
                 })
             })
+        // eslint-disable-next-line no-fallthrough
         case "save_config_init":
             Object.keys(params).map(key => {
                 this.config_data[key] = Object.assign(this.config_data[key], params[key])
@@ -535,7 +550,7 @@ export class Backend {
             let process = []
             if (this.daemon) { process.push(this.daemon.quit()) }
             if (this.walletd) { process.push(this.walletd.quit()) }
-            if (this.market) { process.push(this.market.quit())}
+            if (this.market) { process.push(this.market.quit()) }
             if (this.wss) { this.wss.close() }
 
             Promise.all(process).then(() => {

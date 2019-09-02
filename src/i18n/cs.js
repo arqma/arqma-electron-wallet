@@ -206,6 +206,10 @@ export default {
         walletName: "JMÉNO PENĚŽENKY",
         walletRPCPort: "RPC PORT PENĚŽENKY",
         walletStoragePath: "CESTA K ADRESÁŘI S PENĚŽENKOU",
+        protocol: "PROTOKOL",
+        hostname: "HOSTNAME",
+        endpoint: "ENDPOINT",
+        port: "PORT",
 
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Potvrďte nové heslo",
@@ -399,6 +403,7 @@ export default {
         arqmaBalance: "Zůstatek",
         arqmaUnlockedBalance: "Odemčený zůstatek",
         arqmaUnlockedShort: "Odemčeno",
+        arqmaExchangeBalance: "Stavy na burzách",
         noTransactionsFound: "Nebyly nalezeny žádné transakce",
         notes: "Poznámky",
         numberOfUnspentOutputs: "Dostupné prostředky",
@@ -479,7 +484,8 @@ export default {
             tabs: {
                 general: "General",
                 language: "Jazyk",
-                peers: "Peers"
+                peers: "Peers",
+                exchange: "Výměna"
             }
         },
         transactionDetails: "Detaily transakce",
@@ -495,5 +501,20 @@ export default {
         },
         welcome: "Vítejte",
         yourWallets: "Vaše peněženky"
+    },
+    headers: {
+        address: "Adresa",
+        amount: "Množství",
+        confirmations: "Potvrzení",
+        double_spend_seen: "Dvojitá útrata viděna",
+        fee: "Poplatek",
+        height: "Výška",
+        note: "Poznámka",
+        paymentid: "ID platby",
+        suggestedConfirmationsThreshold: "Doporučená prahová hodnota pro potvrzení",
+        timestamp: "Časové razítko",
+        txid: "TxID",
+        type: "Typ",
+        unlockTime: "Odemkněte čas"
     }
 }
