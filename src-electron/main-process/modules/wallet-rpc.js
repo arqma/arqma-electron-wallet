@@ -1729,7 +1729,7 @@ export class WalletRPC {
                         filename = filename.replace(/:\s*/g, ".")
                         let csv = fs.createWriteStream(path.join(params.export_path, filename), { encoding: "utf8", flags: "wx" })
                         if (params.header)
-                            csv.write("address,amount,confirmations,double_spend_seen,fee,height,note,payment_id,suggested_confirmations_threshold,timestamp,txid,type,unlock_time\n")
+                            csv.write(params.headers)
                         for (const [key, transaction] of Object.entries(data.transactions.tx_list)) {
                             csv.write(`${transaction.address},${transaction.amount / 1e9},${transaction.confirmations},${transaction.double_spend_seen},${transaction.fee / 1e9},${transaction.height},${transaction.note},${transaction.payment_id},${transaction.suggested_confirmations_threshold},${new Date(transaction.timestamp * 1000).toISOString()},${transaction.txid},${transaction.type},${transaction.unlock_time}\n`)
                         }
