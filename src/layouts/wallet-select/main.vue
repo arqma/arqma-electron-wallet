@@ -51,6 +51,8 @@ export default {
             switch(this.$route.name) {
                 case "wallet-create":
                     return "Create new wallet"
+                case "wallet-mcreate":
+                    return "Multisig create new wallet"
                 case "wallet-restore":
                     return "Restore wallet from seed"
                 case "wallet-import":

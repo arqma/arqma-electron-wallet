@@ -492,6 +492,7 @@ export default {
         transactions: "Transactions",
         wallet: {
             createNew: "Create new wallet",
+            mcreateNew: "Create multisig new wallet",
             createdOrRestored: "Wallet created/restored",
             importFromFile: "Import wallet from file",
             importFromLegacyGUI: "Import wallet from legacy GUI",

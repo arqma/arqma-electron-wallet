@@ -44,6 +44,12 @@ export default [
                     import("pages/wallet-select/create")
             },
             {
+                path: "mcreate",
+                name: "wallet-mcreate",
+                component: () =>
+                    import("pages/wallet-select/mcreate")
+            },
+            {
                 path: "restore",
                 name: "wallet-restore",
                 component: () =>

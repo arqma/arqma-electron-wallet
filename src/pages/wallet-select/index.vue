@@ -62,6 +62,12 @@
             </q-item-side>
             <q-item-main :label="$t('titles.wallet.createNew')" />
         </q-item>
+        <q-item @click.native="mcreateNewWallet()">
+            <q-item-side>
+                <q-icon name="add_circle_outline" size="40px" />
+            </q-item-side>
+            <q-item-main :label="$t('titles.wallet.mcreateNew')" />
+        </q-item>
         <q-item @click.native="restoreWallet()">
             <q-item-side>
                 <q-icon name="input" size="40px" />
@@ -137,6 +143,9 @@ export default {
         },
         createNewWallet() {
             this.$router.replace({ path: "wallet-select/create" });
+        },
+        mcreateNewWallet() {
+            this.$router.replace({ path: "wallet-select/mcreate" });
         },
         restoreWallet() {
             this.$router.replace({ path: "wallet-select/restore" });
