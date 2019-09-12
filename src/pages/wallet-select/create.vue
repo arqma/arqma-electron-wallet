@@ -41,6 +41,7 @@
                 hide-underline
             />
         </ArqmaField>
+        <PasswordStrength :password="wallet.password" ref="password_strength" />
 
         <q-field>
             <q-btn color="primary" @click="create" :label="$t('buttons.createWallet')" />
@@ -51,6 +52,7 @@
 </template>
 
 <script>
+import PasswordStrength from "components/password_strength"
 import { required } from "vuelidate/lib/validators"
 import { mapState } from "vuex"
 import ArqmaField from "components/arqma_field"
@@ -135,39 +137,64 @@ export default {
                 })
                 return
             }
+            this.warnEmptyPassword()
+                            .then(options => {
+                                if(options.length > 0 && options[0] === true) {
+                                    // user selected do not show again
+                                    this.$gateway.send("core", "quick_save_config", {
+                                        preference: {
+                                            notify_empty_password: false
+                                        }
+                                    })
+                                }
+                                this.$q.loading.show({
+                                    delay: 0
+                                })
+                                this.$gateway.send("wallet", "create_wallet", this.wallet);
+                                    }).catch(() => {
+                                    })
+                            },
+                            cancel() {
+                                this.$router.replace({ path: "/wallet-select" });
+                            },
+                            warnEmptyPassword: function () {
+                                let message = ""
+                                if(this.wallet.password == "") {
+                                    message = "Using an empty password will leave your wallet unencrypted on your file system!"
+                                } else if(this.$refs.password_strength.score < 3) {
+                                    message = "Using an insecure password could allow attackers to brute-force your wallet! Consider using a password with better strength."
+                                }
+                                if(this.notify_empty_password && message != "") {
+                                    return this.$q.dialog({
+                                        title: "Warning",
+                                        message: message,
+                                        options: {
+                                            type: "checkbox",
+                                            model: [],
+                                            items: [
+                                                {label: "Do not show this message again", value: true},
+                                            ]
+                                        },
+                                        ok: {
+                                            label: "CONTINUE"
+                                        },
+                                        cancel: {
+                                            flat: true,
+                                            label: "CANCEL",
+                                            color: this.theme=="dark"?"white":"dark"
+                                        }
+                                    })
+                                } else {
+                                    return new Promise((resolve, reject) => {
+                                        resolve([])
+                                    })
+                                }
+                            }
+                        },
 
-            // Warn user if no password is set
-            let passwordPromise = Promise.resolve();
-            if (!this.wallet.password) {
-                passwordPromise = this.$q.dialog({
-                    title: this.$t("dialog.noPassword.title"),
-                    message: this.$t("dialog.noPassword.message"),
-                    ok: {
-                        label: this.$t("dialog.noPassword.ok"),
-                    },
-                    cancel: {
-                        flat: true,
-                        label: this.$t("dialog.buttons.cancel"),
-                        color: this.theme === "dark" ? "white" : "dark"
-                    },
-                })
-            }
-
-            passwordPromise
-                .then(() => {
-                    this.$q.loading.show({
-                        delay: 0
-                    })
-                    this.$gateway.send("wallet", "create_wallet", this.wallet)
-                })
-                .catch(() => {})
-        },
-        cancel() {
-            this.$router.replace({ path: "/wallet-select" });
-        }
-    },
     components: {
-        ArqmaField
+        ArqmaField,
+        PasswordStrength
     }
 }
 </script>
