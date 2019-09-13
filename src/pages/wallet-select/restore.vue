@@ -85,11 +85,11 @@
                 hide-underline
                 />
         </ArqmaField>
-
+        <PasswordStrength :password="wallet.password" ref="password_strength" />
         <q-field>
             <q-btn color="primary" @click="restore_wallet" :label="$t('buttons.restoreWallet')" />
         </q-field>
-<PasswordStrength :password="wallet.password" ref="password_strength" />
+
     </div>
 </q-page>
 </template>
