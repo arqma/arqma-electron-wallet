@@ -14,13 +14,13 @@
                 <div>{{ $t("footer.remote") }}: {{ daemon.info.height }}</div>
             </template>
 
-            <div>{{ $t("footer.wallet") }}: {{ wallet.info.height }} / {{ target_height }} ({{ wallet_pct }}%)</div>
+
         </div>
 
     </div>
     <div class="status-bars" :class="[status]">
         <div v-bind:style="{ width: daemon_pct+'%' }"></div>
-        <div v-bind:style="{ width: wallet_pct+'%' }"></div>
+
     </div>
 </q-layout-footer>
 </template>

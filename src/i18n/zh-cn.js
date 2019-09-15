@@ -365,7 +365,11 @@ export default {
             title: "被禁止的同伴（如果重新启动钱包，禁令将被清除）",
             bannedUntil: "禁止直到 {time}"
         },
+        backupSeedWord: "将您的种子词备份到安全的位置！ 如果您更换设备，这是获取资金的唯一方式。",
         blockHeight: "高度",
+        confirmWords: "确认您的助记符种子词",
+        enter7words: "按正确顺序输入助记符种子的前七个单词：",
+        usingEmptyPass: "使用空密码将使您的钱包在您的文件系统上不加密！",
         checkTransaction: {
             description: "通过提供交易ID，收件人地址，用于签名的消息和签名，验证资金是否已支付给地址.\n对于“支出证明”，您不需要提供收件人地址.",
             infoTitles: {

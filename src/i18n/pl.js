@@ -366,7 +366,11 @@ export default {
             title: "Banned peers (bans will cleared if wallet is restarted)",
             bannedUntil: "Banned until {time}"
         },
+        backupSeedWord: "Utwórz kopię zapasową słów źródłowych w bezpiecznym miejscu! Jest to jedyny sposób na dostęp do funduszy, jeśli zmienisz urządzenie.",
         blockHeight: "Wysokość",
+        confirmWords: "Potwierdź swoje mnemoniczne słowa",
+        enter7words: "Wpisz pierwsze siedem słów swojego mnemonicznego ziarna w prawidłowej kolejności:",
+        usingEmptyPass: "Użycie pustego hasła pozostawi portfel niezaszyfrowany w systemie plików!",
         checkTransaction: {
             description: "Sprawdź, czy środki zostały wypłacone na adres, podając identyfikator transakcji, adres odbiorcy, wiadomość użytą do podpisania i podpis.\nW przypadku „Wydania dowodu” nie musisz podawać adresu odbiorcy.",
             infoTitles: {

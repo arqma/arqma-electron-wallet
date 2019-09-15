@@ -44,8 +44,8 @@
                     <a @click="openExternal('https://arqma.com/')" href="#">https://arqma.com/</a>
                 </p>
                 <p>
-                    <a @click="openExternal('https://t.me/joinchat/HNpOMRIiNSoCn0zYrAOofw')" href="#">Telegram</a> -
-                    <a @click="openExternal('https://discord.gg/s9BQpJT')" href="#">Discord</a> -
+                    <a @click="openExternal('https://telegram.arqma.com')" href="#">Telegram</a> -
+                    <a @click="openExternal('https://chat.arqma.com')" href="#">Discord</a> -
                     <a @click="openExternal('https://www.reddit.com/r/arqma/')" href="#">Reddit</a> -
                     <a @click="openExternal('https://github.com/arqma/arqma-electron-wallet')" href="#">Github</a>
                 </p>

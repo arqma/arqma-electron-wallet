@@ -19,7 +19,36 @@
 
             <q-btn color="primary" @click="save" :label="$t('buttons.save')" />
         </q-toolbar>
+        <div v-if="page=='preferences'">
+                    <div class="q-pa-md">
+                        <h6 class="q-mb-md q-mt-none" style="font-weight: 300">Appearance:</h6>
 
+                        <q-btn-toggle
+                            v-model="theme"
+                            toggle-color="primary"
+                            size="md"
+                            :options="[
+                                      {label: 'Light theme', value: 'light', icon: 'brightness_5'},
+                                      {label: 'Dark theme', value: 'dark', icon: 'brightness_2'},
+                                      ]"
+                            />
+
+
+                        <h6 class="q-mb-md" style="font-weight: 300">Preferences:</h6>
+                        <div>
+                            <q-checkbox v-model="minimize_to_tray" label="Minimize to Tray" />
+                        </div>
+
+                        <h6 class="q-mb-md" style="font-weight: 300">Notifications:</h6>
+                        <div>
+                            <q-checkbox v-model="notify_no_payment_id" label="Notify when making transaction without Payment ID" />
+                        </div>
+                        <div>
+                            <q-checkbox v-model="notify_empty_password" label="Notify when creating or restoring a wallet with an insecure password" />
+                        </div>
+
+                    </div>
+                </div>
         <div v-if="page=='exchange'">
             <div class="q-pa-lg">
                 <SettingsExchange ref="settingsExchange"></SettingsExchange>

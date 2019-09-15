@@ -85,7 +85,7 @@
                 hide-underline
                 />
         </ArqmaField>
-
+        <PasswordStrength :password="wallet.password" ref="password_strength" />
         <q-field>
             <q-btn color="primary" @click="restore_wallet" :label="$t('buttons.restoreWallet')" />
         </q-field>
@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import PasswordStrength from "components/password_strength"
 import { required, numeric } from "vuelidate/lib/validators"
 import { mapState } from "vuex"
 import ArqmaField from "components/arqma_field"
@@ -210,7 +211,8 @@ export default {
         }
     },
     components: {
-        ArqmaField
+        ArqmaField,
+        PasswordStrength
     }
 }
 </script>

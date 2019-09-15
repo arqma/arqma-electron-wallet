@@ -365,7 +365,11 @@ export default {
             title: "Pares vetados (los vetos se anularán si reinicia el monedero)",
             bannedUntil: "Vetado hasta {time}"
         },
+        backupSeedWord: "¡Respalde sus palabras de origen en un lugar seguro! Esta es la única forma de acceder a sus fondos si cambia de dispositivo.",
         blockHeight: "Altura",
+        confirmWords: "Confirma tus palabras de semilla mnemotécnicas",
+        enter7words: "Ingrese las primeras siete palabras de su semilla mnemónica en el orden correcto:",
+        usingEmptyPass: "¡Usar una contraseña vacía dejará su billetera sin cifrar en su sistema de archivos!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {

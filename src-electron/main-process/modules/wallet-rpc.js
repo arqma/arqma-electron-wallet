@@ -373,7 +373,7 @@ export class WalletRPC {
             this.wallet_state.name = filename
             this.wallet_state.open = true
 
-            this.finalizeNewWallet(filename)
+            this.finalizeNewWallet(filename, true)
         })
     }
 
@@ -523,7 +523,7 @@ export class WalletRPC {
         }
     }
 
-    finalizeNewWallet (filename) {
+    finalizeNewWallet (filename, newly_created=false) {
         Promise.all([
             this.sendRPC("get_address"),
             this.sendRPC("getheight"),
@@ -539,7 +539,8 @@ export class WalletRPC {
                     balance: 0,
                     unlocked_balance: 0,
                     height: 0,
-                    view_only: false
+                    view_only: false,
+                    newly_created
                 },
                 secret: {
                     mnemonic: "",

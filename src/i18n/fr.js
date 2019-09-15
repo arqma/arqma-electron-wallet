@@ -367,7 +367,11 @@ export default {
             title: "Les pairs exclus (les exclusions seront effacées si le portefeuille est redémarré)",
             bannedUntil: "Exclu jusqu'au {time}"
         },
+        backupSeedWord: "Sauvegardez vos mots clés dans un endroit sécurisé! C'est le seul moyen d'accéder à vos fonds si vous changez d'appareil.",
         blockHeight: "Hauteur",
+        confirmWords: "Confirmez vos mots-clés mnémoniques",
+        enter7words: "Entrez les sept premiers mots de votre code mnémonique dans le bon ordre:",
+        usingEmptyPass: "L'utilisation d'un mot de passe vide laissera votre portefeuille non chiffré sur votre système de fichiers!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {

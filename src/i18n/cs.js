@@ -365,6 +365,7 @@ export default {
             title: "Banované peers (bany budou vymazány, pokud je peněženka restartována)",
             bannedUntil: "Blokovat do {time}"
         },
+        backupSeedWord: "Zálohujte vaše počáteční slova na bezpečném místě! Toto je jediný způsob, jak získat přístup k vašim finančním prostředkům, pokud změníte zařízení.",
         blockHeight: "Výška",
         checkTransaction: {
             description: "Zkontrolujte, zda byly prostředky na adresu zaplaceny uvedením ID transakce, adresy příjemce, zprávy použité pro podpis a podpisu.\nPro 'Spend Proof' nemusíte poskytnout adresu příjemce.",
