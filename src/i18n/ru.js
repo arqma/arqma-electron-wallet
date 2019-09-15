@@ -365,7 +365,11 @@ export default {
             title: "Забаненные пиры (баны будут сняты при перезагрузке кошелька)",
             bannedUntil: "Забанено до {time}"
         },
+        backupSeedWord: "Сделайте резервную копию ваших начальных слов в безопасном месте! Это единственный способ получить доступ к вашим средствам, если вы переключаете устройства.",
         blockHeight: "Высота блока",
+        confirmWords: "Подтвердите свои мнемонические начальные словаs",
+        enter7words: "Введите первые семь слов вашего мнемонического семени в правильном порядке:",
+        usingEmptyPass: "Использование пустого пароля оставит ваш кошелек незашифрованным в вашей файловой системе!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {

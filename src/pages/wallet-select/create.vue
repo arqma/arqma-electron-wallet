@@ -160,7 +160,7 @@ export default {
                             warnEmptyPassword: function () {
                                 let message = ""
                                 if(this.wallet.password == "") {
-                                    message = "Using an empty password will leave your wallet unencrypted on your file system!"
+                                    message = this.$t("strings.usingEmptyPass")
                                 } else if(this.$refs.password_strength.score < 3) {
                                     message = "Using an insecure password could allow attackers to brute-force your wallet! Consider using a password with better strength."
                                 }

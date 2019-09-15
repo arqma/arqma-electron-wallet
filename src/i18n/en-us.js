@@ -365,7 +365,11 @@ export default {
             title: "Banned peers (bans will cleared if wallet is restarted)",
             bannedUntil: "Banned until {time}"
         },
+        backupSeedWord: "Backup your seed words in a secure location! This is the only way to access your funds if you switch devices.",
         blockHeight: "Height",
+        confirmWords: "Confirm your mnemonic seed words",
+        enter7words: "Enter the first seven words of your mnemonic seed in the correct order:",
+        usingEmptyPass: "Using an empty password will leave your wallet unencrypted on your file system!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {

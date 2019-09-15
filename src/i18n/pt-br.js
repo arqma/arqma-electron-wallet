@@ -365,7 +365,11 @@ export default {
             title: "Pares banidos (banimento serão anulados ao reiniciar a carteira)",
             bannedUntil: "Banido até {time}"
         },
+        backupSeedWord: "Faça backup de suas palavras iniciais em um local seguro! Essa é a única maneira de acessar seus fundos se você trocar de dispositivo.",
         blockHeight: "Altura",
+        confirmWords: "Confirme suas palavras-semente mnemônicas",
+        enter7words: "Digite as sete primeiras palavras da sua semente mnemônica na ordem correta:",
+        usingEmptyPass: "Usar uma senha vazia deixará sua carteira não criptografada no seu sistema de arquivos!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {

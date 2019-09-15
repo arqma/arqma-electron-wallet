@@ -6,10 +6,10 @@
     <template v-if="secret.mnemonic">
         <template v-if="info.newly_created">
             <div class="row q-py-sm q-px-md q-mt-lg bg-amber-3 text-dark round-borders">
-                Backup your seed words in a secure location! This is the only way to access your funds if you switch devices.
+              {{ $t ("strings.backupSeedWord") }}
             </div>
         </template>
-        <h6 class="q-mb-xs q-mt-lg">Seed words</h6>
+        <h6 class="q-mb-xs q-mt-lg">{{ $t("strings.seedWords") }}</h6>
         <div class="row">
             <div class="col" v-if="mnemonic_words_confirm.length">
                 Hidden while you confirm you mnemonic seed words. Make sure to write these down!
@@ -24,7 +24,7 @@
                     size="sm" icon="file_copy"
                     @click="copyPrivateKey('mnemonic', $event)">
                     <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
-                        Copy seed words
+                        {{ $t("strings.saveSeedWarning") }}
                     </q-tooltip>
                 </q-btn>
             </div>
@@ -32,7 +32,7 @@
     </template>
 
     <template v-if="secret.view_key != secret.spend_key">
-        <h6 class="q-mb-xs">View key</h6>
+        <h6 class="q-mb-xs">{{ $t("strings.viewKey") }}</h6>
         <div class="row">
             <div class="col" style="word-break:break-all;">
                 {{ secret.view_key }}
@@ -43,7 +43,7 @@
                     size="sm" icon="file_copy"
                     @click="copyPrivateKey('view_key', $event)">
                     <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
-                        Copy view key
+                      {{ $t("menuItems.copyViewKey") }}
                     </q-tooltip>
                 </q-btn>
             </div>
@@ -51,7 +51,7 @@
     </template>
 
     <template v-if="!/^0*$/.test(secret.spend_key)">
-        <h6 class="q-mb-xs">Spend key</h6>
+        <h6 class="q-mb-xs">{{ $t("strings.spendKey") }}</h6>
         <div class="row">
             <div class="col" style="word-break:break-all;">
                 {{ secret.spend_key }}
@@ -62,18 +62,16 @@
                     size="sm" icon="file_copy"
                     @click="copyPrivateKey('spend_key', $event)">
                     <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
-                        Copy spend key
+                      {{ $t("menuItems.copySpendKey") }}
                     </q-tooltip>
                 </q-btn>
             </div>
         </div>
     </template>
 
-
-
     <div v-if="info.newly_created">
-        <h6 class="q-mb-md">Confirm your mnemonic seed words</h6>
-        <p>Enter the first seven words of your mnemonic seed in the correct order:</p>
+        <h6 class="q-mb-md">{{ $t("strings.confirmWords") }}</h6>
+        {{ $t("strings.enter7words") }}
 
         <div v-bind:class="{ row: true, 'q-pa-sm': true, 'round-borders': true, 'bg-grey-4':theme=='light', 'bg-dark':theme=='dark' }" style="min-height:48px">
             <template v-for="(word, index) in mnemonic_words_confirm">
@@ -104,7 +102,7 @@
 
     <q-field>
         <q-btn
-            label="Open wallet"
+            :label="$t('buttons.openWallet')"
             class="q-mt-lg"
             :color="!can_continue ? (theme=='dark'?'dark':'standard') : 'primary'"
             :text-color="!can_continue ? (theme=='dark'?'white':'dark') : 'white'"
