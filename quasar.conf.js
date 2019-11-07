@@ -197,7 +197,7 @@ module.exports = function (ctx) {
                 },
 
                 mac: {
-                    target: ["7z"],
+                    target: ["zip"],
                     icon: "src-electron/icons/icon.icns",
                     category: "public.app-category.finance",
                     // Notarizing: https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
