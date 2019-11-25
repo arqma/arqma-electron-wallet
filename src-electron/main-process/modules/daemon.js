@@ -29,7 +29,7 @@ export class Daemon {
         return new Promise((resolve, reject) => {
             if (process.platform === "win32") {
                 // eslint-disable-next-line no-undef
-                let arqmad_path = path.join(__ryo_bin, "arqmad.exe")
+                let arqmad_path = path.join(__arqma_bin, "arqmad.exe")
                 let arqmad_version_cmd = `"${arqmad_path}" --version`
                 if (!fs.existsSync(arqmad_path)) { resolve(false) }
                 child_process.exec(arqmad_version_cmd, (error, stdout, stderr) => {
@@ -38,7 +38,7 @@ export class Daemon {
                 })
             } else {
                 // eslint-disable-next-line no-undef
-                let arqmad_path = path.join(__ryo_bin, "arqmad")
+                let arqmad_path = path.join(__arqma_bin, "arqmad")
                 let arqmad_version_cmd = `"${arqmad_path}" --version`
                 if (!fs.existsSync(arqmad_path)) { resolve(false) }
                 child_process.exec(arqmad_version_cmd, { detached: true }, (error, stdout, stderr) => {
@@ -142,10 +142,10 @@ export class Daemon {
                 if (status === "closed") {
                     if (process.platform === "win32") {
                         // eslint-disable-next-line no-undef
-                        this.daemonProcess = child_process.spawn(path.join(__ryo_bin, "arqmad.exe"), args)
+                        this.daemonProcess = child_process.spawn(path.join(__arqma_bin, "arqmad.exe"), args)
                     } else {
                         // eslint-disable-next-line no-undef
-                        this.daemonProcess = child_process.spawn(path.join(__ryo_bin, "arqmad"), args, {
+                        this.daemonProcess = child_process.spawn(path.join(__arqma_bin, "arqmad"), args, {
                             detached: true
                         })
                     }

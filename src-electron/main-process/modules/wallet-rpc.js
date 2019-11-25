@@ -116,10 +116,10 @@ export class WalletRPC {
                     if (status === "closed") {
                         if (process.platform === "win32") {
                             // eslint-disable-next-line no-undef
-                            this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc.exe"), args)
+                            this.walletRPCProcess = child_process.spawn(path.join(__arqma_bin, "arqma-wallet-rpc.exe"), args)
                         } else {
                             // eslint-disable-next-line no-undef
-                            this.walletRPCProcess = child_process.spawn(path.join(__ryo_bin, "arqma-wallet-rpc"), args, {
+                            this.walletRPCProcess = child_process.spawn(path.join(__arqma_bin, "arqma-wallet-rpc"), args, {
                                 detached: true
                             })
                         }
@@ -1178,8 +1178,8 @@ export class WalletRPC {
                 wallet.address_list.unused = wallet.address_list.unused.slice(0, 10)
 
                 if (wallet.address_list.unused.length < num_unused_addresses &&
-                   !wallet.address_list.primary[0].address.startsWith("RYoK") &&
-                   !wallet.address_list.primary[0].address.startsWith("RYoH")) {
+                   !wallet.address_list.primary[0].address.startsWith("ar") &&
+                   !wallet.address_list.primary[0].address.startsWith("aRi")) {
                     for (let n = wallet.address_list.unused.length; n < num_unused_addresses; n++) {
                         this.sendRPC("create_address", { account_index: 0 }).then((data) => {
                             wallet.address_list.unused.push(data.result)

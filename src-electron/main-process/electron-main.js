@@ -13,9 +13,9 @@ const windowStateKeeper = require("electron-window-state")
  */
 if (process.env.PROD) {
     global.__statics = require("path").join(__dirname, "statics").replace(/\\/g, "\\\\")
-    global.__ryo_bin = require("path").join(__dirname, "..", "bin").replace(/\\/g, "\\\\")
+    global.__arqma_bin = require("path").join(__dirname, "..", "bin").replace(/\\/g, "\\\\")
 } else {
-    global.__ryo_bin = require("path").join(process.cwd(), "bin").replace(/\\/g, "\\\\")
+    global.__arqma_bin = require("path").join(process.cwd(), "bin").replace(/\\/g, "\\\\")
 }
 
 let mainWindow, backend
