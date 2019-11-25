@@ -177,9 +177,10 @@ module.exports = function (ctx) {
             builder: {
                 // https://www.electron.build/configuration/configuration
 
-                appId: "com.arqma.wallet",
+                appId: "com.arqma.electron-wallet",
                 productName: "Arqma Electron Wallet",
                 copyright: "Copyright © 2018-2019 Arqma Project, 2018 Ryo/Loki Currency Project",
+                afterSign: "build/notarize.js",
 
                 // directories: {
                 //     buildResources: "src-electron/build"
@@ -196,19 +197,33 @@ module.exports = function (ctx) {
                 },
 
                 mac: {
+                    target: ["default"],
                     icon: "src-electron/icons/icon.icns",
-                    category: "public.app-category.finance"
+                    category: "public.app-category.finance",
+                    // Notarizing: https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application/
+                    hardenedRuntime: true,
+                    gatekeeperAssess: false,
+                    entitlements: "build/entitlements.mac.plist",
+                    entitlementsInherit: "build/entitlements.mac.plist",
+                    darkModeSupport: true,
+                    type: "distribution"
                 },
 
-                dmg: {
-                    background: "src-electron/build/arqma-dmg.tiff"
-                },
+//                dmg: {
+//                    background: "src-electron/build/arqma-dmg.tiff",
+//                    sign: false
+//                },
 
                 nsis: {
                     oneClick: false,
                     allowToChangeInstallationDirectory: true
 
                 },
+
+                files: [
+                    "!build/notarize.js",
+                    "!.env"
+                ],
 
                 extraResources: [
                     "bin"
