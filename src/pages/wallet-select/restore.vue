@@ -150,6 +150,7 @@ export default {
     },
     methods: {
         restore_wallet() {
+        try {
             this.$v.wallet.$touch()
 
             if (this.$v.wallet.name.$error) {
@@ -203,8 +204,8 @@ export default {
             this.$q.loading.show({
                 delay: 0
             })
-
             this.$gateway.send("wallet", "restore_wallet", this.wallet);
+        }catch(e){console.log(e)}
         },
         cancel() {
             this.$router.replace({ path: "/wallet-select" });

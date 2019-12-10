@@ -1,53 +1,36 @@
-import { app, ipcMain, BrowserWindow, Menu, dialog } from "electron"
-import { version, productName } from "../../package.json"
+import { app, ipcMain, BrowserWindow, Menu, Tray, dialog } from "electron"
 import { Backend } from "./modules/backend"
 import { checkForUpdate } from "./auto-updater"
 import menuTemplate from "./menu"
 import isDev from "electron-is-dev"
-const portscanner = require("portscanner")
 const windowStateKeeper = require("electron-window-state")
+const path = require("path");
 
 /**
  * Set `__statics` path to static files in production;
  * The reason we are setting it here is that the path needs to be evaluated at runtime
  */
 if (process.env.PROD) {
-    global.__statics = require("path").join(__dirname, "statics").replace(/\\/g, "\\\\")
-    global.__arqma_bin = require("path").join(__dirname, "..", "bin").replace(/\\/g, "\\\\")
+    global.__statics = path.join(__dirname, "statics").replace(/\\/g, "\\\\")
+    global.__arqma_bin = path.join(__dirname, "..", "bin").replace(/\\/g, "\\\\")
 } else {
-    global.__arqma_bin = require("path").join(process.cwd(), "bin").replace(/\\/g, "\\\\")
+    global.__arqma_bin = path.join(process.cwd(), "bin").replace(/\\/g, "\\\\")
 }
 
-let mainWindow, backend
+let mainWindow, backend, tray
 let showConfirmClose = true
 let forceQuit = false
+let updateTrayInterval = null
 let installUpdate = false
 
-// eslint-disable-next-line no-unused-vars
-const title = `${productName} v${version}`
-
-const selectionMenu = Menu.buildFromTemplate([
-    { role: "copy" },
-    { type: "separator" },
-    { role: "selectall" }
-])
-
-const inputMenu = Menu.buildFromTemplate([
-    { role: "cut" },
-    { role: "copy" },
-    { role: "paste" },
-    { type: "separator" },
-    { role: "selectall" }
-])
-
-function createWindow () {
+function createWindow() {
     /**
      * Initial window options
      */
 
     let mainWindowState = windowStateKeeper({
-       defaultWidth: 900,
-       defaultHeight: 700
+        defaultWidth: 800,
+        defaultHeight: 650
     })
 
     mainWindow = new BrowserWindow({
@@ -57,14 +40,11 @@ function createWindow () {
         height: mainWindowState.height,
         minWidth: 640,
         minHeight: 480,
-        icon: require("path").join(__statics, "icon_512x512.png"),
-        title: `${productName} v${version}`
+        icon: path.join(__statics, "icon_64x64.png")
     })
 
     mainWindow.on("close", (e) => {
-        // Don't ask for confirmation if we're installing an update
         if (installUpdate) { return }
-
         if (process.platform === "darwin") {
             if (forceQuit) {
                 forceQuit = false
@@ -92,60 +72,60 @@ function createWindow () {
     ipcMain.on("confirmClose", (e, restart) => {
         showConfirmClose = false
 
-        // In dev mode, this will launch a blank white screen
-        if (restart && !isDev) app.relaunch()
+        if(restart && !isDev) {
+            app.relaunch()
+        }
 
-        const promise = backend ? backend.quit() : Promise.resolve()
-        promise.then(() => {
-            backend = null
+        if (backend) {
+            if (process.platform !== "darwin") {
+                clearInterval(updateTrayInterval)
+                tray.setToolTip("Closing...")
+            }
+            backend.quit().then(() => {
+                backend = null
+                app.quit()
+            })
+        } else {
             app.quit()
+        }
+    })
+
+    mainWindow.on("minimize", (e) => {
+        if (!backend || !backend.config_data) {
+            e.defaultPrevented = false
+            return
+        }
+        let minimize_to_tray = backend.config_data.preference.minimize_to_tray
+        if (minimize_to_tray === null) {
+            mainWindow.webContents.send("confirmMinimizeTray")
+            e.preventDefault()
+        } else if (minimize_to_tray === true) {
+            e.preventDefault()
+            mainWindow.hide()
+        } else {
+            e.defaultPrevented = false
+        }
+    })
+
+    ipcMain.on("autostartSettings", (e, openAtLogin) => {
+        app.setLoginItemSettings({
+            openAtLogin
         })
+    })
+
+    ipcMain.on("confirmMinimizeTray", (e, minimize_to_tray) => {
+        mainWindow.setMinimizable(true)
+        backend.config_data.preference.minimize_to_tray = minimize_to_tray
+        if (minimize_to_tray) {
+            mainWindow.hide()
+        } else {
+            mainWindow.minimize()
+        }
     })
 
     mainWindow.webContents.on("did-finish-load", () => {
-        // Set the title
-        mainWindow.setTitle(`${productName} v${version}`)
-
-        require("crypto").randomBytes(64, (err, buffer) => {
-            // if err, then we may have to use insecure token generation perhaps
-            if (err) throw err
-
-            let config = {
-                port: 12313,
-                token: buffer.toString("hex")
-            }
-
-            portscanner.checkPortStatus(config.port, "127.0.0.1", (e, status) => {
-                //      if (error) {
-                //      console.error(error)
-                //      }
-
-                if (status === "closed") {
-                    backend = new Backend(mainWindow)
-                    backend.init(config)
-                    mainWindow.webContents.send("initialize", config)
-                } else {
-                    dialog.showMessageBox(mainWindow, {
-                        title: "Startup error",
-                        message: `Arqma Wallet is already open, or port ${config.port} is in use`,
-                        type: "error",
-                        buttons: ["ok"]
-                    }, () => {
-                        showConfirmClose = false
-                        app.quit()
-                    })
-                }
-            })
-        })
-    })
-
-    mainWindow.webContents.on("context-menu", (e, props) => {
-        const { selectionText, isEditable } = props
-        if (isEditable) {
-            inputMenu.popup(mainWindow)
-        } else if (selectionText && selectionText.trim() !== "") {
-            selectionMenu.popup(mainWindow)
-        }
+        backend = new Backend(mainWindow)
+        backend.init()
     })
 
     mainWindow.loadURL(process.env.APP_URL)
@@ -153,22 +133,63 @@ function createWindow () {
 }
 
 app.on("ready", () => {
-    checkForUpdate(autoUpdater => {
-        if (mainWindow) {
-            mainWindow.webContents.send("showQuitScreen")
-        }
+  checkForUpdate(autoUpdater => {
+      if (mainWindow) {
+          mainWindow.webContents.send("showQuitScreen")
+      }
 
-        const promise = backend ? backend.quit() : Promise.resolve()
-        promise.then(() => {
-            installUpdate = true
-            backend = null
-            autoUpdater.quitAndInstall()
-        })
-    })
+      const promise = backend ? backend.quit() : Promise.resolve()
+      promise.then(() => {
+          installUpdate = true
+          backend = null
+          autoUpdater.quitAndInstall()
+      })
+  })
     if (process.platform === "darwin") {
         const menu = Menu.buildFromTemplate(menuTemplate)
         Menu.setApplicationMenu(menu)
+    } else {
+        tray = new Tray(path.join(__statics, "icon_32x32.png"))
+        const contextMenu = Menu.buildFromTemplate([
+            {
+                label: "Show Arqma Wallet",
+                click: function() {
+                    if(mainWindow.isMinimized())
+                        mainWindow.minimize()
+                    else
+                        mainWindow.show()
+                    mainWindow.focus()
+                }
+            },
+            {
+                label: "Exit Arqma Wallet",
+                click: function() {
+                    if(mainWindow.isMinimized())
+                        mainWindow.minimize()
+                    else
+                        mainWindow.show()
+                    mainWindow.focus()
+                    mainWindow.close()
+                }
+            }
+        ])
+
+        tray.setContextMenu(contextMenu)
+
+        updateTrayInterval = setInterval(() => {
+            if (backend)
+                tray.setToolTip(backend.getTooltipLabel())
+        }, 1000)
+
+        tray.on("click", () => {
+            if(mainWindow.isMinimized())
+                mainWindow.minimize()
+            else
+                mainWindow.show()
+            mainWindow.focus()
+        })
     }
+
     createWindow()
 })
 
@@ -187,7 +208,7 @@ app.on("activate", () => {
 })
 
 app.on("before-quit", () => {
-    // Quit instantly if we are installing an update
+  // Quit instantly if we are installing an update
     if (installUpdate) {
         return
     }
@@ -195,6 +216,10 @@ app.on("before-quit", () => {
         forceQuit = true
     } else {
         if (backend) {
+            if (process.platform !== "darwin") {
+                clearInterval(updateTrayInterval)
+                tray.setToolTip("Closing...")
+            }
             backend.quit().then(() => {
                 mainWindow.close()
             })

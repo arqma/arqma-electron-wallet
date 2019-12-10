@@ -6,23 +6,30 @@ export default {
         config: {
             appearance: {
                 theme: "dark"
+            },
+            preference: {
+                notify_no_payment_id: true,
+                notify_empty_password: true,
+                minimize_to_tray: false,
+                timeout: 600000 // 10 minutes
             }
         },
         pending_config: {
         },
-        remotes: {
-        }
+        network_interfaces: [
+            {
+                address: "0.0.0.0",
+                label: "All interfaces - 0.0.0.0"
+            },
+            {
+                address: "127.0.0.1",
+                label: "Local machine only - 127.0.0.1"
+            }
+        ]
     },
     wallets: {
         list: [],
-        legacy: [],
-
-        // List of wallets that are in a sub folder (format of the old GUI)
-        directories: []
-    },
-    old_gui_import_status: {
-        code: 0, // Success
-        failed_wallets: []
+        legacy: []
     },
     wallet: {
         status: {
@@ -43,35 +50,17 @@ export default {
             spend_key: ""
         },
         transactions: {
-            tx_list: []
+            tx_list: [],
         },
         address_list: {
             used: [],
             unused: [],
-            address_book: []
-        },
-        isRPCSyncing: false
+            address_book: [],
+        }
     },
     tx_status: {
         code: 0,
         message: ""
-    },
-    service_node_status: {
-        stake: {
-            code: 0,
-            message: "",
-            sending: false
-        },
-        registration: {
-            code: 0,
-            message: "",
-            sending: false
-        },
-        unlock: {
-            code: 0,
-            message: "",
-            sending: false
-        }
     },
     prove_transaction_status: {
         code: 0,
@@ -92,7 +81,7 @@ export default {
             height: 0,
             height_without_bootstrap: 0,
             incoming_connections_count: 0,
-            is_ready: false,
+            is_ready: true,
             outgoing_connections_count: 0,
             status: "OK",
             target: 120,
@@ -105,8 +94,17 @@ export default {
         },
         connections: [],
         bans: [],
-        tx_pool_backlog: [],
-        service_nodes: []
+        tx_pool_backlog: []
+    },
+    pool: {
+        status: 2,
+        desynced: false,
+        system_clock_error: false,
+        stats: {
+            currentEffort: 0
+        },
+        blocks: [],
+        workers: []
     },
     market: {
         info: {

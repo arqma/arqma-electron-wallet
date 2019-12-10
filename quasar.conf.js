@@ -29,7 +29,20 @@ module.exports = function (ctx) {
             // gzip: true,
             // analyze: true,
             // extractCSS: false,
-            extendWebpack (cfg) {
+            sourceMap: true,
+            extendWebpack(cfg) {
+                cfg.module.rules.push({
+                    test: /RyoCoreCpp\.js$/,
+                    loader: "exports-loader"
+                })
+                cfg.module.rules.push({
+                    test:  /RyoCoreCpp\.wasm$/,
+                    type: "javascript/auto",
+                    loader: "file-loader",
+                    options: {
+                        name: "[name]-[hash].[ext]",
+                    }
+                })
                 /*
                 cfg.module.rules.push({
                     enforce: "pre",
@@ -92,7 +105,12 @@ module.exports = function (ctx) {
                 "QInfiniteScroll",
                 "QDatetime",
                 "QContextMenu",
-                "QScrollArea"
+                "QScrollArea",
+                "QTable",
+                "QTh",
+                "QTr",
+                "QTd",
+                "QTableColumns"
             ],
             directives: [
                 "Ripple",
@@ -154,10 +172,21 @@ module.exports = function (ctx) {
             // id: "org.cordova.quasar.app"
         },
         electron: {
-            bundler: "builder", // or "packager"
-            extendWebpack (cfg) {
-                // do something with Electron process Webpack cfg
-            },
+           bundler: "builder", // or "packager"
+           extendWebpack(cfg) {
+               cfg.module.rules.push({
+                   test: /RyoCoreCpp\.js$/,
+                   loader: "exports-loader"
+               })
+               cfg.module.rules.push({
+                   test:  /RyoCoreCpp\.wasm$/,
+                   type: "javascript/auto",
+                   loader: "file-loader",
+                   options: {
+                       name: "[name].[ext]",
+                   }
+               })
+           },
             packager: {
                 // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
@@ -179,7 +208,7 @@ module.exports = function (ctx) {
 
                 appId: "com.arqma.electron-wallet",
                 productName: "Arqma Electron Wallet",
-                copyright: "Copyright © 2018-2019 Arqma Project, 2018 Ryo/Loki Currency Project",
+                copyright: "Copyright © 2018-2020 Arqma Project, 2018-2020 Ryo/Loki Currency Project",
                 afterSign: "build/notarize.js",
 
                 // directories: {

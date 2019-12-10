@@ -13,6 +13,11 @@
                         <q-item-tile label>{{ $t("menuItems.settings") }}</q-item-tile>
                     </q-item-main>
                 </q-item>
+                <q-item v-if="daemon_type != 'remote'" v-close-overlay @click.native="openPool">
+                    <q-item-main>
+                        <q-item-tile label>Solo Mining</q-item-tile>
+                    </q-item-main>
+                </q-item>
                 <q-item v-close-overlay @click.native="showAbout(true)">
                     <q-item-main>
                         <q-item-tile label>{{ $t("menuItems.about") }}</q-item-tile>
@@ -28,6 +33,7 @@
 
     </q-btn>
     <settings-modal ref="settingsModal" />
+    <pool-modal ref="poolModal" />
     <q-modal minimized ref="aboutModal">
         <div class="about-modal">
 
@@ -36,7 +42,7 @@
             <p class="q-my-sm">Wallet Version: v{{version}}</p>
             <p class="q-my-sm">Daemon Version: v{{daemonVersion}}</p>
             <p class="q-my-sm">Copyright (c) 2018-2019, ArQmA Project</p>
-            <p class="q-my-sm">Copyright (c) 2018, Ryo Currency Project</p>
+            <p class="q-my-sm">Copyright (c) 2018-2019, Ryo Currency Project</p>
             <p class="q-my-sm">All rights reserved.</p>
 
             <div class="q-mt-md q-mb-lg external-links">
@@ -65,6 +71,7 @@
 import { version, daemonVersion } from "../../package.json"
 import { mapState } from "vuex"
 import SettingsModal from "components/settings"
+import PoolModal from "components/pool"
 export default {
     name: "MainMenu",
     props: {
@@ -86,7 +93,7 @@ export default {
     },
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
-        isRPCSyncing: state => state.gateway.wallet.isRPCSyncing
+        daemon_type: state => state.gateway.app.config.daemon.type
     }),
     methods: {
         openExternal (url) {
@@ -100,6 +107,9 @@ export default {
         },
         openSettings () {
             this.$refs.settingsModal.isVisible = true
+        },
+        openPool () {
+        this.$refs.poolModal.isVisible = true
         },
         switchWallet () {
             // If the rpc is syncing then we want to tell the user to restart
@@ -137,7 +147,8 @@ export default {
         }
     },
     components: {
-        SettingsModal
+        SettingsModal,
+        PoolModal
     }
 }
 </script>

@@ -11,7 +11,7 @@
                     </q-item>
                 </q-list>
             </q-popover>
-        </q-btn>    
+        </q-btn>
     </span>
 </template>
 
@@ -22,6 +22,7 @@ export default {
         market: state => state.gateway.market.info,
         info: state => state.gateway.wallet.info,
         is_ready (state) {
+            console.log(this.$store.getters["gateway/isReady"])
             return this.$store.getters["gateway/isReady"]
         }
     }),
