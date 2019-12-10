@@ -1,4 +1,8 @@
-BSD-3 
+Copyright (c) 2018-2020, ArQmA Currency Project
+Copyright (c) 2018-2020, Ryo Currency Project
+Copyright (c) 2018-2020, Loki Currency Project
+
+BSD-3
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -33,4 +37,3 @@ https://github.com/monero-project/monero/tree/e2c39f6b59fcf5c623c814dfefc518ab0b
 https://github.com/ryo-currency/ryo-emergency/tree/9d1f51c453978badad21b2feaca2f4348ab26bfa
 
 Portions of this wallet have been released by the RYO wallet developers into public domain, we are thankful for their contributions
-
