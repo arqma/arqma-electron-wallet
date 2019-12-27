@@ -6,17 +6,12 @@
 
 <script>
 export default {
-    name: "FormatArqma",
+    name: "FormatRyo",
     props: {
         amount: {
             required: true
         },
         round: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        rawValue: {
             type: Boolean,
             required: false,
             default: false
@@ -27,7 +22,7 @@ export default {
             let value = this.amount / 1e9
             if(this.round)
                 value = value.toFixed(3)
-            return this.rawValue ? value : value.toLocaleString()
+            return value.toLocaleString()
         }
 
     }

@@ -407,75 +407,6 @@
                 <p class="text-weight-light">
                     Point your miner to <code>{{ address_port }}</code> to start solo mining.
                 </p>
-                <div class="row gutter-sm items-baseline">
-                    <div>
-                        <p class="text-weight-light">
-                            Example configurations:
-                        </p>
-                    </div>
-                    <div>
-                        <q-btn @click="modals.xmr_stak = true">xmr-stak</q-btn>
-                    </div>
-                </div>
-
-                <q-modal v-model="modals.xmr_stak">
-                    <div class="modal-header">Config example: xmr-stak</div>
-                    <div class="q-ma-lg">
-
-                        <div class="row">
-                            <div class="col">
-                                <p class="q-ma-none">Place this config example in <code>pools.txt</code></p>
-                            </div>
-                            <div class="col-auto">
-                                <q-btn
-                                    color="primary" style="width:25px;"
-                                    size="sm" icon="file_copy"
-                                    @click="copyConfig()">
-                                    <q-tooltip anchor="center left" self="center right" :offset="[5, 10]">
-                                        Copy config
-                                    </q-tooltip>
-                                </q-btn>
-                            </div>
-                        </div>
-
-                        <pre ref="config-xmrstak">
-"pool_list" :
-[
-    {
-        "pool_address" : "{{ address_port }}",
-        "wallet_address" : "diff.auto",
-        "rig_id" : "Worker_Name",
-        "pool_password" : "x",
-        "use_nicehash" : false,
-        "use_tls" : false,
-        "tls_fingerprint" : "",
-        "pool_weight" : 1
-    },
-],
-"currency" : "cryptonight_gpu",
-                        </pre>
-
-                        <div class="q-mt-lg">
-                            <div class="row justify-between">
-                                <div class="col-auto">
-                                    <q-btn
-                                        color="primary"
-                                        @click="modals.xmr_stak = false"
-                                        label="Close"
-                                        />
-                                </div>
-                                <div class="col-auto">
-                                    <q-btn
-                                        color="primary"
-                                        @click="openSoftware()"
-                                        label="Download xmr-stak"
-                                        />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </q-modal>
-
             </div>
         </div>
 
@@ -507,7 +438,7 @@
                                 <template v-if="props.row.status == 0">
                                     <q-icon name="lock" />
                                     <q-tooltip anchor="center right" self="center left" :offset="[5, 0]">
-                                        Pending ({{ props.row.height + 1 + 60 - pool.stats.height }} to go)
+                                        Pending ({{ props.row.height + 1 + 18 - pool.stats.height }} to go)
                                     </q-tooltip>
                                 </template>
                                 <template v-if="props.row.status == 1">
@@ -687,7 +618,7 @@
                                             <div class="text"><span>Unlock Time</span></div>
                                             <div class="value">
                                                 <span v-if="block.status == 0">
-                                                    {{ block.height + 1 + 60 - pool.stats.height }} to go
+                                                    {{ block.height + 1 + 18 - pool.stats.height }} to go
                                                 </span>
                                                 <span v-if="block.status == 1">
                                                     N/A
@@ -953,26 +884,6 @@ export default {
         openExplorer(hash) {
             this.$gateway.send("core", "open_explorer", {type: "block", id: hash})
         },
-        openSoftware(software="xmrstak") {
-            let url = ""
-            switch(software) {
-                case "xmrstak":
-                    url = "https://github.com/fireice-uk/xmr-stak/releases/latest"
-                    break
-                default:
-                    return
-            }
-            this.$gateway.send("core", "open_url", {url})
-        },
-        copyConfig(software="xmrstak") {
-            const config = this.$refs[`config-${software}`].innerHTML
-            clipboard.writeText(config)
-            this.$q.notify({
-                type: "positive",
-                timeout: 1000,
-                message: "Config copied to clipboard"
-            })
-        },
         resetVarDiff() {
             this.settings.varDiff = JSON.parse(JSON.stringify(this.varDiffDefaults))
         }
@@ -998,7 +909,6 @@ export default {
             page: "main",
             isVisible: false,
             modals: {
-                xmr_stak: false,
                 block: false,
                 stats: false,
                 vardiff: false,
@@ -1032,8 +942,8 @@ export default {
                     startDiff: 5000,
                     minDiff: 1000,
                     maxDiff: 100000000,
-                    targetTime: 60,
-                    retargetTime: 30,
+                    targetTime: 30,
+                    retargetTime: 60,
                     variancePercent: 30,
                     maxJump: 100,
                     fixedDiffSeparator: "."
@@ -1044,8 +954,8 @@ export default {
                 startDiff: 5000,
                 minDiff: 1000,
                 maxDiff: 100000000,
-                targetTime: 60,
-                retargetTime: 30,
+                targetTime: 30,
+                retargetTime: 60,
                 variancePercent: 30,
                 maxJump: 100,
                 fixedDiffSeparator: "."

@@ -65,7 +65,7 @@ export class Market {
                         let label = `${key} ${symbol}`
                         let price = +ticker.last
                         if (price === 0) continue
-                        data.push({ key: key, label: label, symbol: symbol, value: price })
+                        data.push({ key: label, label: label, symbol: symbol, value: price })
                     }
                     this.sendGateway("set_market_data", { info: { exchanges: data } })
                 } catch (error) {}
