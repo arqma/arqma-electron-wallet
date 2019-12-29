@@ -210,6 +210,7 @@ module.exports = function (ctx) {
                 productName: "Arqma Electron Wallet",
                 copyright: "Copyright © 2018-2020 Arqma Project, 2018-2020 Ryo/Loki Currency Project",
                 afterSign: "build/notarize.js",
+                artifactName: "arqma-electron-wallet-${version}-${os}.${ext}",
 
                 // directories: {
                 //     buildResources: "src-electron/build"
@@ -250,7 +251,7 @@ module.exports = function (ctx) {
                 },
 
                 files: [
-                    "!build/notarize.js",
+                    "!build/*.js",
                     "!.env"
                 ],
 
