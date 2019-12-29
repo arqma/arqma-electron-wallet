@@ -1,6 +1,6 @@
 {
   "name": "arqma-electron-wallet",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "daemonVersion": "6.0.0",
   "description": "Modern GUI interface for Arqma Currency",
   "productName": "Arqma Electron Wallet",
@@ -17,6 +17,7 @@
   "scripts": {
     "dev": "quasar dev -m electron -t mat",
     "build": "quasar build -m electron -t mat",
+    "release": "quasar build -m electron -t mat --publish=always",
     "lint": "eslint --ext .js,.vue src",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "lint-fix": "eslint --fix .",
@@ -60,7 +61,7 @@
     "devtron": "^1.4.0",
     "dotenv": "^8.1.0",
     "electron": "^4.1.1",
-    "electron-builder": "^21.2.0",
+    "electron-builder": "^22.2.0",
     "electron-debug": "^2.1.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-rebuild": "^1.8.4",
