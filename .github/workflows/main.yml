@@ -23,9 +23,11 @@ jobs:
                 node-version: "11.9.0"
 
             - name: Install vs
+              if: runner.os != 'Windows'
               run: npm install --global --production --vs2015 --add-python-to-path windows-build-tools
 
             - name: Install gyp
+              if: runner.os != 'Windows'
               run: npm install --global --production --add-python-to-path windows-build-tools node-gyp
 
             - name: Install dependencies
