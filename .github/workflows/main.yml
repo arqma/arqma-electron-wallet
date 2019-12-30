@@ -22,8 +22,11 @@ jobs:
               with:
                 node-version: "11.9.0"
 
+            - name: Install vs
+              run: npm install --global --production --vs2015 --add-python-to-path windows-build-tools
+
             - name: Install gyp
-              run: node-gyp rebuild
+              run: npm install --global --production --add-python-to-path windows-build-tools node-gyp
 
             - name: Install dependencies
               run: npm install
