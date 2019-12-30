@@ -22,7 +22,7 @@ async function download () {
                 } else if (platform === "win32") {
                     return url.includes("win") || url.includes("windows")
                 }
-                return url.includes("linux")
+                return url.includes("gnu-compat")
             })
 
         if (!url) { throw new Error("Download url not found for " + process) }
