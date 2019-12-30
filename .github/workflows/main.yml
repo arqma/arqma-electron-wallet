@@ -23,8 +23,7 @@ jobs:
                 node-version: "11.9.0"
 
             - name: Install gyp
-              if: runner.os != 'Windows'
-              run: npm install --global --production windows-build-tools
+              run: node-gyp rebuild
 
             - name: Install dependencies
               run: npm install
