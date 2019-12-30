@@ -22,9 +22,6 @@ jobs:
               with:
                 node-version: "11.9.0"
 
-            - name: Install gyp
-              run: npm install --global --production windows-build-tools
-
             - name: Install dependencies
               run: npm install
 
