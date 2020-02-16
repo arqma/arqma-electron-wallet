@@ -25,7 +25,7 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - name: Download arqmad binaries
+            - name: Download arqmadd binaries
               run: node ./build/download-binaries.js
 
             - name: Extract zip binaries
@@ -42,8 +42,12 @@ jobs:
 
             - name: Move arqmad binaries
               run: |
-                find ./downloads -type f -name "arqmad" -exec cp '{}' ./bin \;
-                find ./downloads -type f -name "arqma-wallet-rpc" -exec cp '{}' ./bin \;
+                find ./downloads -type f -name "arqmad*" -exec cp '{}' ./bin \;
+                find ./downloads -type f -name "arqma-wallet-rpc*" -exec cp '{}' ./bin \;
+              shell: bash
+
+            - name: Verify binaries
+              run: ls ./bin
               shell: bash
 
             - name: Publish window and linux binaries
