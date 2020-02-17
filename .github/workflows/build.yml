@@ -39,7 +39,11 @@ jobs:
               run: tar -xf latest.xz
               shell: bash
               working-directory: ./downloads
-
+            
+            - name:  choose correct vs
+              if: runner.os == 'windows'
+              run: npm install --global windows-build-tools
+              
             - name: Move arqmad binaries
               run: |
                 find ./downloads -type f -name "arqmad*" -exec cp '{}' ./bin \;
