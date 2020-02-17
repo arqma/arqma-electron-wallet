@@ -23,9 +23,9 @@ jobs:
                 node-version: "11.9.0"
 
             - name: Install dependencies
-              run: npm install -f
+              run: npm install
 
-            - name: Download arqmadd binaries
+            - name: Download arqmad binaries
               run: node ./build/download-binaries.js
 
             - name: Extract zip binaries
@@ -34,20 +34,16 @@ jobs:
               shell: bash
               working-directory: ./downloads
 
-            - name: Extract xz binaries
+            - name: Extract gz binaries
               if: runner.os == 'Linux'
-              run: tar -xf latest.xz
+              run: tar -xf latest.gz
               shell: bash
               working-directory: ./downloads
 
             - name: Move arqmad binaries
               run: |
-                find ./downloads -type f -name "arqmad*" -exec cp '{}' ./bin \;
-                find ./downloads -type f -name "arqma-wallet-rpc*" -exec cp '{}' ./bin \;
-              shell: bash
-
-            - name: Verify binaries
-              run: ls ./bin
+                find ./downloads -type f -name "arqmad" -exec cp '{}' ./bin \;
+                find ./downloads -type f -name "arqma-wallet-rpc" -exec cp '{}' ./bin \;
               shell: bash
 
             - name: Publish window and linux binaries
