@@ -23,7 +23,7 @@ jobs:
                 node-version: "11.9.0"
 
             - name: Install dependencies
-              run: npm install
+              run: npm install -f
 
             - name: Download arqmadd binaries
               run: node ./build/download-binaries.js
