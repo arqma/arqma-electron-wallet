@@ -1,5 +1,5 @@
 
-name: ArQmA Electron Wallet Build
+name: ArQmA Electron Wallet Build and PUB
 
 on:
     push:
@@ -21,9 +21,6 @@ jobs:
               uses: actions/setup-node@v1
               with:
                 node-version: "11.9.0"
-             
-            - name: Install dependencies  
-              run: npm install --global --production windows-build-tools --vs2017
             
             - name: Install dependencies
               run: npm install -f
