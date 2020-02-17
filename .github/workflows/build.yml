@@ -36,7 +36,7 @@ jobs:
 
             - name: Extract xz binaries
               if: runner.os == 'Linux'
-              run: tar -xf latest.xz
+              run: tar -xf latest.gz
               shell: bash
               working-directory: ./downloads
               
