@@ -22,7 +22,7 @@ async function download () {
                 } else if (platform === "win32") {
                     return url.includes("win64") || url.includes("win64")
                 }
-                return url.includes("arqma-x86_64-linux-gnu")
+                return url.includes("x86_64-linux-gnu")
             })
 
         if (!url) { throw new Error("Download url not found for " + process) }
