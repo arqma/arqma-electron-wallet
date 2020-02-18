@@ -52,13 +52,13 @@ jobs:
 
             - name: Publish window and linux binaries
               if: runner.os != 'macOS'
-              run: npm run release
+              run: npm run build
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish mac binaries
               if: runner.os == 'macOS'
-              run: npm run release
+              run: npm run build
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 CSC_LINK: ${{ secrets.MAC_CERTIFICATE }}
