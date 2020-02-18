@@ -12,7 +12,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-latest, macos-latest, ubuntu-latest]
+                os: [windows-2016, macos-latest, ubuntu-latest]
         steps:
             - name: Checkout git repo
               uses: actions/checkout@v1
