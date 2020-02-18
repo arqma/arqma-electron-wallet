@@ -24,7 +24,6 @@ async function download () {
                 }
                 return url.includes("x86_64-linux-gnu")
             })
-
         if (!url) { throw new Error("Download url not found for " + process) }
         console.log("Downloading binary at url: " + url)
 
