@@ -73,8 +73,12 @@ jobs:
               shell: bash
               working-directory: ./dist/electron-mat/Packaged
 
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v1
-              with:
-                name: ${{ runner.OS }}
-                path: dist/electron-mat/Packaged
+           - name: Upload the artifacts
+             uses: skx/github-action-publish-binaries@master
+             env:
+             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+             with:
+              name: ${{ runner.OS }}
+              path: dist/electron-mat/Packaged
+              args: 'example-*'
+           
