@@ -79,7 +79,3 @@ jobs:
                 name: ${{ runner.OS }}
                 path: dist/electron-mat/Packaged
             
-            - name: Publish the artifacts
-              uses: skx/github-action-publish-binaries@master
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
