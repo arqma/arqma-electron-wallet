@@ -1,5 +1,5 @@
 
-name: ArQmA Electron Wallet Build and PUB
+name: ArQmA Electron Wallet Build
 
 on:
     push:
