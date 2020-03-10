@@ -13,7 +13,7 @@ jobs:
             fail-fast: false
             matrix:
                 os: [windows-2016, ubuntu-latest]
- 
+
         steps:
             - name: Checkout git repo
               uses: actions/checkout@v1
@@ -22,7 +22,7 @@ jobs:
               uses: actions/setup-node@v1
               with:
                 node-version: "11.9.0"
-            
+
             - name: Install dependencies
               run: npm install -f
 
@@ -40,7 +40,7 @@ jobs:
               run: tar -xf latest.gz
               shell: bash
               working-directory: ./downloads
-              
+
             - name: Move arqmad binaries
               run: |
                 find ./downloads -type f -name "arqmad*" -exec cp '{}' ./bin \;
@@ -63,8 +63,7 @@ jobs:
               working-directory: ./dist/electron-mat/Packaged
 
             - name: Upload artifacts
-              uses: actions/upload-artifact@v1
+              uses: actions/upload-artifact@v3.0.0
               with:
                 name: ${{ runner.OS }}
                 path: dist/electron-mat/Packaged
-            
