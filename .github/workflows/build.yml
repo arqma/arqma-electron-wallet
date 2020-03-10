@@ -63,7 +63,7 @@ jobs:
               working-directory: ./dist/electron-mat/Packaged
 
             - name: Upload artifacts
-              uses: actions/upload-artifact@v3.0.0
+              uses: actions/upload-artifact@v1
               with:
                 name: ${{ runner.OS }}
                 path: dist/electron-mat/Packaged
