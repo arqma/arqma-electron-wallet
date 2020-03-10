@@ -1,3 +1,5 @@
+![ArQmA Electron Wallet Build and PUB](https://github.com/ArqTras/arqma-electron-wallet/workflows/ArQmA%20Electron%20Wallet%20Build%20and%20PUB/badge.svg)
+
 # Arqma Electron GUI Wallet
 
 ### Introduction
