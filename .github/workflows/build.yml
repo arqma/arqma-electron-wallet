@@ -68,7 +68,7 @@ jobs:
                 name: ${{ runner.OS }}
                 path: dist/electron-mat/Packaged
 
-              actions-tagger:
+actions-tagger:
                 runs-on: windows-latest
                 steps:
                   - uses: Actions-R-Us/actions-tagger@v1
