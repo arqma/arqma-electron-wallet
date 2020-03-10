@@ -67,9 +67,3 @@ jobs:
               with:
                 name: ${{ runner.OS }}
                 path: dist/electron-mat/Packaged
-
-            - uses: Actions-R-Us/actions-tagger@v1
-              with:
-                publish_latest: true
-                env:
-                GITHUB_TOKEN: '${{secrets.GITHUB_TOKEN}}'
