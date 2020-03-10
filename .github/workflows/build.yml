@@ -12,7 +12,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-2016, macos-latest, ubuntu-latest]
+                os: [windows-2016, ubuntu-latest]
  
         steps:
             - name: Checkout git repo
@@ -56,17 +56,6 @@ jobs:
               run: npm run build
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Publish mac binaries
-              if: runner.os == 'macOS'
-              run: npm run build
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                CSC_LINK: ${{ secrets.MAC_CERTIFICATE }}
-                CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
-                SIGNING_APPLE_ID: ${{ secrets.SIGNING_APPLE_ID }}
-                SIGNING_APP_PASSWORD: ${{ secrets.SIGNING_APP_PASSWORD }}
-                SIGNING_TEAM_ID: ${{ secrets.SIGNING_TEAM_ID }}
 
             - name: Remove un-needed artifacts
               run: rm -r -- ./*/
