@@ -1,4 +1,5 @@
 name: Keep the versions up-to-date
+
 on:
   release:
     types: [published]
@@ -7,7 +8,7 @@ jobs:
   actions-tagger:
     runs-on: windows-latest
     steps:
-      - uses: Actions-R-Us/actions-tagger@v1
+      - uses: Actions-R-Us/actions-tagger@latest
         with:
           publish_latest: true
         env:
