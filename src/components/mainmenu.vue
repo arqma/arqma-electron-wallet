@@ -41,8 +41,8 @@
 
             <p class="q-my-sm">Wallet Version: v{{version}}</p>
             <p class="q-my-sm">Daemon Version: v{{daemonVersion}}</p>
-            <p class="q-my-sm">Copyright (c) 2018-2019, ArQmA Project</p>
-            <p class="q-my-sm">Copyright (c) 2018-2019, Ryo Currency Project</p>
+            <p class="q-my-sm">Copyright (c) 2018-2020, ArQmA Project</p>
+            <p class="q-my-sm">Copyright (c) 2018-2020, Ryo Currency Project</p>
             <p class="q-my-sm">All rights reserved.</p>
 
             <div class="q-mt-md q-mb-lg external-links">

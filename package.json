@@ -1,6 +1,6 @@
 {
   "name": "arqma-electron-wallet",
-  "version": "3.0.0",
+  "version": "2.0.8",
   "daemonVersion": "6.0.1",
   "description": "Modern GUI interface for Arqma Currency",
   "productName": "Arqma Electron Wallet",
