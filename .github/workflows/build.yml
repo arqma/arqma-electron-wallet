@@ -1,6 +1,4 @@
-
-name: ArQmA Electron Wallet Builds
-
+name: Arqma Electron Wallet Build
 on:
     push:
         branches:
@@ -26,7 +24,7 @@ jobs:
             - name: Install dependencies
               run: npm install -f
 
-            - name: Download arqmad binaries
+            - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
 
             - name: Extract zip binaries
@@ -41,7 +39,7 @@ jobs:
               shell: bash
               working-directory: ./downloads
 
-            - name: Move arqmad binaries
+            - name: Move armqad binaries
               run: |
                 find ./downloads -type f -name "arqmad*" -exec cp '{}' ./bin \;
                 find ./downloads -type f -name "arqma-wallet-rpc*" -exec cp '{}' ./bin \;
