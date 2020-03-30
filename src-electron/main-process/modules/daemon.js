@@ -98,8 +98,6 @@ export class Daemon {
                 "--data-dir", options.app.data_dir,
                 "--rpc-bind-ip", options.daemon.rpc_bind_ip,
                 "--rpc-bind-port", options.daemon.rpc_bind_port,
-                "--zmq-rpc-bind-ip", options.daemon.zmq_rpc_bind_ip,
-                "--zmq-rpc-bind-port", options.daemon.zmq_rpc_bind_port,
                 "--out-peers", options.daemon.out_peers,
                 "--in-peers", options.daemon.in_peers,
                 "--limit-rate-up", options.daemon.limit_rate_up,
