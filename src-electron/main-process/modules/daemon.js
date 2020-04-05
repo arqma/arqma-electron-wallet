@@ -21,7 +21,6 @@ export class Daemon {
 
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
         this.queue = new queue(1, Infinity)
-        this.zmq_enabled = false
 
     }
 
@@ -187,7 +186,6 @@ export class Daemon {
                     })
                 }, 2000)
             } else {
-                this.zmq_enabled = true
                 this.startZMQ(options);
                 let getinfo = {"jsonrpc": "2.0",
                            "id": "1",
@@ -345,14 +343,12 @@ export class Daemon {
     }
 
     startHeartbeat() {
-        if(!this.zmq_enabled) 
-        {
-            clearInterval(this.heartbeat)
-            this.heartbeat = setInterval(() => {
-                this.heartbeatAction()
-            }, this.local ? 5 * 1000 : 30 * 1000) // 5 seconds for local daemon, 30 seconds for remote
+        clearInterval(this.heartbeat)
+        this.heartbeat = setInterval(() => {
             this.heartbeatAction()
-        }
+        }, this.local ? 5 * 1000 : 30 * 1000) // 5 seconds for local daemon, 30 seconds for remote
+        this.heartbeatAction()
+
         clearInterval(this.heartbeat_slow)
         this.heartbeat_slow = setInterval(() => {
             this.heartbeatSlowAction()
