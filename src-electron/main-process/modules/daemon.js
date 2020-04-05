@@ -161,16 +161,15 @@ export class Daemon {
             this.hostname = options.daemon.rpc_bind_ip
             this.port = options.daemon.rpc_bind_port
 
-            //if(options.daemon.type !== 'local_zmq') {
+            if(options.daemon.type !== 'local_zmq') {
                 this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
-            //}
+            }
             this.daemonProcess.on("error", err => process.stderr.write(`Daemon: ${err}\n`))
             this.daemonProcess.on("close", code => process.stderr.write(`Daemon: exited with code ${code}\n`))
 
             // To let caller know when the daemon is ready
             let intrvl = setInterval(() => {
                 this.sendRPC("get_info").then((data) => {
-                    console.log('sheit ', data)
                     if(!data.hasOwnProperty("error")) {
                         clearInterval(intrvl);
 

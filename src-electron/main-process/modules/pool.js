@@ -755,6 +755,10 @@ export class Pool {
 
     quit() {
         return new Promise((resolve, reject) => {
+            if (dealer) {
+                dealer.send(['', 'EVICT']);
+                dealer.close()
+            }
             this.stop().then(() => {
                 if(this.intervals.stats) {
                     clearInterval(this.intervals.stats)

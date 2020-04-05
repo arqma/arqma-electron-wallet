@@ -97,7 +97,6 @@ export default {
                 if(this.wallet.info.height < this.target_height - 1 && this.wallet.info.height != 0) {
                     return "Scanning..."
                 } else if(height_without_bootstrap < this.target_height) {
-                    console.log(height_without_bootstrap, ' ',  this.target_height)
                     return "Syncing..."
                 } else {
                     return "Ready"
