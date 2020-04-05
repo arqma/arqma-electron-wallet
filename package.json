@@ -53,7 +53,9 @@
     "vue-i18n": "^8.15.3",
     "vue-timeago": "^5.1.2",
     "vuelidate": "^0.7.5",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "^4.4.2",
+    "zeromq": "^5.2.0",
+    "rxjs": "^6.5.4"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -65,7 +67,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-notarize": "^0.1.1",
     "electron-packager": "^13.1.1",
-    "electron-rebuild": "^1.10.0",
+    "electron-rebuild": "^1.10.1",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-friendly-formatter": "^4.0.1",
