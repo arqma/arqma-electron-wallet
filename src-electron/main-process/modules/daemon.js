@@ -221,10 +221,10 @@ export class Daemon {
     }
 
 
-    startZMQ() {
+    startZMQ(options) {
         dealer.identity = this.randomString();
-        dealer.connect(`tcp://${'127.0.0.1'}:${19995}`);
-        console.log(`Dealer connected to port 127.0.0.1:19995`);
+        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`);
+        console.log(`Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`);
         const zmqDirector = fromEvent(dealer, "message");
         zmqDirector.subscribe(x => {
                     let daemon_info = {
@@ -499,10 +499,10 @@ export class Daemon {
     quit() {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat);
-        // if (dealer) {
-        //     dealer.send(['', 'EVICT']);
-        //     dealer.close()
-        // }
+        if (dealer) {
+            dealer.send(['', 'EVICT']);
+            dealer.close()
+        }
 
         this.queue.queue = []
         return new Promise((resolve, reject) => {
