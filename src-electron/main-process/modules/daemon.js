@@ -172,7 +172,7 @@ export class Daemon {
                 this.sendRPC("get_info").then((data) => {
                     console.log('sheit ', data)
                     if(!data.hasOwnProperty("error")) {
-
+                        clearInterval(intrvl);
 
                         if(options.daemon.type === 'local_zmq') {
                             this.zmq_enabled = true
@@ -184,7 +184,7 @@ export class Daemon {
                             dealer.send(['', JSON.stringify(getinfo)])
                         }
                         this.startHeartbeat()
-                        clearInterval(intrvl);
+                        
                         resolve();
                     } else {
                         if(data.error.cause &&
@@ -196,7 +196,7 @@ export class Daemon {
                         }
                     }
                 })
-            }, 1000)
+            }, 2000)
         })
     }
 
