@@ -7,7 +7,9 @@ import { Miner } from "./pool/miner"
 import { Block } from "./pool/block"
 import { Database } from "./pool/database"
 import { diff1, noncePattern, uid, logger } from "./pool/utils"
-
+const zmq = require('zeromq')
+const dealer = zmq.socket('dealer')
+const { fromEvent } = require('rxjs')
 const request = require("request-promise")
 const http = require("http")
 
@@ -18,6 +20,7 @@ export class Pool {
         this.active = false
         this.config = null
         this.server = null
+        this.zmq_enabled = false
 
         this.id = 0
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
@@ -159,17 +162,38 @@ export class Pool {
             let debounce = 0
             this.intervals.startup = setInterval(() => {
                 const daemon_info = this.backend.daemon.daemon_info
-                const target_height = Math.max(daemon_info.height_without_bootstrap, daemon_info.target_height)
-
-          //      if(daemon_info.is_ready && daemon_info.height_without_bootstrap >= target_height) {
-                if(daemon_info.height_without_bootstrap >= target_height) {
+                const target_height = this.daemon_type === "local_zmq" ? daemon_info.info.target_height : Math.max(daemon_info.height_without_bootstrap, daemon_info.target_height)
+                const height = this.daemon_type === "local_zmq" ? daemon_info.info.height : daemon_info.height_without_bootstrap
+                if(height >= target_height) {
                     logger.log("info", "Attempting to connect to daemon")
 
                     this.getBlock().then(() => {
                         clearInterval(this.intervals.startup)
-                        this.startHeartbeat()
+
+                        if(this.daemon_type === "local_zmq") {
+                            this.startZMQ(this.backend.config_data.daemon)
+                            const wallet_address= this.config.mining.address
+                            const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
+                            const reserve_size = uniform ? 8 : 1
+                            let getblocktemplate = {"jsonrpc": "2.0",
+                                   "id": "1",
+                                   "method": "get_block_template",
+                                   "params": {"reserve_size": reserve_size,
+                                              "wallet_address": wallet_address}}
+                            dealer.send(['', JSON.stringify(getblocktemplate)])
+                        } else {
+                            this.startHeartbeat()
+                        }         
                         this.startServer().then(() => {
+  
+                                         
+                            
                             this.sendStatus(2)
+
+
+
+
+
                         }).catch(error => {
                             this.sendStatus(-1)
                         })
@@ -229,6 +253,31 @@ export class Pool {
         this.startJobRefreshInterval()
 
         this.startRetargetInterval()
+    }
+
+    randomBetween(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    randomString() {
+        var source = 'abcdefghijklmnopqrstuvwxyz'
+        var target = [];
+        for (var i = 0; i < 20; i++) {
+            target.push(source[this.randomBetween(0, source.length)]);
+        }
+        return target.join('');
+    }
+
+
+    startZMQ(options) {
+        dealer.identity = this.randomString();
+        dealer.connect(`tcp://${options.zmq_rpc_bind_ip}:${options.zmq_rpc_bind_port}`);
+        console.log(`Pool Dealer connected to port ${options.zmq_rpc_bind_ip}:${options.zmq_rpc_bind_port}`);
+        const zmqDirector = fromEvent(dealer, "message");
+        zmqDirector.subscribe(x => {
+                    let json = JSON.parse(x.toString());                    
+                    this.addBlockAndInformMiners(json)
+                })
     }
 
     watchdog() {
@@ -570,35 +619,42 @@ export class Pool {
         return this.blocks.valid.filter(block => block.height == height).pop()
     }
 
+    addBlockAndInformMiners(data, force=false) {
+        const wallet_address= this.config.mining.address
+        const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
+        if(data.hasOwnProperty("error")) {
+            logger.log("error", "Error polling get_block_template %j", [data.error.message])
+            return data.error.message
+        }
+        const block = data.result
+        if(this.blocks.current == null || this.blocks.current.height < block.height || force) {
+            const address_abbr = wallet_address.substring(0, 5) + "..." + wallet_address.substring(wallet_address.length - 5)
+            logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [address_abbr, block.height, block.difficulty, uniform])
+
+            this.blocks.current = new Block(this, block, uniform)
+
+            this.blocks.valid.push(this.blocks.current)
+
+            while(this.blocks.valid.length > 5) {
+                this.blocks.valid.shift()
+            }
+
+            for(let connection_id in this.connections) {
+                const miner = this.connections[connection_id]
+                miner.pushJob(force)
+            }
+        }
+        return null
+    }
+
     getBlock(force=false) {
         const wallet_address= this.config.mining.address
         const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
         const reserve_size = uniform ? 8 : 1
         return new Promise((resolve, reject) => {
             this.sendRPC("get_block_template", { wallet_address, reserve_size }).then(data => {
-                if(data.hasOwnProperty("error")) {
-                    logger.log("error", "Error polling get_block_template %j", [data.error.message])
-                    return reject(data.error.message)
-                }
-                const block = data.result
-                if(this.blocks.current == null || this.blocks.current.height < block.height || force) {
-                    const address_abbr = wallet_address.substring(0, 5) + "..." + wallet_address.substring(wallet_address.length - 5)
-                    logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [address_abbr, block.height, block.difficulty, uniform])
-
-                    this.blocks.current = new Block(this, block, uniform)
-
-                    this.blocks.valid.push(this.blocks.current)
-
-                    while(this.blocks.valid.length > 5) {
-                        this.blocks.valid.shift()
-                    }
-
-                    for(let connection_id in this.connections) {
-                        const miner = this.connections[connection_id]
-                        miner.pushJob(force)
-                    }
-                }
-                resolve()
+                const result = this.addBlockAndInformMiners(data, force)
+                !result ? resolve() : reject(result);
             })
         })
     }

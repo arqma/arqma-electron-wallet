@@ -110,6 +110,7 @@ export class Daemon {
 
             if(options.daemon.type === 'local_zmq') {
                 args.push("--zmq-enabled",
+                          "--zmq-max_clients", 5,
                           "--zmq-bind-port",
                           options.daemon.zmq_rpc_bind_port)
             }
@@ -160,24 +161,16 @@ export class Daemon {
             this.hostname = options.daemon.rpc_bind_ip
             this.port = options.daemon.rpc_bind_port
 
-            this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
+            //if(options.daemon.type !== 'local_zmq') {
+                this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
+            //}
             this.daemonProcess.on("error", err => process.stderr.write(`Daemon: ${err}\n`))
             this.daemonProcess.on("close", code => process.stderr.write(`Daemon: exited with code ${code}\n`))
-
-            // if(options.daemon.type === 'local_zmq') {
-            //     this.startZMQ();
-            //     let getinfo = {"jsonrpc": "2.0",
-            //                "id": "1",
-            //                "method": "get_info",
-            //                "params": {}}
-            //     dealer.send(['', JSON.stringify(getinfo)])
-            //     this.startHeartbeat()
-            //     resolve()
-            // }
 
             // To let caller know when the daemon is ready
             let intrvl = setInterval(() => {
                 this.sendRPC("get_info").then((data) => {
+                    console.log('sheit ', data)
                     if(!data.hasOwnProperty("error")) {
 
 
@@ -224,14 +217,13 @@ export class Daemon {
     startZMQ(options) {
         dealer.identity = this.randomString();
         dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
-        console.log(`Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
+        console.log(`Daemon Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
         const zmqDirector = fromEvent(dealer, "message");
         zmqDirector.subscribe(x => {
                     let daemon_info = {
                     }
-                    let result = JSON.parse(x.toString());
-                    
-                    daemon_info.info = result.result.info
+                    let results = JSON.parse(x.toString());
+                    daemon_info.info = results.result.info
                     this.daemon_info = daemon_info
                     this.sendGateway("set_daemon_data", daemon_info)
                 })
