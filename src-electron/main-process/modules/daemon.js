@@ -223,8 +223,8 @@ export class Daemon {
 
     startZMQ(options) {
         dealer.identity = this.randomString();
-        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`);
-        console.log(`Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`);
+        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
+        console.log(`Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
         const zmqDirector = fromEvent(dealer, "message");
         zmqDirector.subscribe(x => {
                     let daemon_info = {
@@ -237,9 +237,6 @@ export class Daemon {
                 })
     }
 
-    sendZMQ() {
-
-    }
 
     handle(data) {
 
