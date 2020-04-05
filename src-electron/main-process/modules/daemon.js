@@ -103,7 +103,7 @@ export class Daemon {
                 "--in-peers", options.daemon.in_peers,
                 "--limit-rate-up", options.daemon.limit_rate_up,
                 "--limit-rate-down", options.daemon.limit_rate_down,
-                "--log-level", 1, /*options.daemon.log_level*/
+                "--log-level", options.daemon.log_level,
                 "--rpc-bind-ip", options.daemon.rpc_bind_ip,
                 "--rpc-bind-port", options.daemon.rpc_bind_port
             ];
