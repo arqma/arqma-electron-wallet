@@ -183,7 +183,7 @@ export class Daemon {
 
                         if(options.daemon.type === 'local_zmq') {
                             this.zmq_enabled = true
-                            this.startZMQ();
+                            this.startZMQ(options);
                             let getinfo = {"jsonrpc": "2.0",
                                        "id": "1",
                                        "method": "get_info",
