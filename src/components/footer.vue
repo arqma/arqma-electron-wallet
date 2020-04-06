@@ -3,10 +3,11 @@
     <div class="status-line">
 
         <template v-if="config.daemon.type !== 'remote'">
-            <div>Daemon: {{ daemon.info.height_without_bootstrap }} / {{ target_height }} ({{ daemon_local_pct }}%)</div>
+            <div>Daemon: {{ (config.daemon.type === 'local_zmq' ? daemon.info.height : daemon.info.height_without_bootstrap) }} / {{ target_height }} ({{ daemon_local_pct }}%)</div>
         </template>
 
-        <template v-if="config.daemon.type !== 'local'">
+
+        <template v-if="config.daemon.type !== 'local' && config.daemon.type !== 'local_zmq'">
             <div>Remote: {{ daemon.info.height }}</div>
         </template>
 
@@ -49,24 +50,31 @@ export default {
         pool: state => state.gateway.pool,
 
         target_height (state) {
+            if(this.config.daemon.type === "local_zmq")
+                return this.daemon.info.target_height
             if(this.config.daemon.type === "local" && !this.daemon.info.is_ready)
                 return Math.max(this.daemon.info.height, this.daemon.info.target_height)
             else
                 return this.daemon.info.height
         },
         daemon_pct (state) {
-            if(this.config.daemon.type === "local")
+            if(this.config.daemon.type === "local" || this.config.daemon.type === "local_zmq")
                 return this.daemon_local_pct
             return 0
         },
         daemon_local_pct (state) {
             if(this.config.daemon.type === "remote")
                 return 0
-            let pct = (100 * this.daemon.info.height_without_bootstrap / this.target_height).toFixed(1)
-            if(pct == 100.0 && this.daemon.info.height_without_bootstrap < this.target_height)
+            let pct = 0.0
+            if(this.config.daemon.type === "local_zmq") 
+            {
+                pct = (100 * this.daemon.info.height / this.daemon.info.target_height).toFixed(1)
+            } else {
+                pct = (100 * this.daemon.info.height_without_bootstrap / this.target_height).toFixed(1)
+                if(pct == 100.0 && this.daemon.info.height_without_bootstrap < this.target_height)
                 return 99.9
-            else
-                return Math.min(pct, 100)
+            }
+            return Math.min(pct, 100)
         },
         wallet_pct (state) {
             let pct = (100 * this.wallet.info.height / this.target_height).toFixed(1)
@@ -85,9 +93,10 @@ export default {
                     return "Ready"
                 }
             } else {
+                let height_without_bootstrap = (this.config.daemon.type === "local_zmq") ? this.daemon.info.height : this.daemon.info.height_without_bootstrap
                 if(this.wallet.info.height < this.target_height - 1 && this.wallet.info.height != 0) {
                     return "Scanning..."
-                } else if(this.daemon.info.height_without_bootstrap < this.target_height) {
+                } else if(height_without_bootstrap < this.target_height) {
                     return "Syncing..."
                 } else {
                     return "Ready"

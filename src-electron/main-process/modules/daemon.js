@@ -4,6 +4,9 @@ const queue = require("promise-queue");
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zmq = require('zeromq')
+const dealer = zmq.socket('dealer')
+const { fromEvent } = require('rxjs')
 
 export class Daemon {
     constructor(backend) {
@@ -69,7 +72,6 @@ export class Daemon {
     }
 
     start(options) {
-
         if(options.daemon.type === "remote") {
 
             this.local = false
@@ -96,14 +98,21 @@ export class Daemon {
 
             const args = [
                 "--data-dir", options.app.data_dir,
-                "--rpc-bind-ip", options.daemon.rpc_bind_ip,
-                "--rpc-bind-port", options.daemon.rpc_bind_port,
                 "--out-peers", options.daemon.out_peers,
                 "--in-peers", options.daemon.in_peers,
                 "--limit-rate-up", options.daemon.limit_rate_up,
                 "--limit-rate-down", options.daemon.limit_rate_down,
                 "--log-level", options.daemon.log_level,
+                "--rpc-bind-ip", options.daemon.rpc_bind_ip,
+                "--rpc-bind-port", options.daemon.rpc_bind_port
             ];
+
+            if(options.daemon.type === 'local_zmq') {
+                args.push("--zmq-enabled",
+                          "--zmq-max_clients", 5,
+                          "--zmq-bind-port",
+                          options.daemon.zmq_rpc_bind_port)
+            }
 
             if(options.daemon.enhanced_ip_privacy) {
                 args.push(
@@ -151,45 +160,82 @@ export class Daemon {
             this.hostname = options.daemon.rpc_bind_ip
             this.port = options.daemon.rpc_bind_port
 
-            this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
+
             this.daemonProcess.on("error", err => process.stderr.write(`Daemon: ${err}\n`))
             this.daemonProcess.on("close", code => process.stderr.write(`Daemon: exited with code ${code}\n`))
 
-            // To let caller know when the daemon is ready
-            let intrvl = setInterval(() => {
-                this.sendRPC("get_info").then((data) => {
-                    if(!data.hasOwnProperty("error")) {
-                        this.startHeartbeat()
-                        clearInterval(intrvl);
-                        resolve();
-                    } else {
-                        if(data.error.cause &&
-                           data.error.cause.code === "ECONNREFUSED") {
-                            // Ignore
-                        } else {
+            if(options.daemon.type !== 'local_zmq') {
+                this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
+            
+                // To let caller know when the daemon is ready
+                let intrvl = setInterval(() => {
+                    this.sendRPC("get_info").then((data) => {
+                        if(!data.hasOwnProperty("error")) {
                             clearInterval(intrvl);
-                            reject(error);
+                            this.startHeartbeat()
+                            resolve();
+                        } else {
+                            if(data.error.cause &&
+                               data.error.cause.code === "ECONNREFUSED") {
+                                // Ignore
+                            } else {
+                                clearInterval(intrvl);
+                                reject(error);
+                            }
                         }
-                    }
-                })
-            }, 1000)
+                    })
+                }, 2000)
+            } else {
+                this.startZMQ(options);
+                let getinfo = {"jsonrpc": "2.0",
+                           "id": "1",
+                           "method": "get_info",
+                           "params": {}}
+                dealer.send(['', JSON.stringify(getinfo)])
+                resolve();
+            }
         })
     }
 
+    randomBetween(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    randomString() {
+        var source = 'abcdefghijklmnopqrstuvwxyz'
+        var target = [];
+        for (var i = 0; i < 20; i++) {
+            target.push(source[this.randomBetween(0, source.length)]);
+        }
+        return target.join('');
+    }
+
+
+    startZMQ(options) {
+        dealer.identity = this.randomString();
+        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
+        console.log(`Daemon Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
+        const zmqDirector = fromEvent(dealer, "message");
+        zmqDirector.subscribe(x => {
+                    let daemon_info = {
+                    }
+                    let results = JSON.parse(x.toString());
+                    daemon_info.info = results.result.info
+                    this.daemon_info = daemon_info
+                    this.sendGateway("set_daemon_data", daemon_info)
+                })
+    }
+
+
     handle(data) {
-
         let params = data.data
-
         switch (data.method) {
-
             case "ban_peer":
                 this.banPeer(params.host, params.seconds)
                 break
 
             default:
-
         }
-
     }
 
     banPeer(host, seconds=3600) {
@@ -432,6 +478,11 @@ export class Daemon {
     quit() {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat);
+        if (dealer) {
+            dealer.send(['', 'EVICT']);
+            dealer.close()
+        }
+
         this.queue.queue = []
         return new Promise((resolve, reject) => {
             if (this.daemonProcess) {
