@@ -21,6 +21,7 @@ export class Daemon {
 
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
         this.queue = new queue(1, Infinity)
+        this.zmq_enabled = false
 
     }
 
@@ -113,6 +114,8 @@ export class Daemon {
                           "--zmq-bind-port",
                           options.daemon.zmq_rpc_bind_port)
             }
+
+            this.zmq_enabled = options.daemon.type === 'local_zmq'
 
             if(options.daemon.enhanced_ip_privacy) {
                 args.push(
@@ -478,7 +481,8 @@ export class Daemon {
     quit() {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat);
-        if (dealer) {
+        if(this.zmq_enabled) {
+            console.log('closing sheit')
             dealer.send(['', 'EVICT']);
             dealer.close()
         }
