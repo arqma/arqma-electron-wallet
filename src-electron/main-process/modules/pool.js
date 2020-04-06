@@ -162,14 +162,14 @@ export class Pool {
             let debounce = 0
             this.intervals.startup = setInterval(() => {
                 const daemon_info = this.backend.daemon.daemon_info
-                const target_height = this.daemon_type === "local_zmq" ? daemon_info.info.target_height : Math.max(daemon_info.height_without_bootstrap, daemon_info.target_height)
+                const target_height = this.daemon_type === "local_zmq" ? daemon_info.info.target_height || 0 : Math.max(daemon_info.height_without_bootstrap, daemon_info.target_height)
                 const height = this.daemon_type === "local_zmq" ? daemon_info.info.height : daemon_info.height_without_bootstrap
                 if(height >= target_height) {
                     logger.log("info", "Attempting to connect to daemon")
 
                     this.getBlock().then(() => {
                         clearInterval(this.intervals.startup)
-
+                        this.zmq_enabled = this.daemon_type === "local_zmq"
                         if(this.daemon_type === "local_zmq") {
                             this.startZMQ(this.backend.config_data.daemon)
                             const wallet_address= this.config.mining.address
@@ -755,7 +755,7 @@ export class Pool {
 
     quit() {
         return new Promise((resolve, reject) => {
-            if (dealer) {
+            if (this.zmq_enabled) {
                 dealer.send(['', 'EVICT']);
                 dealer.close()
             }
