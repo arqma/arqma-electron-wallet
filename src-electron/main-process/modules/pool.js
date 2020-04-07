@@ -110,7 +110,7 @@ export class Pool {
             }
             this.connections = {}
             this.zmq_enabled = this.daemon_type === "local_zmq"
-            if(this.daemon_type !== "local_zmq") {        
+            if(this.daemon_type !== "local_zmq") {
 
                 if(update_work) {
                     this.getBlock(true).catch(() => {})
@@ -196,7 +196,7 @@ export class Pool {
 
                     this.getBlock().then(() => {
                         clearInterval(this.intervals.startup)
-                        this.startHeartbeat()        
+                        this.startHeartbeat()
                         this.startServer().then(() => {
                             this.sendStatus(2)
                         }).catch(error => {
@@ -276,12 +276,12 @@ export class Pool {
 
     startZMQ(options) {
         dealer.identity = this.randomString();
-        dealer.connect(`tcp://${options.zmq_rpc_bind_ip}:${options.zmq_rpc_bind_port}`);
-        console.log(`Pool Dealer connected to port ${options.zmq_rpc_bind_ip}:${options.zmq_rpc_bind_port}`);
+        dealer.connect(`tcp://${options.zmq_bind_ip}:${options.zmq_bind_port}`);
+        console.log(`Pool Dealer connected to port ${options.zmq_bind_ip}:${options.zmq_bind_port}`);
         const zmqDirector = fromEvent(dealer, "message");
         this.zmq_enabled = true
         zmqDirector.subscribe(x => {
-                    let json = JSON.parse(x.toString());                    
+                    let json = JSON.parse(x.toString());
                     this.addBlockAndInformMiners(json)
                 })
     }

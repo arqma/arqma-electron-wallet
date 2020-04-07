@@ -111,7 +111,7 @@ export class Daemon {
                 args.push("--zmq-enabled",
                           "--zmq-max_clients", 5,
                           "--zmq-bind-port",
-                          options.daemon.zmq_rpc_bind_port)
+                          options.daemon.zmq_bind_port)
             }
 
             this.zmq_enabled = options.daemon.type === 'local_zmq'
@@ -168,7 +168,7 @@ export class Daemon {
 
             if(options.daemon.type !== 'local_zmq') {
                 this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
-            
+
                 // To let caller know when the daemon is ready
                 let intrvl = setInterval(() => {
                     this.sendRPC("get_info").then((data) => {
@@ -215,8 +215,8 @@ export class Daemon {
 
     startZMQ(options) {
         dealer.identity = this.randomString();
-        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
-        console.log(`Daemon Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_rpc_bind_port}`);
+        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
+        console.log(`Daemon Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
         const zmqDirector = fromEvent(dealer, "message");
         zmqDirector.subscribe(x => {
                     let daemon_info = {
