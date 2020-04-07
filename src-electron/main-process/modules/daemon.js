@@ -22,7 +22,6 @@ export class Daemon {
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
         this.queue = new queue(1, Infinity)
         this.zmq_enabled = false
-
     }
 
 
@@ -482,7 +481,6 @@ export class Daemon {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat);
         if(this.zmq_enabled) {
-            console.log('closing sheit')
             dealer.send(['', 'EVICT']);
             dealer.close()
         }

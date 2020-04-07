@@ -4,6 +4,9 @@ import { Market } from "./market";
 import { Pool } from "./pool";
 import { ipcMain, dialog } from "electron";
 
+
+// import { spawn } from 'child_process'
+
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
@@ -21,9 +24,16 @@ export class Backend {
         this.wallet_dir = null
         this.config_file = null
         this.config_data = {}
+        this.isPoolStarted = false
+        this.remote_height = 0
     }
 
     init() {
+
+
+        // spawn(process.execPath, ['./go.js'], {stdio:'ignore'})
+
+
 
         if(os.platform() == "win32") {
 	    this.config_dir = "C:\\ProgramData\\arqma";
@@ -49,8 +59,8 @@ export class Backend {
                     p2p_bind_port: 19993,
                     rpc_bind_ip: "127.0.0.1",
                     rpc_bind_port: 19994,
-                    zmq_rpc_bind_ip: "127.0.0.1",
-                    zmq_rpc_bind_port: 19995,
+                    zmq_bind_ip: "127.0.0.1",
+                    zmq_bind_port: 19995,
                     out_peers: -1,
                     in_peers: -1,
                     limit_rate_up: -1,
@@ -69,14 +79,14 @@ export class Backend {
                         type: "local",
                         p2p_bind_port: 39993,
                         rpc_bind_port: 39994,
-                        zmq_rpc_bind_port: 39995
+                        zmq_bind_port: 39995
                     },
                     testnet: {
                         ...daemon,
                         type: "local",
                         p2p_bind_port: 29993,
                         rpc_bind_port: 29994,
-                        zmq_rpc_bind_port: 29995
+                        zmq_bind_port: 29995
                     }
                 }
 
@@ -109,8 +119,8 @@ export class Backend {
                 p2p_bind_port: 19993,
                 rpc_bind_ip: "127.0.0.1",
                 rpc_bind_port: 19994,
-                zmq_rpc_bind_ip: "127.0.0.1",
-                zmq_rpc_bind_port: 19995,
+                zmq_bind_ip: "127.0.0.1",
+                zmq_bind_port: 19995,
                 out_peers: 8,
                 in_peers: 0,
                 limit_rate_up: -1,
@@ -184,13 +194,47 @@ export class Backend {
         this.startup()
     }
 
+
+    checkHeight() {
+        this.pool.checkHeight().then(response => {
+            try {
+                const json = JSON.parse(response)
+                if(json === null || typeof json !== "object" || !json.hasOwnProperty("data")) {
+                    return
+                }
+                let desynced = false, system_clock_error = false
+                if(json.data.hasOwnProperty("height") && this.blocks.current != null) {
+                    this.remote_height = json.data.height
+                }
+                this.remote_height = 0
+            } catch(error) {
+                this.remote_height = 0
+            }
+        });
+    }
+
+
     send(event, data={}) {
         let message = {
             event,
             data
         }
+        // console.log(this.config_data)
+        if (this.config_data.pool.server.enabled) {
+            if (this.config_data.daemon.type === 'local_zmq' && !this.isPoolStarted) {
+                if(event === "set_daemon_data") {
+                    if(data.info.height === data.info.target_height &&  data.info.height >= this.remote_height ) {
+                        console.log('starting pool');
+                        //test if daemon is syncd
+                        this.pool.startWithZmq()
+                        this.isPoolStarted = true
+                    }
+                }
+             }
+         }
         this.mainWindow.webContents.send("event", message)
     }
+
 
     receive(data) {
 
@@ -568,6 +612,7 @@ export class Backend {
                             this.walletd.listWallets(true)
 
                             this.pool.init(this.config_data)
+                            this.checkHeight()
 
                             this.send("set_app_data", {
                                 status: {

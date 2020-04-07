@@ -43,10 +43,10 @@
     <q-field v-if="config.daemon.type === 'local_zmq'">
         <div class="row gutter-sm items-end">
             <div class="col-8">
-                <q-input v-model="config.daemon.rpc_bind_ip" float-label="Local Daemon IP" :dark="theme=='dark'" disable />
+                <q-input v-model="config.daemon.zmq_bind_ip" float-label="Local Daemon IP" :dark="theme=='dark'" disable />
             </div>
             <div class="col-4">
-                <q-input v-model="config.daemon.zmq_rpc_bind_port" float-label="Local Daemon Port (ZMQ)" type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'" />
+                <q-input v-model="config.daemon.zmq_bind_port" float-label="Local Daemon Port (ZMQ)" type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'" />
             </div>
         </div>
 
@@ -136,10 +136,6 @@
                     <q-input v-model="config.daemon.rpc_bind_port" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
                              float-label="Daemon RPC Port" type="number" :decimals="0" :step="1" min="1024" max="65535" />
                 </div>
-<!--                 <div class="col-3">
-                    <q-input v-model="config.daemon.zmq_rpc_bind_port" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Daemon ZMQ Port" type="number" :decimals="0" :step="1" min="1024" max="65535" />
-                </div> -->
                 <div class="col-3">
                     <q-input v-model="config.wallet.rpc_bind_port" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
                              float-label="Wallet RPC Port" type="number" :decimals="0" :step="1" min="1024" max="65535" />
