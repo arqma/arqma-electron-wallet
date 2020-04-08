@@ -24,7 +24,7 @@ export class Backend {
         this.wallet_dir = null
         this.config_file = null
         this.config_data = {}
-        this.isPoolStarted = false
+        this.isPoolInitialized = false
         this.remote_height = 0
     }
 
@@ -195,39 +195,17 @@ export class Backend {
     }
 
 
-    checkHeight() {
-        this.pool.checkHeight().then(response => {
-            try {
-                const json = JSON.parse(response)
-                if(json === null || typeof json !== "object" || !json.hasOwnProperty("data")) {
-                    return
-                }
-                let desynced = false, system_clock_error = false
-                if(json.data.hasOwnProperty("height") && this.blocks.current != null) {
-                    this.remote_height = json.data.height
-                }
-                this.remote_height = 0
-            } catch(error) {
-                this.remote_height = 0
-            }
-        });
-    }
-
-
     send(event, data={}) {
         let message = {
             event,
             data
         }
-        // console.log(this.config_data)
+
         if (this.config_data.pool.server.enabled) {
-            if (this.config_data.daemon.type === 'local_zmq' && !this.isPoolStarted) {
+            if (this.config_data.daemon.type === 'local_zmq') {
                 if(event === "set_daemon_data") {
-                    if(data.info.height === data.info.target_height &&  data.info.height >= this.remote_height ) {
-                        console.log('starting pool');
-                        //test if daemon is syncd
+                    if(data.info.isDaemonSyncd) {
                         this.pool.startWithZmq()
-                        this.isPoolStarted = true
                     }
                 }
              }
@@ -320,7 +298,13 @@ export class Backend {
                     this.send("set_app_data", {
                         config: this.config_data
                     })
-                    this.pool.init(this.config_data)
+                    
+                    if(this.config_data.pool.server.enabled) {
+                        this.pool.init(this.config_data)
+                        this.pool.startWithZmq()
+                    } else {
+                        this.pool.stop()
+                    }
                 })
                 break
 
@@ -612,7 +596,7 @@ export class Backend {
                             this.walletd.listWallets(true)
 
                             this.pool.init(this.config_data)
-                            this.checkHeight()
+                            this.isPoolInitialized = true
 
                             this.send("set_app_data", {
                                 status: {

@@ -8,7 +8,6 @@ import { Block } from "./pool/block"
 import { Database } from "./pool/database"
 import { diff1, noncePattern, uid, logger } from "./pool/utils"
 const zmq = require('zeromq')
-const dealer = zmq.socket('dealer')
 const { fromEvent } = require('rxjs')
 const request = require("request-promise")
 const http = require("http")
@@ -21,9 +20,10 @@ export class Pool {
         this.config = null
         this.server = null
         this.zmq_enabled = false
-
+        this.isPoolRunning = false
         this.id = 0
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
+        this.dealer = {}
 
         this.intervals = {
             startup: null,
@@ -115,9 +115,6 @@ export class Pool {
                 if(update_work) {
                     this.getBlock(true).catch(() => {})
                 }
-                if(update_vardiff) {
-                    this.updateVarDiff()
-                }
 
                 if(this.config.server.enabled) {
                     if(start && this.config.mining.address != "") {
@@ -126,6 +123,9 @@ export class Pool {
                 } else {
                     this.stop()
                 }
+            }
+            if(update_vardiff) {
+                this.updateVarDiff()
             }
 
         } catch(error) {
@@ -137,6 +137,9 @@ export class Pool {
 
     startWithZmq() {
         if(this.daemon_type === "local_zmq") {
+            if(this.isPoolRunning) return
+                this.isPoolRunning = true
+            logger.log("info", "Starting pool with ZMQ")
             this.startZMQ(this.backend.config_data.daemon)
             const wallet_address= this.config.mining.address
             const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
@@ -146,7 +149,7 @@ export class Pool {
                    "method": "get_block_template",
                    "params": {"reserve_size": reserve_size,
                               "wallet_address": wallet_address}}
-            dealer.send(['', JSON.stringify(getblocktemplate)])
+            this.dealer.send(['', JSON.stringify(getblocktemplate)])
             // let update_vardiff = false
             // if(!start && this.active) {
             //     if(JSON.stringify(this.config.varDiff) != JSON.stringify(options.pool.varDiff)) {
@@ -275,13 +278,15 @@ export class Pool {
 
 
     startZMQ(options) {
-        dealer.identity = this.randomString();
-        dealer.connect(`tcp://${options.zmq_bind_ip}:${options.zmq_bind_port}`);
+        this.dealer = zmq.socket('dealer')
+        this.dealer.identity = this.randomString();
+        this.dealer.setsockopt(zmq.ZMQ_LINGER, 0)
+        this.dealer.connect(`tcp://${options.zmq_bind_ip}:${options.zmq_bind_port}`);
         console.log(`Pool Dealer connected to port ${options.zmq_bind_ip}:${options.zmq_bind_port}`);
-        const zmqDirector = fromEvent(dealer, "message");
+        const zmqDirector = fromEvent(this.dealer, "message");
         this.zmq_enabled = true
         zmqDirector.subscribe(x => {
-                    let json = JSON.parse(x.toString());
+                    let json = JSON.parse(x.toString());               
                     this.addBlockAndInformMiners(json)
                 })
     }
@@ -651,7 +656,7 @@ export class Pool {
                 }
             }
         }
-        catch(error) {}
+        catch(error) {console.log('sheit ', error)}
         return null
     }
 
@@ -749,6 +754,15 @@ export class Pool {
                 miner.socket.destroy()
                 delete this.connections[connection_id]
             }
+
+            if (this.zmq_enabled) {
+                logger.log("warn", "Closing ZMQ")
+                this.dealer.send(['', 'EVICT']);
+                this.dealer.close()
+                this.dealer = null
+                this.isPoolRunning = false
+            }
+
             if(this.server) {
                 logger.log("warn", "Closing server")
                 this.server.close(() => {
@@ -763,10 +777,6 @@ export class Pool {
 
     quit() {
         return new Promise((resolve, reject) => {
-            if (this.zmq_enabled) {
-                dealer.send(['', 'EVICT']);
-                dealer.close()
-            }
             this.stop().then(() => {
                 if(this.intervals.stats) {
                     clearInterval(this.intervals.stats)

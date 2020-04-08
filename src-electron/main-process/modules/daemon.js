@@ -5,7 +5,6 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const zmq = require('zeromq')
-const dealer = zmq.socket('dealer')
 const { fromEvent } = require('rxjs')
 
 export class Daemon {
@@ -18,7 +17,7 @@ export class Daemon {
         this.local = false // do we have a local daemon ?
 
         this.daemon_info = {}
-
+        this.dealer = {}
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
         this.queue = new queue(1, Infinity)
         this.zmq_enabled = false
@@ -49,6 +48,28 @@ export class Daemon {
                 })
             }
         })
+    }
+
+     checkRemoteHeight() {
+        let url = "https://explorer.arqma.com/api/networkinfo"
+        if(this.testnet) {
+            url = "https://stageblocks.arqma.com/api/networkinfo"
+        }
+        request(url).then(response => {
+            try {
+                const json = JSON.parse(response)
+                if(json === null || typeof json !== "object" || !json.hasOwnProperty("data")) {
+                    return
+                }
+                let desynced = false, system_clock_error = false
+                if(json.data.hasOwnProperty("height") && this.blocks.current != null) {
+                    this.remote_height = json.data.height
+                }
+                this.remote_height = 0
+            } catch(error) {
+                this.remote_height = 0
+            }
+        });
     }
 
     checkRemoteDaemon(options) {
@@ -188,12 +209,13 @@ export class Daemon {
                     })
                 }, 2000)
             } else {
+                this.checkRemoteHeight()
                 this.startZMQ(options);
                 let getinfo = {"jsonrpc": "2.0",
                            "id": "1",
                            "method": "get_info",
                            "params": {}}
-                dealer.send(['', JSON.stringify(getinfo)])
+                this.dealer.send(['', JSON.stringify(getinfo)])
                 resolve();
             }
         })
@@ -214,14 +236,19 @@ export class Daemon {
 
 
     startZMQ(options) {
-        dealer.identity = this.randomString();
-        dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
+        this.dealer = zmq.socket('dealer')
+        this.dealer.identity = this.randomString();
+        this.dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
         console.log(`Daemon Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
-        const zmqDirector = fromEvent(dealer, "message");
+        const zmqDirector = fromEvent(this.dealer, "message");
         zmqDirector.subscribe(x => {
                     let daemon_info = {
                     }
                     let results = JSON.parse(x.toString());
+                    results.result.info.isDaemonSyncd = false
+                    if (results.result.info.height === results.result.info.target_height && results.result.info.height >= this.remote_height) {
+                        results.result.info.isDaemonSyncd = true
+                    }
                     daemon_info.info = results.result.info
                     this.daemon_info = daemon_info
                     this.sendGateway("set_daemon_data", daemon_info)
@@ -481,8 +508,9 @@ export class Daemon {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat);
         if(this.zmq_enabled) {
-            dealer.send(['', 'EVICT']);
-            dealer.close()
+            this.dealer.send(['', 'EVICT']);
+            this.dealer.close()
+            this.dealer = null
         }
 
         this.queue.queue = []
