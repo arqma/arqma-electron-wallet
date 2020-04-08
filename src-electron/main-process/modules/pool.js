@@ -110,7 +110,7 @@ export class Pool {
             }
             this.connections = {}
             this.zmq_enabled = this.daemon_type === "local_zmq"
-            if(this.daemon_type !== "local_zmq") {        
+            if(this.daemon_type !== "local_zmq") {
 
                 if(update_work) {
                     this.getBlock(true).catch(() => {})
@@ -199,7 +199,7 @@ export class Pool {
 
                     this.getBlock().then(() => {
                         clearInterval(this.intervals.startup)
-                        this.startHeartbeat()        
+                        this.startHeartbeat()
                         this.startServer().then(() => {
                             this.sendStatus(2)
                         }).catch(error => {
