@@ -19,11 +19,10 @@ export class Pool {
         this.active = false
         this.config = null
         this.server = null
-        this.zmq_enabled = false
         this.isPoolRunning = false
         this.id = 0
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
-        this.dealer = {}
+        this.dealer = null
 
         this.intervals = {
             startup: null,
@@ -109,7 +108,6 @@ export class Pool {
                 valid: []
             }
             this.connections = {}
-            this.zmq_enabled = this.daemon_type === "local_zmq"
             if(this.daemon_type !== "local_zmq") {
 
                 if(update_work) {
@@ -284,7 +282,6 @@ export class Pool {
         this.dealer.connect(`tcp://${options.zmq_bind_ip}:${options.zmq_bind_port}`);
         console.log(`Pool Dealer connected to port ${options.zmq_bind_ip}:${options.zmq_bind_port}`);
         const zmqDirector = fromEvent(this.dealer, "message");
-        this.zmq_enabled = true
         zmqDirector.subscribe(x => {
                     let json = JSON.parse(x.toString());               
                     this.addBlockAndInformMiners(json)
@@ -755,7 +752,7 @@ export class Pool {
                 delete this.connections[connection_id]
             }
 
-            if (this.zmq_enabled) {
+            if (this.dealer) {
                 logger.log("warn", "Closing ZMQ")
                 this.dealer.send(['', 'EVICT']);
                 this.dealer.close()
