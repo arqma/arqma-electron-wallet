@@ -50,7 +50,7 @@ jobs:
               run: ls ./bin
               shell: bash
 
-            - name: Publish window and linux binaries
+            - name: Publish windows and linux binaries
               if: runner.os != 'macOS'
               run: npm run build
               env:
