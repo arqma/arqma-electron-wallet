@@ -119,8 +119,6 @@ export class Daemon {
 
             const args = [
                 "--data-dir", options.app.data_dir,
-
-
                 "--out-peers", options.daemon.out_peers,
                 "--in-peers", options.daemon.in_peers,
                 "--limit-rate-up", options.daemon.limit_rate_up,
