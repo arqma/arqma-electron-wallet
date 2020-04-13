@@ -4,6 +4,8 @@ const queue = require("promise-queue");
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zmq = require('zeromq')
+const { fromEvent } = require('rxjs')
 
 export class Daemon {
     constructor(backend) {
@@ -15,10 +17,10 @@ export class Daemon {
         this.local = false // do we have a local daemon ?
 
         this.daemon_info = {}
-
+        this.dealer = {}
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
         this.queue = new queue(1, Infinity)
-
+        this.zmq_enabled = false
     }
 
 
@@ -48,6 +50,28 @@ export class Daemon {
         })
     }
 
+     checkRemoteHeight() {
+        let url = "https://explorer.arqma.com/api/networkinfo"
+        if(this.testnet) {
+            url = "https://stageblocks.arqma.com/api/networkinfo"
+        }
+        request(url).then(response => {
+            try {
+                const json = JSON.parse(response)
+                if(json === null || typeof json !== "object" || !json.hasOwnProperty("data")) {
+                    return
+                }
+                let desynced = false, system_clock_error = false
+                if(json.data.hasOwnProperty("height") && this.blocks.current != null) {
+                    this.remote_height = json.data.height
+                }
+                this.remote_height = 0
+            } catch(error) {
+                this.remote_height = 0
+            }
+        });
+    }
+
     checkRemoteDaemon(options) {
         if(options.daemon.type == "local") {
             return new Promise((resolve, reject) => {
@@ -69,7 +93,6 @@ export class Daemon {
     }
 
     start(options) {
-
         if(options.daemon.type === "remote") {
 
             this.local = false
@@ -96,16 +119,23 @@ export class Daemon {
 
             const args = [
                 "--data-dir", options.app.data_dir,
-                "--rpc-bind-ip", options.daemon.rpc_bind_ip,
-                "--rpc-bind-port", options.daemon.rpc_bind_port,
-                "--zmq-rpc-bind-ip", options.daemon.zmq_rpc_bind_ip,
-                "--zmq-rpc-bind-port", options.daemon.zmq_rpc_bind_port,
                 "--out-peers", options.daemon.out_peers,
                 "--in-peers", options.daemon.in_peers,
                 "--limit-rate-up", options.daemon.limit_rate_up,
                 "--limit-rate-down", options.daemon.limit_rate_down,
                 "--log-level", options.daemon.log_level,
+                "--rpc-bind-ip", options.daemon.rpc_bind_ip,
+                "--rpc-bind-port", options.daemon.rpc_bind_port
             ];
+
+            if(options.daemon.type === 'local_zmq') {
+                args.push("--zmq-enabled",
+                          "--zmq-max_clients", 5,
+                          "--zmq-bind-port",
+                          options.daemon.zmq_bind_port)
+            }
+
+            this.zmq_enabled = options.daemon.type === 'local_zmq'
 
             if(options.daemon.enhanced_ip_privacy) {
                 args.push(
@@ -153,45 +183,88 @@ export class Daemon {
             this.hostname = options.daemon.rpc_bind_ip
             this.port = options.daemon.rpc_bind_port
 
-            this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
+
             this.daemonProcess.on("error", err => process.stderr.write(`Daemon: ${err}\n`))
             this.daemonProcess.on("close", code => process.stderr.write(`Daemon: exited with code ${code}\n`))
 
-            // To let caller know when the daemon is ready
-            let intrvl = setInterval(() => {
-                this.sendRPC("get_info").then((data) => {
-                    if(!data.hasOwnProperty("error")) {
-                        this.startHeartbeat()
-                        clearInterval(intrvl);
-                        resolve();
-                    } else {
-                        if(data.error.cause &&
-                           data.error.cause.code === "ECONNREFUSED") {
-                            // Ignore
-                        } else {
+            if(options.daemon.type !== 'local_zmq') {
+                this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
+
+                // To let caller know when the daemon is ready
+                let intrvl = setInterval(() => {
+                    this.sendRPC("get_info").then((data) => {
+                        if(!data.hasOwnProperty("error")) {
                             clearInterval(intrvl);
-                            reject(error);
+                            this.startHeartbeat()
+                            resolve();
+                        } else {
+                            if(data.error.cause &&
+                               data.error.cause.code === "ECONNREFUSED") {
+                                // Ignore
+                            } else {
+                                clearInterval(intrvl);
+                                reject(error);
+                            }
                         }
-                    }
-                })
-            }, 1000)
+                    })
+                }, 2000)
+            } else {
+                this.checkRemoteHeight()
+                this.startZMQ(options);
+                let getinfo = {"jsonrpc": "2.0",
+                           "id": "1",
+                           "method": "get_info",
+                           "params": {}}
+                this.dealer.send(['', JSON.stringify(getinfo)])
+                resolve();
+            }
         })
     }
 
+    randomBetween(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    randomString() {
+        var source = 'abcdefghijklmnopqrstuvwxyz'
+        var target = [];
+        for (var i = 0; i < 20; i++) {
+            target.push(source[this.randomBetween(0, source.length)]);
+        }
+        return target.join('');
+    }
+
+
+    startZMQ(options) {
+        this.dealer = zmq.socket('dealer')
+        this.dealer.identity = this.randomString();
+        this.dealer.connect(`tcp://${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
+        console.log(`Daemon Dealer connected to port ${options.daemon.rpc_bind_ip}:${options.daemon.zmq_bind_port}`);
+        const zmqDirector = fromEvent(this.dealer, "message");
+        zmqDirector.subscribe(x => {
+                    let daemon_info = {
+                    }
+                    let results = JSON.parse(x.toString());
+                    results.result.info.isDaemonSyncd = false
+                    if (results.result.info.height === results.result.info.target_height && results.result.info.height >= this.remote_height) {
+                        results.result.info.isDaemonSyncd = true
+                    }
+                    daemon_info.info = results.result.info
+                    this.daemon_info = daemon_info
+                    this.sendGateway("set_daemon_data", daemon_info)
+                })
+    }
+
+
     handle(data) {
-
         let params = data.data
-
         switch (data.method) {
-
             case "ban_peer":
                 this.banPeer(params.host, params.seconds)
                 break
 
             default:
-
         }
-
     }
 
     banPeer(host, seconds=3600) {
@@ -434,6 +507,12 @@ export class Daemon {
     quit() {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat);
+        if(this.zmq_enabled) {
+            this.dealer.send(['', 'EVICT']);
+            this.dealer.close()
+            this.dealer = null
+        }
+
         this.queue.queue = []
         return new Promise((resolve, reject) => {
             if (this.daemonProcess) {
