@@ -23,6 +23,8 @@ export class Pool {
         this.id = 0
         this.agent = new http.Agent({keepAlive: true, maxSockets: 1})
         this.dealer = null
+        this.BlockTemplateParameters = null
+        this.address_abbr
 
         this.intervals = {
             startup: null,
@@ -108,6 +110,11 @@ export class Pool {
                 valid: []
             }
             this.connections = {}
+
+            this.BlockTemplateParameters = this.calculateBlockTemplateParameters()
+            const wallet_address = this.config.mining.address;
+            this.address_abbr = `${wallet_address.substring(0, 5)}...${wallet_address.substring(wallet_address.length - 5)}`
+
             if(this.daemon_type !== "local_zmq") {
 
                 if(update_work) {
@@ -139,14 +146,10 @@ export class Pool {
                 this.isPoolRunning = true
             logger.log("info", "Starting pool with ZMQ")
             this.startZMQ(this.backend.config_data.daemon)
-            const wallet_address= this.config.mining.address
-            const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
-            const reserve_size = uniform ? 8 : 1
             let getblocktemplate = {"jsonrpc": "2.0",
                    "id": "1",
                    "method": "get_block_template",
-                   "params": {"reserve_size": reserve_size,
-                              "wallet_address": wallet_address}}
+                   "params": this.blocktemplateparameters}
             this.dealer.send(['', JSON.stringify(getblocktemplate)])
             this.startHeartbeat()
             this.startServer().then(() => {
@@ -488,6 +491,7 @@ export class Pool {
 
                 this.connections[connection_id] = newMiner
                 this.database.addWorker(workerName)
+                this.BlockTemplateParameters = this.calculateBlockTemplateParameters()
 
                 socket.workerName = workerName
 
@@ -616,9 +620,13 @@ export class Pool {
         return this.blocks.valid.filter(block => block.height == height).pop()
     }
 
+    calculateBlockTemplateParameters() {
+        return {wallet_address: this.config.mining.address,
+                reserve_size: (this.config.mining.uniform || Object.keys(this.connections).length > 128) ? 8 : 1}
+    }
+
     addBlockAndInformMiners(data, force=false) {
         try {
-            const wallet_address= this.config.mining.address
             const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
             if(data.hasOwnProperty("error")) {
                 logger.log("error", "Error polling get_block_template %j", [data.error.message])
@@ -627,8 +635,8 @@ export class Pool {
             const block = data.result
 
             if(this.blocks == null || this.blocks.current == null || this.blocks.current.height < block.height || force) {
-                const address_abbr = wallet_address.substring(0, 5) + "..." + wallet_address.substring(wallet_address.length - 5)
-                logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [address_abbr, block.height, block.difficulty, uniform])
+                
+                logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, uniform])
 
                 this.blocks.current = new Block(this, block, uniform)
 
@@ -649,11 +657,8 @@ export class Pool {
     }
 
     getBlock(force=false) {
-        const wallet_address= this.config.mining.address
-        const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
-        const reserve_size = uniform ? 8 : 1
         return new Promise((resolve, reject) => {
-            this.sendRPC("get_block_template", { wallet_address, reserve_size }).then(data => {
+            this.sendRPC("get_block_template", this.BlockTemplateParameters).then(data => {
                 const result = this.addBlockAndInformMiners(data, force)
                 !result ? resolve() : reject(result);
             })
