@@ -148,15 +148,6 @@ export class Pool {
                    "params": {"reserve_size": reserve_size,
                               "wallet_address": wallet_address}}
             this.dealer.send(['', JSON.stringify(getblocktemplate)])
-            // let update_vardiff = false
-            // if(!start && this.active) {
-            //     if(JSON.stringify(this.config.varDiff) != JSON.stringify(options.pool.varDiff)) {
-            //         update_vardiff = true
-            //     }
-            // }
-            // if(update_vardiff) {
-            //     this.updateVarDiff()
-            // }
             this.startHeartbeat()
             this.startServer().then(() => {
                                 this.sendStatus(2)
@@ -255,8 +246,8 @@ export class Pool {
             this.watchdog()
         }, 240000)
         this.watchdog()
-
-        // this.startJobRefreshInterval()
+        if(this.daemon_type !== "local_zmq")
+            this.startJobRefreshInterval()
 
         this.startRetargetInterval()
     }
