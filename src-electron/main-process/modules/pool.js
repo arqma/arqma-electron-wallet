@@ -112,6 +112,7 @@ export class Pool {
             this.connections = {}
 
             this.BlockTemplateParameters = this.calculateBlockTemplateParameters()
+
             const wallet_address = this.config.mining.address;
             this.address_abbr = `${wallet_address.substring(0, 5)}...${wallet_address.substring(wallet_address.length - 5)}`
 
@@ -149,7 +150,8 @@ export class Pool {
             let getblocktemplate = {"jsonrpc": "2.0",
                    "id": "1",
                    "method": "get_block_template",
-                   "params": this.blocktemplateparameters}
+                   "params": this.BlockTemplateParameters}
+
             this.dealer.send(['', JSON.stringify(getblocktemplate)])
             this.startHeartbeat()
             this.startServer().then(() => {

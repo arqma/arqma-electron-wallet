@@ -244,13 +244,16 @@ export class Daemon {
         zmqDirector.subscribe(x => {
                     let daemon_info = {
                     }
-                    let results = JSON.parse(x.toString());
-                    results.result.info.isDaemonSyncd = false
-                    if (results.result.info.height === results.result.info.target_height && results.result.info.height >= this.remote_height) {
-                        results.result.info.isDaemonSyncd = true
-                    }
-                    daemon_info.info = results.result.info
+                    let json = JSON.parse(x.toString());
+                    json.result.info.isDaemonSyncd = false
+                    daemon_info.info = json.result.info
                     this.daemon_info = daemon_info
+                    if (json.result.info.height === json.result.info.target_height && json.result.info.height >= this.remote_height) {
+                        json.result.info.isDaemonSyncd = true
+                        this.heartbeatSlowAction(daemon_info)
+                        return
+                    }
+
                     this.sendGateway("set_daemon_data", daemon_info)
                 })
     }
@@ -415,12 +418,12 @@ export class Daemon {
         })
     }
 
-    heartbeatSlowAction() {
+    heartbeatSlowAction(daemon_info = {}) {
         let actions = []
         if(this.local) {
             actions = [
                 this.getRPC("connections"),
-                this.getRPC("bans"),
+                this.getRPC("bans")
                 //this.getRPC("txpool_backlog"),
             ]
         } else {
@@ -432,8 +435,7 @@ export class Daemon {
         if(actions.length === 0) return
 
         Promise.all(actions).then((data) => {
-            let daemon_info = {
-            }
+
             for (let n of data) {
                 if(n == undefined || !n.hasOwnProperty("result") || n.result == undefined)
                     continue
@@ -445,6 +447,7 @@ export class Daemon {
                     daemon_info.tx_pool_backlog = n.result.backlog
                 }
             }
+
             this.sendGateway("set_daemon_data", daemon_info)
         })
     }
