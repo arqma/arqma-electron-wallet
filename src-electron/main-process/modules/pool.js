@@ -654,7 +654,7 @@ export class Pool {
                 }
             }
         }
-        catch(error) {console.log('sheit ', error)}
+        catch(error) {}
         return null
     }
 
