@@ -204,7 +204,7 @@ export class Backend {
         if (this.config_data.pool.server.enabled) {
             if (this.config_data.daemon.type === 'local_zmq') {
                 if(event === "set_daemon_data") {
-                    if(data.info.isDaemonSyncd) {
+                    if(data.info && data.info.hasOwnProperty("isDaemonSyncd") && data.info.isDaemonSyncd) {
                         this.pool.startWithZmq()
                     }
                 }
