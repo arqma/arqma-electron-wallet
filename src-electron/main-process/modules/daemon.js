@@ -268,7 +268,7 @@ export class Daemon {
                 if (params.enabled) {
                     this.heartbeat_slow = setInterval(() => {
                         this.heartbeatSlowAction()
-                    }, 10 * 1000) // 30 seconds
+                    }, 30 * 1000) // 30 seconds
                     this.heartbeatSlowAction()
                 }
                 break

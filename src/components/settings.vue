@@ -240,10 +240,12 @@ export default {
                     this.$gateway.send("daemon", "get_peers", {enabled: true})
                 }
             } else {
-                this.enableGetPeers = value
+                this.enableGetPeers = false
                 this.$gateway.send("daemon", "get_peers", {enabled: false})
-                if (this.page === "settings")
-                    isVisible = value
+            }
+            if (!value) {
+                this.enableGetPeers = value
+                this.isVisible = value
             }
         },
         save() {
