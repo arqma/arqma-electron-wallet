@@ -91,7 +91,8 @@ export class Pool {
 
             let update_work = false
             if(!start && this.active) {
-                if(this.config.mining.address != options.pool.mining.address || this.config.mining.uniform != options.pool.mining.uniform) {
+
+                if(this.config.mining.address != options.pool.mining.address) {
                     update_work = true
                 }
             }
@@ -279,7 +280,7 @@ export class Pool {
         console.log(`Pool Dealer connected to port ${options.zmq_bind_ip}:${options.zmq_bind_port}`);
         const zmqDirector = fromEvent(this.dealer, "message");
         zmqDirector.subscribe(x => {
-                    let json = JSON.parse(x.toString());               
+                    let json = JSON.parse(x.toString());
                     this.addBlockAndInformMiners(json)
                 })
     }
@@ -624,12 +625,12 @@ export class Pool {
 
     calculateBlockTemplateParameters() {
         return {wallet_address: this.config.mining.address,
-                reserve_size: (this.config.mining.uniform || Object.keys(this.connections).length > 128) ? 8 : 1}
+                reserve_size: (true || Object.keys(this.connections).length > 128) ? 8 : 1}
     }
 
     addBlockAndInformMiners(data, force=false) {
         try {
-            const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
+            const uniform = true || Object.keys(this.connections).length > 128
             if(data.hasOwnProperty("error")) {
                 logger.log("error", "Error polling get_block_template %j", [data.error.message])
                 return data.error.message
@@ -637,7 +638,7 @@ export class Pool {
             const block = data.result
 
             if(this.blocks == null || this.blocks.current == null || this.blocks.current.height < block.height || force) {
-                
+
                 logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, uniform])
 
                 this.blocks.current = new Block(this, block, uniform)

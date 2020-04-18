@@ -141,7 +141,7 @@
                         </q-field>
                     </div>
                     <div class="col-6">
-                        <q-field>
+                    <!--    <q-field>
                             <q-checkbox v-model="enableStats" label="Privately Share Hashrate" />
                             <q-btn
                                 @click="modals.stats = true"
@@ -151,7 +151,7 @@
                                 size="sm"
                                 dense round flat
                                 />
-                        </q-field>
+                        </q-field>  -->
                     </div>
                     <div class="col-3">
                         <span>Pool status:</span>
@@ -769,8 +769,8 @@ export default {
             }
             return "Select wallet address"
         },
-        settings_changed: function () {
-            this.settings.mining.uniform = !this.enableStats
+       settings_changed: function () {
+           this.settings.mining.uniform = !this.enableStats
             return this.currentSettings != JSON.stringify(this.settings)
         },
         cols_workers_visible: function() {

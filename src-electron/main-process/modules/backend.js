@@ -299,7 +299,7 @@ export class Backend {
                     this.send("set_app_data", {
                         config: this.config_data
                     })
-                    
+
                     this.pool.init(this.config_data)
                     if(!originalServerState) {
                         if (this.config_data.pool.server.enabled && this.config_data.daemon.type === "local_zmq") {
