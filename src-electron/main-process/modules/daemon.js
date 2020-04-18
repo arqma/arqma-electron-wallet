@@ -250,8 +250,6 @@ export class Daemon {
                     this.daemon_info = daemon_info
                     if (json.result.info.height === json.result.info.target_height && json.result.info.height >= this.remote_height) {
                         json.result.info.isDaemonSyncd = true
-                        this.heartbeatSlowAction(daemon_info)
-                        return
                     }
 
                     this.sendGateway("set_daemon_data", daemon_info)
@@ -265,7 +263,15 @@ export class Daemon {
             case "ban_peer":
                 this.banPeer(params.host, params.seconds)
                 break
-
+            case "get_peers":
+                clearInterval(this.heartbeat_slow)
+                if (params.enabled) {
+                    this.heartbeat_slow = setInterval(() => {
+                        this.heartbeatSlowAction()
+                    }, 30 * 1000) // 30 seconds
+                    this.heartbeatSlowAction()
+                }
+                break
             default:
         }
     }
@@ -380,13 +386,6 @@ export class Daemon {
             this.heartbeatAction()
         }, this.local ? 5 * 1000 : 30 * 1000) // 5 seconds for local daemon, 30 seconds for remote
         this.heartbeatAction()
-
-        clearInterval(this.heartbeat_slow)
-        this.heartbeat_slow = setInterval(() => {
-            this.heartbeatSlowAction()
-        }, 30 * 1000) // 30 seconds
-        this.heartbeatSlowAction()
-
     }
 
     heartbeatAction() {

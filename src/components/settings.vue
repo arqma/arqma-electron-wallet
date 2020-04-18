@@ -13,6 +13,8 @@
                     toggle-color="primary"
                     size="md"
                     :options="tabs"
+                    @input="getPeers(true)"
+
                     />
             </div>
 
@@ -79,7 +81,7 @@
             <q-list :dark="theme=='dark'" no-border>
                 <q-list-header>Peer list</q-list-header>
 
-                <q-item link v-for="(entry, index) in daemon.connections" v-bind:key="entry.height" @click.native="showPeerDetails(entry)">
+                <q-item link v-for="(entry, index) in daemon.connections" v-bind:key="entry.connection_id" @click.native="showPeerDetails(entry)">
                     <q-item-main>
                         <q-item-tile label>{{ entry.address }}</q-item-tile>
                         <q-item-tile sublabel>Height: {{ entry.height }}</q-item-tile>
@@ -156,7 +158,8 @@ export default {
             notify_no_payment_id: null,
             notify_empty_password: null,
             timeout: 10,
-            isVisible: false
+            isVisible: false,
+            enableGetPeers: false
         }
     },
     mounted: function () {
@@ -230,7 +233,19 @@ export default {
         }
     },
     methods: {
+        getPeers(value){
+            if (this.page === "peers") {
+                if (value && !this.enableGetPeers ) {
+                    this.enableGetPeers = value
+                    this.$gateway.send("daemon", "get_peers", {enabled: value})
+                    return
+                }
+            }
+            this.enableGetPeers = value
+            this.$gateway.send("daemon", "get_peers", {enabled: false})
+        },
         save() {
+            this.$gateway.send("daemon", "get_peers", {enabled: false})
             this.$gateway.send("core", "save_config", this.pending_config);
             this.isVisible = false
         },
