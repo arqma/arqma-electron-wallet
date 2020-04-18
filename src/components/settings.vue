@@ -234,14 +234,16 @@ export default {
     },
     methods: {
         getPeers(value){
-            if (this.page === "peers") {
-                if (value && !this.enableGetPeers ) {
-                    this.enableGetPeers = value
-                    this.$gateway.send("daemon", "get_peers", {enabled: true})
+            if (this.config.daemon.type && !this.config.daemon.type.includes("remote")) {
+                if (this.page === "peers") {
+                    if (value && !this.enableGetPeers ) {
+                        this.enableGetPeers = value
+                        this.$gateway.send("daemon", "get_peers", {enabled: true})
+                    }
+                } else {
+                    this.enableGetPeers = false
+                    this.$gateway.send("daemon", "get_peers", {enabled: false})
                 }
-            } else {
-                this.enableGetPeers = false
-                this.$gateway.send("daemon", "get_peers", {enabled: false})
             }
             if (!value) {
                 this.enableGetPeers = value
