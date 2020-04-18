@@ -2,7 +2,7 @@
 <q-modal v-model="isVisible" maximized class="settings-modal">
     <q-modal-layout>
         <q-toolbar slot="header" color="dark" inverted>
-            <q-btn flat round dense @click="isVisible = false" icon="reply" />
+            <q-btn flat round dense @click="getPeers(false)" icon="reply" />
             <q-toolbar-title shrink>
                 Settings
             </q-toolbar-title>
@@ -237,12 +237,14 @@ export default {
             if (this.page === "peers") {
                 if (value && !this.enableGetPeers ) {
                     this.enableGetPeers = value
-                    this.$gateway.send("daemon", "get_peers", {enabled: value})
-                    return
+                    this.$gateway.send("daemon", "get_peers", {enabled: true})
                 }
+            } else {
+                this.enableGetPeers = value
+                this.$gateway.send("daemon", "get_peers", {enabled: false})
+                if (this.page === "settings")
+                    isVisible = value
             }
-            this.enableGetPeers = value
-            this.$gateway.send("daemon", "get_peers", {enabled: false})
         },
         save() {
             this.$gateway.send("daemon", "get_peers", {enabled: false})

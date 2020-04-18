@@ -268,7 +268,7 @@ export class Daemon {
                 if (params.enabled) {
                     this.heartbeat_slow = setInterval(() => {
                         this.heartbeatSlowAction()
-                    }, 30 * 1000) // 30 seconds
+                    }, 10 * 1000) // 30 seconds
                     this.heartbeatSlowAction()
                 }
                 break
@@ -446,7 +446,6 @@ export class Daemon {
                     daemon_info.tx_pool_backlog = n.result.backlog
                 }
             }
-
             this.sendGateway("set_daemon_data", daemon_info)
         })
     }
