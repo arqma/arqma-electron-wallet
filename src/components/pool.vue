@@ -1,6 +1,6 @@
 <template>
 <q-modal v-model="isVisible" maximized class="pool-modal">
-    <q-modal-layout>
+    <q-modal-layout class="noscrollers">
         <q-toolbar slot="header" color="dark" inverted>
             <q-btn flat round dense @click="isVisible = false" icon="reply" />
             <q-toolbar-title shrink>
@@ -410,9 +410,9 @@
             </div>
         </div>
         <div v-if="page=='stats'">
-        <div class="q-layout-page">
-          <webview src="https://solo-pool.arqma.com/" autosize="on" minwidth="480" minheight="640"></webview>
-        </div>
+            <div class="q-layout-page">
+              <webview src="https://solo-pool.arqma.com/" autosize="on" ></webview>
+            </div>
         </div>
         <div v-if="page=='blocks'">
             <div class="q-pa-md">
@@ -1221,5 +1221,14 @@ body.dark {
         box-shadow: inset rgba(255, 255, 255, 0.6) 0 2px 2px, inset rgba(0, 0, 0, 0.3) 0 -2px 6px;
         border-radius: 2px;
     }
+}
+.noscrollers {
+    overflow: hidden;
+}
+webview {
+    display: 1 1 0;
+    border: none;
+    height: 100vh;
+    width: 100vw;
 }
 </style>
