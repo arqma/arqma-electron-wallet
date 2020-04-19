@@ -222,7 +222,7 @@ module.exports = function (ctx) {
                 ],
 
                 linux: {
-                    target: ["AppImage", "deb"],
+                    target: ["snap"],
                     icon: "src-electron/icons/linux-512x512.png",
                     category: "Finance"
                 },
