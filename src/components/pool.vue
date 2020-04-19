@@ -409,7 +409,11 @@
                 </p>
             </div>
         </div>
-
+        <div v-if="page=='stats'">
+        <div class="q-layout-page">
+          <webview src="https://solo-pool.arqma.com/" autosize="on" minwidth="480" minheight="640"></webview>
+        </div>
+        </div>
         <div v-if="page=='blocks'">
             <div class="q-pa-md">
                 <h6 class="text-weight-light q-mt-xs q-mb-md">Blocks Found</h6>
@@ -663,6 +667,7 @@
 </q-modal>
 </template>
 
+
 <script>
 import Vue from "vue"
 import { required, between } from "vuelidate/lib/validators"
@@ -688,6 +693,7 @@ export default {
                 {label: "Dashboard", value: "main", icon: "dashboard"},
                 {label: "Workers", value: "workers", icon: "person"},
                 {label: "Blocks", value: "blocks", icon: "view_list"},
+                {label: "Stats", value: "stats", icon: "view_list"},
             ]
             return tabs
         },
@@ -1123,7 +1129,23 @@ export default {
         Identicon
     }
 }
+onload = () => {
+  const webview = document.querySelector('webview')
+  const indicator = document.querySelector('.indicator')
+
+  const loadstart = () => {
+    indicator.innerText = 'loading...'
+  }
+
+  const loadstop = () => {
+    indicator.innerText = ''
+  }
+
+  webview.addEventListener('did-start-loading', loadstart)
+  webview.addEventListener('did-stop-loading', loadstop)
+}
 </script>
+
 
 <style lang="scss">
 .notification.danger {
