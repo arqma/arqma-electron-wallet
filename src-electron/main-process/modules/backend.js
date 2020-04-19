@@ -240,7 +240,6 @@ export class Backend {
     handle(data) {
 
         let params = data.data
-
         switch (data.method) {
           case "set_language":
             this.send("set_language", { lang: params.lang })
