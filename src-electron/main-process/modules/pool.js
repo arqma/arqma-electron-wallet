@@ -74,7 +74,7 @@ export class Pool {
         this.port = options.daemon.rpc_bind_port
 
         try {
-
+            this.sendStatus(0)
             if(this.database.db == null) {
                 this.database.start()
                 logger.log("info", "Database initialized")
@@ -91,7 +91,8 @@ export class Pool {
 
             let update_work = false
             if(!start && this.active) {
-                if(this.config.mining.address != options.pool.mining.address || this.config.mining.uniform != options.pool.mining.uniform) {
+
+                if(this.config.mining.address != options.pool.mining.address) {
                     update_work = true
                 }
             }
@@ -112,6 +113,7 @@ export class Pool {
             this.connections = {}
 
             this.BlockTemplateParameters = this.calculateBlockTemplateParameters()
+
             const wallet_address = this.config.mining.address;
             this.address_abbr = `${wallet_address.substring(0, 5)}...${wallet_address.substring(wallet_address.length - 5)}`
 
@@ -140,20 +142,21 @@ export class Pool {
         }
     }
 
-    startWithZmq() {
+    startWithZmq(isDaemonSyncd = false) {
         if(this.daemon_type === "local_zmq") {
             if(this.isPoolRunning) return
-                this.isPoolRunning = true
+            this.isPoolRunning = true
             logger.log("info", "Starting pool with ZMQ")
             this.startZMQ(this.backend.config_data.daemon)
             let getblocktemplate = {"jsonrpc": "2.0",
                    "id": "1",
                    "method": "get_block_template",
-                   "params": this.blocktemplateparameters}
+                   "params": this.BlockTemplateParameters}
+
             this.dealer.send(['', JSON.stringify(getblocktemplate)])
             this.startHeartbeat()
             this.startServer().then(() => {
-                                this.sendStatus(2)
+                                this.sendStatus(1)
                             }).catch(error => {
                                 this.sendStatus(-1)
                             })
@@ -274,10 +277,10 @@ export class Pool {
         this.dealer.identity = this.randomString();
         this.dealer.setsockopt(zmq.ZMQ_LINGER, 0)
         this.dealer.connect(`tcp://${options.zmq_bind_ip}:${options.zmq_bind_port}`);
-        console.log(`Pool Dealer connected to port ${options.zmq_bind_ip}:${options.zmq_bind_port}`);
+        logger.log("info", `Pool Dealer connected to port ${options.zmq_bind_ip}:${options.zmq_bind_port}`);
         const zmqDirector = fromEvent(this.dealer, "message");
         zmqDirector.subscribe(x => {
-                    let json = JSON.parse(x.toString());               
+                    let json = JSON.parse(x.toString());
                     this.addBlockAndInformMiners(json)
                 })
     }
@@ -338,6 +341,7 @@ export class Pool {
         if(this.intervals.retarget) {
             clearInterval(this.intervals.retarget)
         }
+        const retargetTime = this.config ? this.config.varDiff.retargetTime : 60 
         this.intervals.retarget = setInterval(() => {
             for(let connection_id in this.connections) {
                 const miner = this.connections[connection_id]
@@ -345,7 +349,7 @@ export class Pool {
                     logger.log("info", "Difficulty change { old: %d, new: %d } for %s@%s", [miner.difficulty.last, miner.difficulty.now, miner.workerName, miner.ip])
                 }
             }
-        }, this.config.varDiff.retargetTime * 1000)
+        }, retargetTime * 1000)
     }
 
     startServer() {
@@ -622,12 +626,12 @@ export class Pool {
 
     calculateBlockTemplateParameters() {
         return {wallet_address: this.config.mining.address,
-                reserve_size: (this.config.mining.uniform || Object.keys(this.connections).length > 128) ? 8 : 1}
+                reserve_size: (true || Object.keys(this.connections).length > 128) ? 8 : 1}
     }
 
     addBlockAndInformMiners(data, force=false) {
         try {
-            const uniform = this.config.mining.uniform || Object.keys(this.connections).length > 128
+            const uniform = true || Object.keys(this.connections).length > 128
             if(data.hasOwnProperty("error")) {
                 logger.log("error", "Error polling get_block_template %j", [data.error.message])
                 return data.error.message
@@ -635,9 +639,9 @@ export class Pool {
             const block = data.result
 
             if(this.blocks == null || this.blocks.current == null || this.blocks.current.height < block.height || force) {
-                
-                logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, uniform])
 
+                logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, uniform])
+                this.sendStatus(2)
                 this.blocks.current = new Block(this, block, uniform)
 
                 this.blocks.valid.push(this.blocks.current)
@@ -652,7 +656,7 @@ export class Pool {
                 }
             }
         }
-        catch(error) {console.log('sheit ', error)}
+        catch(error) {}
         return null
     }
 
