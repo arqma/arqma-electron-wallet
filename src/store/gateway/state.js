@@ -16,6 +16,8 @@ export default {
         },
         pending_config: {
         },
+        remotes: {
+        },
         network_interfaces: [
             {
                 address: "0.0.0.0",

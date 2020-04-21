@@ -172,6 +172,7 @@ export class Backend {
                     endpoint: "/api/v3/coins/arqma/tickers"
                 }
             },
+
             daemons: objectAssignDeep({}, daemons),
         }
         this.config_data = {
@@ -180,12 +181,16 @@ export class Backend {
 
                 }
 
-                this.remotes = [
-                    {
-                        host: "node.supportarqma.com",
-                        port: "19994"
-                    }
-                ]
+        this.remotes = [
+                    {host: "node.supportarqma.com",
+                    port:19994},
+                    {host: "jp.supportarqma.com",
+                    port:19994},
+                    {host: "us.supportarqma.com",
+                    port:19994},
+                    {host: "eu.supportarqma.com",
+                    port:19994},
+        ]
 
         ipcMain.on("event", (event, data) => {
             this.receive(data)
@@ -365,6 +370,8 @@ export class Backend {
                     },
                     config: this.config_data,
                     pending_config: this.config_data,
+                    remotes: this.remotes,
+                    defaults: this.defaults
                 });
                 return;
             }

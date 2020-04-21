@@ -29,9 +29,24 @@
     </q-field>
 
     <q-field v-if="config.daemon.type != 'local' && config.daemon.type != 'local_zmq'">
-        <div class="row gutter-sm items-end">
+        <div class="row q-mt-md pl-sm">
             <div class="col-8">
-                <q-input v-model="config.daemon.remote_host" float-label="Remote Node Host" :dark="theme=='dark'" />
+            <q-input
+                v-model="config.daemon.remote_host"
+                :placeholder="daemon_defaults.remote_host"
+                :dark="theme=='dark'"
+                hide-underline
+            />
+                <!-- Remote node presets -->
+               <q-btn-dropdown class="remote-dropdown" v-if="config.app.net_type === 'mainnet'" flat>
+                    <q-list link dark no-border>
+                        <q-item v-for="option in remotes" :key="option.host" @click.native="setPreset(option)" v-close-overlay>
+                            <q-item-main>
+                                <q-item-tile label>{{ option.host }}:{{ option.port }}</q-item-tile>
+                            </q-item-main>
+                        </q-item>
+                    </q-list>
+                </q-btn-dropdown>
             </div>
             <div class="col-4">
                 <q-input v-model="config.daemon.remote_port" float-label="Remote Node Port" type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'" />
@@ -161,17 +176,54 @@ export default {
     },
     computed: mapState({
         theme: state => state.gateway.app.config.appearance.theme,
+        remotes: state => state.gateway.app.remotes,
         config: state => state.gateway.app.pending_config,
+        config_daemon (state) {
+            return this.config.daemons[this.config.app.net_type]
+        },
+        is_remote (state) {
+            return this.config_daemon.type === 'remote'
+        },
+        defaults: state => state.gateway.app.defaults,
+        daemon_defaults (state) {
+            return this.config.daemons[this.config.app.net_type]
+        }
     }),
+    mounted () {
+        if(this.randomise_remote && this.remotes.length > 0 && this.config.app.net_type === "mainnet") {
+            const index = Math.floor(Math.random() * Math.floor(this.remotes.length));
+            this.setPreset(this.remotes[index]);
+        }
+    },
     methods: {
-        selectPath () {
-            this.$refs.fileInput.click()
+        selectPath (type) {
+            const fileInput = type === "data" ? "fileInputData" : "fileInputWallet"
+            this.$refs[fileInput].click()
         },
         setDataPath (file) {
-            this.config.app.data_dir = file.target.files[0].path
+            if (file.target.files && file.target.files.length > 0) {
+                this.config.app.data_dir = file.target.files[0].path
+            }
+        },
+        setPreset (option) {
+            if (!option) return;
+
+            const { host, port } = option;
+            if (host) this.config_daemon.remote_host = host;
+            if (port) this.config_daemon.remote_port = port;
+        },
+        toString (value) {
+            if (!value && typeof value !== "number") return ""
+            return String(value);
+        },
+        data () {
+        return {
+            select: 0,
         }
+    },
     }
 }
+
 </script>
 
 <style lang="scss">
