@@ -2,7 +2,7 @@
 <q-modal v-model="isVisible" maximized class="settings-modal">
     <q-modal-layout>
         <q-toolbar slot="header" color="dark" inverted>
-            <q-btn flat round dense @click="isVisible = false" icon="reply" />
+            <q-btn flat round dense @click="getPeers(false)" icon="reply" />
             <q-toolbar-title shrink>
                 Settings
             </q-toolbar-title>
@@ -13,6 +13,8 @@
                     toggle-color="primary"
                     size="md"
                     :options="tabs"
+                    @input="getPeers(true)"
+
                     />
             </div>
 
@@ -79,7 +81,7 @@
             <q-list :dark="theme=='dark'" no-border>
                 <q-list-header>Peer list</q-list-header>
 
-                <q-item link v-for="(entry, index) in daemon.connections" v-bind:key="entry.height" @click.native="showPeerDetails(entry)">
+                <q-item link v-for="(entry, index) in daemon.connections" v-bind:key="entry.connection_id" @click.native="showPeerDetails(entry)">
                     <q-item-main>
                         <q-item-tile label>{{ entry.address }}</q-item-tile>
                         <q-item-tile sublabel>Height: {{ entry.height }}</q-item-tile>
@@ -156,7 +158,8 @@ export default {
             notify_no_payment_id: null,
             notify_empty_password: null,
             timeout: 10,
-            isVisible: false
+            isVisible: false,
+            enableGetPeers: false
         }
     },
     mounted: function () {
@@ -230,7 +233,25 @@ export default {
         }
     },
     methods: {
+        getPeers(value){
+            if (this.config.daemon.type && !this.config.daemon.type.includes("remote")) {
+                if (this.page === "peers") {
+                    if (value && !this.enableGetPeers ) {
+                        this.enableGetPeers = value
+                        this.$gateway.send("daemon", "get_peers", {enabled: true})
+                    }
+                } else {
+                    this.enableGetPeers = false
+                    this.$gateway.send("daemon", "get_peers", {enabled: false})
+                }
+            }
+            if (!value) {
+                this.enableGetPeers = value
+                this.isVisible = value
+            }
+        },
         save() {
+            this.$gateway.send("daemon", "get_peers", {enabled: false})
             this.$gateway.send("core", "save_config", this.pending_config);
             this.isVisible = false
         },

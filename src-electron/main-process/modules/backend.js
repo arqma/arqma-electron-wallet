@@ -151,11 +151,11 @@ export class Backend {
                     enabled: true,
                     startDiff: 5000,
                     minDiff: 1000,
-                    maxDiff: 100000000,
-                    targetTime: 30,
+                    maxDiff: 1000000,
+                    targetTime: 45,
                     retargetTime: 60,
-                    variancePercent: 30,
-                    maxJump: 100,
+                    variancePercent: 45,
+                    maxJump: 30,
                     fixedDiffSeparator: ".",
                 },
             },
@@ -204,7 +204,7 @@ export class Backend {
         if (this.config_data.pool.server.enabled) {
             if (this.config_data.daemon.type === 'local_zmq') {
                 if(event === "set_daemon_data") {
-                    if(data.info.isDaemonSyncd) {
+                    if(data.info && data.info.hasOwnProperty("isDaemonSyncd") && data.info.isDaemonSyncd) {
                         this.pool.startWithZmq()
                     }
                 }
@@ -240,7 +240,6 @@ export class Backend {
     handle(data) {
 
         let params = data.data
-
         switch (data.method) {
           case "set_language":
             this.send("set_language", { lang: params.lang })
@@ -299,7 +298,7 @@ export class Backend {
                     this.send("set_app_data", {
                         config: this.config_data
                     })
-                    
+
                     this.pool.init(this.config_data)
                     if(!originalServerState) {
                         if (this.config_data.pool.server.enabled && this.config_data.daemon.type === "local_zmq") {
