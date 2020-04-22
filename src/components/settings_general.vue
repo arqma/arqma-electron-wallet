@@ -29,13 +29,14 @@
     </q-field>
 
     <q-field v-if="config.daemon.type != 'local' && config.daemon.type != 'local_zmq'">
-        <div class="row q-mt-md pl-sm">
-            <div class="col-8">
+    <div class="row q-mt-md pl-sm">
+        <div class="col-8" label="Remote Node Host">
             <q-input
                 v-model="config_daemon.remote_host"
+                float-label="Remote Node Host"
                 :placeholder="daemon_defaults.remote_host"
                 :dark="theme=='dark'"
-                hide-underline
+
             />
                 <!-- Remote node presets -->
                <q-btn-dropdown class="remote-dropdown" v-if="config.app.net_type === 'mainnet'" flat>
@@ -49,7 +50,18 @@
                 </q-btn-dropdown>
             </div>
             <div class="col-4">
-                <q-input v-model="config.daemon.remote_port" float-label="Remote Node Port" type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'" />
+            <q-input
+               v-model="config_daemon.remote_port"
+               float-label="Remote Port (RPC)"
+               :placeholder="toString(daemon_defaults.remote_port)"
+               type="number"
+               :decimals="0"
+               :step="1"
+               min="1024"
+               max="65535"
+               :dark="theme=='dark'"
+
+           />
             </div>
         </div>
 
@@ -197,8 +209,8 @@ export default {
     },
     methods: {
         selectPath (type) {
-            const fileInput = type === "data" ? "fileInputData" : "fileInputWallet"
-            this.$refs[fileInput].click()
+
+            this.$refs['fileInput'].click()
         },
         setDataPath (file) {
             if (file.target.files && file.target.files.length > 0) {
