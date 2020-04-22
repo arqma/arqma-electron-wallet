@@ -626,12 +626,11 @@ export class Pool {
 
     calculateBlockTemplateParameters() {
         return {wallet_address: this.config.mining.address,
-                reserve_size: (true || Object.keys(this.connections).length > 128) ? 8 : 1}
+                reserve_size: 1 }
     }
 
     addBlockAndInformMiners(data, force=false) {
         try {
-            const uniform = true || Object.keys(this.connections).length > 128
             if(data.hasOwnProperty("error")) {
                 logger.log("error", "Error polling get_block_template %j", [data.error.message])
                 return data.error.message
@@ -640,9 +639,9 @@ export class Pool {
 
             if(this.blocks == null || this.blocks.current == null || this.blocks.current.height < block.height || force) {
 
-                logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, uniform])
+                logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, true])
                 this.sendStatus(2)
-                this.blocks.current = new Block(this, block, uniform)
+                this.blocks.current = new Block(this, block, false)
 
                 this.blocks.valid.push(this.blocks.current)
 
