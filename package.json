@@ -46,6 +46,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "rotating-file-stream": "^1.4.1",
+    "rxjs": "^6.5.4",
     "ryo-core-js": "git://github.com/arqtras/ryo-core-js.git",
     "utf-8-validate": "^5.0.2",
     "validation": "0.0.1",
@@ -53,9 +54,8 @@
     "vue-i18n": "^8.15.3",
     "vue-timeago": "^5.1.2",
     "vuelidate": "^0.7.5",
-    "zxcvbn": "^4.4.2",
     "zeromq": "^5.2.0",
-    "rxjs": "^6.5.4"
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",

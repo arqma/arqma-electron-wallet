@@ -26,13 +26,17 @@ export class Backend {
         this.config_data = {}
         this.isPoolInitialized = false
         this.remote_height = 0
+        this.remotes = []
     }
 
     init() {
 
 
         // spawn(process.execPath, ['./go.js'], {stdio:'ignore'})
-
+        this.remotes = [{host: "node.supportarqma.com", port:19994},
+                        {host: "jp.supportarqma.com", port:19994},
+                        {host: "us.supportarqma.com", port:19994},
+                        {host: "eu.supportarqma.com", port:19994}]
 
 
         if(os.platform() == "win32") {
@@ -172,6 +176,7 @@ export class Backend {
                     endpoint: "/api/v3/coins/arqma/tickers"
                 }
             },
+
             daemons: objectAssignDeep({}, daemons),
         }
         this.config_data = {
@@ -179,13 +184,6 @@ export class Backend {
                     ...objectAssignDeep({}, this.defaults),
 
                 }
-
-                this.remotes = [
-                    {
-                        host: "node.supportarqma.com",
-                        port: "19994"
-                    }
-                ]
 
         ipcMain.on("event", (event, data) => {
             this.receive(data)
@@ -365,6 +363,8 @@ export class Backend {
                     },
                     config: this.config_data,
                     pending_config: this.config_data,
+                    remotes: this.remotes,
+                    defaults: this.defaults
                 });
                 return;
             }
@@ -435,7 +435,8 @@ export class Backend {
             this.send("set_app_data", {
                 config: this.config_data,
                 pending_config: this.config_data,
-                network_interfaces: network_interfaces
+                network_interfaces: network_interfaces,
+                remotes: [...this.remotes]
             });
 
             // Check to see if data dir exists, if not it may have been on network drive
