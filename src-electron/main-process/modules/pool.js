@@ -641,7 +641,7 @@ export class Pool {
 
                 logger.log("info", "New block to mine { address: %s, height: %d, difficulty: %d, uniform: %s }", [this.address_abbr, block.height, block.difficulty, true])
                 this.sendStatus(2)
-                this.blocks.current = new Block(this, block)
+                this.blocks.current = new Block(this, block, false)
 
                 this.blocks.valid.push(this.blocks.current)
 
