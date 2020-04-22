@@ -40,7 +40,7 @@
                 <!-- Remote node presets -->
                <q-btn-dropdown class="remote-dropdown" v-if="config.app.net_type === 'mainnet'" flat>
                     <q-list link dark no-border>
-                        <q-item v-for="option in remotes" :key="option.host" @click.native="setPreset(option)" v-close-overlay>
+                        <q-item v-for="option in remotes" v-bind:key="option.host" @click.native="setPreset(option)" v-close-overlay>
                             <q-item-main>
                                 <q-item-tile label>{{ option.host }}:{{ option.port }}</q-item-tile>
                             </q-item-main>
@@ -206,6 +206,7 @@ export default {
             }
         },
         setPreset (option) {
+
             if (!option) return;
 
             const { host, port } = option;
