@@ -32,7 +32,7 @@
         <div class="row q-mt-md pl-sm">
             <div class="col-8">
             <q-input
-                v-model="config.daemon.remote_host"
+                v-model="config_daemon.remote_host"
                 :placeholder="daemon_defaults.remote_host"
                 :dark="theme=='dark'"
                 hide-underline
@@ -211,8 +211,7 @@ export default {
 
             const { host, port } = option;
             if (host) this.config_daemon.remote_host = host;
-            if (port) this.config_daemon.remote_port = port;
-        },
+            if (port) this.config_daemon.remote_port = port;        },
         toString (value) {
             if (!value && typeof value !== "number") return ""
             return String(value);
