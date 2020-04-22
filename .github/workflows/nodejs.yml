@@ -1,0 +1,70 @@
+name: ArQma Electron Wallet Build
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows-2016, ubuntu-latest]
+
+        steps:
+            - name: Checkout git repo
+              uses: actions/checkout@v1
+
+            - name: Install node
+              uses: actions/setup-node@v1
+              with:
+                node-version: "11.9.0"
+
+            - name: Install dependencies
+              run: npm install -f
+
+            - name: Download arqmad binaries
+              run: node ./build/download-binaries.js
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Extract zip binaries
+              if: runner.os != 'Linux'
+              run: unzip latest.zip
+              shell: bash
+              working-directory: ./downloads
+
+            - name: Extract gz binaries
+              if: runner.os == 'Linux'
+              run: tar -xf latest.gz
+              shell: bash
+              working-directory: ./downloads
+
+            - name: Move arqmad binaries
+              run: |
+                find ./downloads -type f -name "arqmad*" -exec cp '{}' ./bin \;
+                find ./downloads -type f -name "arqma-wallet-rpc*" -exec cp '{}' ./bin \;
+              shell: bash
+
+            - name: Verify binaries
+              run: ls ./bin
+              shell: bash
+
+            - name: Publish windows and linux binaries
+              if: runner.os != 'macOS'
+              run: npm run build
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Remove un-needed artifacts
+              run: rm -r -- ./*/
+              shell: bash
+              working-directory: ./dist/electron-mat/Packaged
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v1
+              with:
+               name: ${{ runner.OS }}
+               path: dist/electron-mat/Packaged
