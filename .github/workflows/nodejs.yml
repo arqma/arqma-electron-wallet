@@ -1,5 +1,4 @@
-name: ArQma Electron Wallet Build
-
+name: Arqma Electron Wallet Build
 on:
     push:
         branches:
@@ -11,7 +10,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-2016, ubuntu-latest]
+                os: [windows-latest, ubuntu-latest]
 
         steps:
             - name: Checkout git repo
@@ -25,10 +24,8 @@ jobs:
             - name: Install dependencies
               run: npm install -f
 
-            - name: Download arqmad binaries
+            - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Extract zip binaries
               if: runner.os != 'Linux'
@@ -52,7 +49,7 @@ jobs:
               run: ls ./bin
               shell: bash
 
-            - name: Publish windows and linux binaries
+            - name: Publish window and linux binaries
               if: runner.os != 'macOS'
               run: npm run build
               env:
@@ -66,5 +63,5 @@ jobs:
             - name: Upload artifacts
               uses: actions/upload-artifact@v1
               with:
-               name: ${{ runner.OS }}
-               path: dist/electron-mat/Packaged
+                name: ${{ runner.OS }}
+                path: dist/electron-mat/Packaged
