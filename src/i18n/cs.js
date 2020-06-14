@@ -142,7 +142,7 @@ export default {
         },
         transfer: {
             title: "Převod",
-            message: "Chcete odeslat transakci?",
+            message: "Zadejte heslo peněženky",
             ok: "ODESLAT"
         },
         unlockConfirm: {
