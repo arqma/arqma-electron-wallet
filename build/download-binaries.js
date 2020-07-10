@@ -26,7 +26,7 @@ async function download() {
       .map(asset => asset["browser_download_url"])
       .find(url => {
         if (platform === "darwin") {
-          return url.includes("osx") || url.includes("mac");
+          return url.includes("osx-x64") || url.includes("osx");
         } else if (platform === "win32") {
           return url.includes("win") || url.includes("windows");
         }
