@@ -25,7 +25,7 @@ async function download () {
             .map(asset => asset["browser_download_url"])
             .find(url => {
                 if (platform === "darwin") {
-                    return url.includes("arqma-osx-x64-v0.6.2.zip") || url.includes("arqma-osx-x64")
+                    return url.includes("osx-x64-v0.6.2.zip")
                 } else if (platform === "win32") {
                     return url.includes("win64") || url.includes("win64")
                 }
