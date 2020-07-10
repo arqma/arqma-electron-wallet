@@ -1,36 +1,36 @@
-const axios = require("axios").default
-const fs = require("fs-extra")
-const path = require("path")
+const axios = require("axios").default;
+const fs = require("fs-extra");
+const path = require("path");
 
-async function download () {
+async function download() {
   const { platform, env } = process;
-  const repoUrl = "https://api.github.com/repos/arqma/arqma/releases/latest"
+  const repoUrl = "https://api.github.com/repos/arqma/arqma/releases/latest";
   try {
-  const pwd = process.cwd();
-  const downloadDir = path.join(pwd, "downloads");
-  await fs.ensureDir(downloadDir);
+    const pwd = process.cwd();
+    const downloadDir = path.join(pwd, "downloads");
+    await fs.ensureDir(downloadDir);
 
-  const headers = {
-    "Content-Type": "application/json",
-    "User-Agent": "Arqma-Electron-Wallet"
-  };
-  if (env.GH_TOKEN) {
-    headers.Authorisation = `Bearer ${env.GH_TOKEN}`;
-  }
+    const headers = {
+      "Content-Type": "application/json",
+      "User-Agent": "Arqma-Electron-Wallet"
+    };
+    if (env.GH_TOKEN) {
+      headers.Authorisation = `Bearer ${env.GH_TOKEN}`;
+    }
 
-  const { data } = await axios.get(repoUrl, { headers });
-  const { name } = data;
-  console.log("Latest release: " + name);
+    const { data } = await axios.get(repoUrl, { headers });
+    const { name } = data;
+    console.log("Latest release: " + name);
 
-  const url = (data.assets || [])
+    const url = (data.assets || [])
       .map(asset => asset["browser_download_url"])
       .find(url => {
-          if (platform === "darwin") {
-            return url.includes("osx") || url.includes("mac");
-          } else if (platform === "win32") {
-              return url.includes("win64") || url.includes("win64");
-          }
-          return url.includes("x86_64-linux-gnu-compat.tar.gz");
+        if (platform === "darwin") {
+          return url.includes("osx") || url.includes("mac");
+        } else if (platform === "win32") {
+          return url.includes("win") || url.includes("windows");
+        }
+        return url.includes("x86_64-linux-gnu-compat.tar.gz");
       });
 
     if (!url) {
@@ -45,9 +45,10 @@ async function download () {
     });
     artifact.pipe(fs.createWriteStream(filePath));
     console.log("Downloaded binary to: " + filePath);
-    } catch (err) {
+  } catch (err) {
     console.error("Failed to download file: " + err);
     process.exit(1);
   }
 }
+
 download();
