@@ -17,10 +17,10 @@ async function download () {
         const url = (data.assets || [])
             .map(asset => asset["browser_download_url"])
             .find(url => {
-                if (platform === "darwin") {
-                    return url.includes("osx.zip")
-                } else if (platform === "win32") {
+                if (platform === "win32") {
                     return url.includes("win64") || url.includes("win64")
+                } else if (platform === "darwin") {
+                    return url.includes("osx.zip") || url.include("osx")
                 }
                 return url.includes("x86_64-linux-gnu.tar.gz")
             })
