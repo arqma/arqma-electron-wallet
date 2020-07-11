@@ -57,7 +57,7 @@ jobs:
 
             - name: Publish mac binaries
               if: runner.os == 'macOS'
-              run: npm run release
+              run: npm run build
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
