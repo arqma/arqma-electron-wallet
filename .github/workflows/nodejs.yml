@@ -52,8 +52,6 @@ jobs:
             - name: Publish window and linux binaries
               if: runner.os != 'macOS'
               run: npm run build
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Remove un-needed artifacts
               run: rm -r -- ./*/
