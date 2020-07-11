@@ -27,15 +27,15 @@ jobs:
             - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
 
-            - name: Extract zip binaries
-              if: runner.os != 'Linux'
-              run: unzip latest.zip
-              shell: bash
-              working-directory: ./downloads
-
             - name: Extract gz binaries
               if: runner.os == 'Linux'
               run: tar -xf latest.gz
+              shell: bash
+              working-directory: ./downloads
+
+            - name: Extract zip binaries
+              if: runner.os != 'Linux'
+              run: unzip latest.zip
               shell: bash
               working-directory: ./downloads
 
