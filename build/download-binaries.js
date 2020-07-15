@@ -20,7 +20,7 @@ async function download () {
                 if (platform === "win32") {
                     return url.includes("win64") || url.includes("win64")
                 } else if (platform === "darwin") {
-                    return url.includes("osx.zip")
+                    return url.includes("arqma-osx.zip")
                 }
                 return url.includes("x86_64-linux-gnu.tar.gz")
             })
