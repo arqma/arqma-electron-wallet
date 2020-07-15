@@ -3,21 +3,14 @@ const fs = require("fs-extra");
 const path = require("path");
 
 async function download() {
-  const { platform, env } = process;
+  const { platform } = process;
   const repoUrl = "https://api.github.com/repos/arqma/arqma/releases/latest";
   try {
     const pwd = process.cwd();
     const downloadDir = path.join(pwd, "downloads");
     await fs.ensureDir(downloadDir);
 
-    const headers = {
-      "Content-Type": "application/json"
-    };
-    if (env.GH_TOKEN) {
-      headers.Authorisation = `ArqTras ${env.GH_TOKEN}`;
-    }
-
-    const { data } = await axios.get(repoUrl, { headers });
+    const { data } = await axios.get(repoUrl);
     const { name } = data;
     console.log("Latest release: " + name);
 

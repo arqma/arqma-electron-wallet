@@ -10,7 +10,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [macos-latest]
+                os: [windows-2016, macos-latest, ubuntu-latest]
 
         steps:
             - name: Checkout git repo
@@ -26,8 +26,6 @@ jobs:
 
             - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
-              env:
-                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Extract gz binaries
               if: runner.os == 'Linux'
