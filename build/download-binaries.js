@@ -3,7 +3,8 @@ const fs = require("fs-extra");
 const path = require("path");
 
 async function download() {
-  const { platform, env } = process;
+//  const { platform, env } = process;
+  const { platform } = process;
   const repoUrl = "https://api.github.com/repos/arqma/arqma/releases/latest";
   try {
     const pwd = process.cwd();
@@ -14,9 +15,9 @@ async function download() {
       "Content-Type": "application/json",
       "User-Agent": "Arqma-Electron-Wallet"
     };
-    if (env.GH_TOKEN) {
-      headers.Authorisation = `Bearer ${env.GH_TOKEN}`;
-    }
+//    if (env.GH_TOKEN) {
+//      headers.Authorisation = `ArqTras ${env.GH_TOKEN}`;
+//    }
 
     const { data } = await axios.get(repoUrl, { headers });
     const { name } = data;
