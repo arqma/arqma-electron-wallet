@@ -60,6 +60,11 @@ jobs:
               run: npm run build
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                CSC_LINK: ${{ secrets.MAC_CERTIFICATE }}
+                CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+                ELECTRON_WALLET_APPLE_ID: ${{ secrets.ELECTRON_WALLET_APPLE_ID }}
+                ELECTRON_WALLET_PASSWORD: ${{ secrets.ELECTRON_WALLET_PASSWORD }}
+                ELECTRON_WALLET_TEAM_ID: ${{ secrets.ELECTRON_WALLET_TEAM_ID }}
 
             - name: Remove un-needed artifacts
               run: rm -r -- ./*/
