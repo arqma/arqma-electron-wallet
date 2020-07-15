@@ -21,10 +21,7 @@ async function download() {
     const { data } = await axios.get(repoUrl, { headers });
     const { name } = data;
     console.log("Latest release: " + name);
-    .catch(err => {
-            // Handle Error Here
-            console.error(err);
-        });
+    
     const url = (data.assets || [])
       .map(asset => asset["browser_download_url"])
       .find(url => {
