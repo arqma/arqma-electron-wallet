@@ -26,6 +26,8 @@ jobs:
 
             - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
+               env:
+                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Extract gz binaries
               if: runner.os == 'Linux'
