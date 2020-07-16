@@ -3,34 +3,25 @@ const fs = require("fs-extra")
 const path = require("path")
 
 async function download () {
-    const { platform, env } = process;
+    const { platform } = process
     const repoUrl = "https://api.github.com/repos/arqma/arqma/releases/latest"
     try {
         const pwd = process.cwd()
         const downloadDir = path.join(pwd, "downloads")
         await fs.ensureDir(downloadDir)
 
-        const headers = {
-        "Content-Type": "application/json"
-        };
-        if (env.GH_TOKEN) {
-        headers.Authorisation = `Bearer ${env.GH_TOKEN}`;
-        }
-
-    const { data } = await axios.get(repoUrl, { headers });
-        const { name } = data
-        console.log("Latest release: " + name)
-
+        const { data } = await axios.get(repoUrl)
         const url = (data.assets || [])
             .map(asset => asset["browser_download_url"])
             .find(url => {
                 if (platform === "darwin") {
-                    return url.includes("osx") || url.includes("mac");
+                    return url.includes("osx")
                 } else if (platform === "win32") {
-                    return url.includes("win64") || url.includes("win64");
+                    return url.includes("win64")
                 }
-                return url.includes("x86_64-linux-gnu-compat.tar.gz");
+                return url.includes("x86_64-linux-gnu-compat.tar.gz")
             })
+
         if (!url) { throw new Error("Download url not found for " + process) }
         console.log("Downloading binary at url: " + url)
 
