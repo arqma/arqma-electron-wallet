@@ -10,7 +10,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-2016, ubuntu-latest]
+                os: [windows-2016, macos-latest, ubuntu-latest]
 
         steps:
             - name: Checkout git repo
@@ -27,15 +27,15 @@ jobs:
             - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
 
-            - name: Extract zip binaries
-              if: runner.os != 'Linux'
-              run: unzip latest.zip
-              shell: bash
-              working-directory: ./downloads
-
             - name: Extract gz binaries
               if: runner.os == 'Linux'
               run: tar -xf latest.gz
+              shell: bash
+              working-directory: ./downloads
+
+            - name: Extract zip binaries
+              if: runner.os != 'Linux'
+              run: unzip latest.zip
               shell: bash
               working-directory: ./downloads
 
@@ -54,6 +54,17 @@ jobs:
               run: npm run build
               env:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Publish mac binaries
+              if: runner.os == 'macOS'
+              run: npm run build
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                CSC_LINK: ${{ secrets.MAC_CERTIFICATE }}
+                CSC_KEY_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+                ELECTRON_WALLET_APPLE_ID: ${{ secrets.ELECTRON_WALLET_APPLE_ID }}
+                ELECTRON_WALLET_PASSWORD: ${{ secrets.ELECTRON_WALLET_PASSWORD }}
+                ELECTRON_WALLET_TEAM_ID: ${{ secrets.ELECTRON_WALLET_TEAM_ID }}
 
             - name: Remove un-needed artifacts
               run: rm -r -- ./*/
