@@ -25,11 +25,11 @@ async function download () {
             .map(asset => asset["browser_download_url"])
             .find(url => {
                 if (platform === "darwin") {
-                    return url.includes("osx")
+                    return url.includes("osx") || url.includes("mac");
                 } else if (platform === "win32") {
-                    return url.includes("win64") || url.includes("win64")
+                    return url.includes("win64") || url.includes("win64");
                 }
-                return url.includes("x86_64-linux-gnu-compat.tar.gz")
+                return url.includes("x86_64-linux-gnu-compat.tar.gz");
             })
         if (!url) { throw new Error("Download url not found for " + process) }
         console.log("Downloading binary at url: " + url)
