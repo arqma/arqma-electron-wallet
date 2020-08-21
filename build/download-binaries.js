@@ -11,19 +11,17 @@ async function download () {
         await fs.ensureDir(downloadDir)
 
         const { data } = await axios.get(repoUrl)
-        const { name } = data
-        console.log("Latest release: " + name)
-
         const url = (data.assets || [])
             .map(asset => asset["browser_download_url"])
             .find(url => {
                 if (platform === "darwin") {
-                    return url.includes("osx") || url.includes("mac")
+                    return url.includes("osx-x64-v6.1.0.zip")
                 } else if (platform === "win32") {
-                    return url.includes("win64") || url.includes("win64")
+                    return url.includes("win64")
                 }
                 return url.includes("x86_64-linux-gnu-compat.tar.gz")
             })
+
         if (!url) { throw new Error("Download url not found for " + process) }
         console.log("Downloading binary at url: " + url)
 
