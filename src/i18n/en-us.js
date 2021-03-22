@@ -1,80 +1,80 @@
 export default {
     buttons: {
         // All button text is uppercased in the gui
-        advanced: "ADVANCED",
-        addressBook: "ADDRESS BOOK",
-        all: "ALL",
-        back: "BACK",
-        browse: "BROWSE",
-        cancel: "CANCEL",
-        change: "CHANGE",
-        check: "CHECK",
-        clear: "CLEAR",
-        close: "CLOSE",
-        contacts: "CONTACTS",
-        copyAddress: "COPY ADDRESS",
-        copySignature: "COPY SIGNATURE",
-        createWallet: "CREATE WALLET",
-        delete: "DELETE",
-        edit: "EDIT",
-        export: "EXPORT",
-        generate: "GENERATE",
-        import: "IMPORT",
-        importWallet: "IMPORT WALLET | IMPORT WALLETS",
-        next: "NEXT",
-        openWallet: "OPEN WALLET",
-        receive: "RECEIVE",
-        registerServiceNode: "REGISTER SERVICE NODE",
-        rescan: "RESCAN",
-        restoreWallet: "RESTORE WALLET",
-        save: "SAVE",
-        saveTxNotes: "SAVE TX NOTES",
-        selectLocation: "SELECT LOCATION",
-        selectWalletFile: "SELECT WALLET FILE",
-        send: "SEND",
-        sendCoins: "SEND COINS",
-        serviceNode: "SERVICE NODE",
-        settings: "SETTINGS",
-        showQRCode: "SHOW QR CODE",
-        showTxDetails: "SHOW TX DETAILS",
-        stake: "STAKE",
-        sweepAll: "SWEEP ALL",
-        txHistory: "TX HISTORY",
-        unlock: "UNLOCK",
-        viewOnExplorer: "VIEW ON EXPLORER",
-        wallet: "WALLET"
+        advanced: "پیشرفته",
+        addressBook: "دفترچه آدرس ها",
+        all: "همه",
+        back: "بازگشت",
+        browse: "جستجو",
+        cancel: "کنسل",
+        change: "تغییرات",
+        check: "چک کردن",
+        clear: "پاک کردن",
+        close: "بستن",
+        contacts: "تماس ها",
+        copyAddress: "کپی آدرس",
+        copySignature: "کپی امضا",
+        createWallet: "ساخت کیف پول",
+        delete: "حذف",
+        edit: "ویرایش",
+        export: "خروجی",
+        generate: "ساختن",
+        import: "وارد شده",
+        importWallet: "کیف پول واردشده | کیف پول های وارد شده",
+        next: "بعدی",
+        openWallet: "ایجاد کیف پول",
+        receive: "دریافت",
+        registerServiceNode: "فهرست خدمات نود",
+        rescan: "بازبینی مجدد",
+        restoreWallet: "بازگرداندن کیف پول",
+        save: "ذخیره",
+        saveTxNotes: "دخیره یادداشت های متنی",
+        selectLocation: "انتخاب موقعیت مکانی",
+        selectWalletFile: "انتخاب پوشه کیف پول",
+        send: "ارسال",
+        sendCoins: "ارسال ارزها",
+        serviceNode: "خدمات نود",
+        settings: "تنظیمات",
+        showQRCode: "نمایش بارکد",
+        showTxDetails: "نمایش جزئیات متن",
+        stake: "وثیقه ارزی",
+        sweepAll: "از بین بردن همه",
+        txHistory: "تاریخچه تراکنش ها",
+        unlock: "فاقد قفل",
+        viewOnExplorer: "مشاهده جستجوگر",
+        wallet: "کیف پول"
     },
     dialog: {
         // Generic buttons
         buttons: {
-            ok: "OK",
-            cancel: "CANCEL",
-            open: "OPEN"
+            ok: "تایید",
+            cancel: "کنسل",
+            open: "باز کردن"
         },
 
         // Dialogs
         banPeer: {
-            title: "Ban peer",
-            peerDetailsTitle: "Peer details",
-            message: "Enter length to ban peer in seconds.\nDefault 3600 = 1 hour.",
-            ok: "Ban peer"
+            title: "مسدود کردن اتصالات",
+            peerDetailsTitle: "جزئیات اتصالات",
+            message: "کد را جهت مسدود کردن اتصالات در چند ثانیه واردکنید.\پیشفرض 3600 = 1 ساعت.",
+            ok: "مسدود کردن اتصالات"
         },
         copyAddress: {
-            title: "Copy address",
-            message: "There is a payment id associated with this address.\nBe sure to copy the payment id separately."
+            title: "کپی آدرس",
+            message: "شناسه پرداختی به آین آدرس مرتبط است.\nمطمئن شوید که شناسه پرداخت را جداگانه کپی کنید."
         },
         copyPrivateKeys: {
             // Copy {seedWords/viewKey/spendKey}
-            title: "Copy {type}",
-            message: "Be careful who you send your private keys to as they control your funds.",
-            seedWords: "Seed Words",
-            viewKey: "View Key",
-            spendKey: "Spend Key"
+            title: "کپی {در حال تایپ کردن}",
+            message: "مراقب باشید افرادی که کلیدهای خصوصی شما را داشته باشند به دارایی شما دسترسی خواهند داشت.",
+            seedWords: "کلمات هسته",
+            viewKey: "کلید نمایش",
+            spendKey: "کلید گذرا "
         },
         deleteWallet: {
-            title: "Delete wallet",
-            message: "Are you absolutely sure you want to delete your wallet?\nMake sure you have your private keys backed up.\nTHIS PROCESS IS NOT REVERSIBLE!",
-            ok: "DELETE"
+            title: "حذف کیف پول",
+            message: "آیا کاملا جهت حذف کیف پول اطمینان دارید?\nمطمین شوید که از کلیدهای خصوصی خود نسخه پشتبان تهیه میکنید.\nاین فرایند قابل بازگشت نیست!",
+            ok: "حذف"
         },
         exit: {
             title: "Exit",
@@ -82,19 +82,19 @@ export default {
             ok: "EXIT"
         },
         keyImages: {
-            title: "{type} key images",
-            message: "Do you want to {type} key images?",
-            export: "Export",
-            import: "Import"
+            title: "{درحال تایپ کردن} تصاویر کلیدی",
+            message: "آیا شما {در حال تایپ} تصاویر کلیدی را میخواهید?",
+            export: "خروج",
+            import: "ورود"
         },
         noPassword: {
-            title: "No password set",
-            message: "Are you sure you want to create a wallet with no password?",
-            ok: "YES"
+            title: "فاقد رمز عبور",
+            message: "آیا از ساخت کیف پول بدون پسورد مطمئن هستید؟",
+            ok: "بله"
         },
         password: {
-            title: "Password",
-            message: "Enter wallet password to continue."
+            title: "رمز عبور",
+            message: "رمز عبور کیف پول را جهت ادامه وارد نمایید."
         },
         registerServiceNode: {
             title: "Register service node",
