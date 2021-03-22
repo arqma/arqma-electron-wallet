@@ -97,63 +97,63 @@ export default {
             message: "رمز عبور کیف پول را جهت ادامه وارد نمایید."
         },
         registerServiceNode: {
-            title: "Register service node",
-            message: "Do you want to register the service node?",
-            ok: "REGISTER"
+            title: "لیست خدمات نود",
+            message: "آیا میخواهید خدمات نود را ثبت نمایید؟",
+            ok: "ثبت"
         },
         rescan: {
-            title: "Rescan wallet",
-            message: "Warning: Some information about previous transactions\nsuch as the recipient's address will be lost.",
-            ok: "RESCAN"
+            title: "اسکن مجدد کیف پول",
+            message: "هشدار:برخی از اطلاعات مربوط به معاملات قبلی\nمانند ادرس گیرنده از دست میرود.",
+            ok: "اسکن مجدد"
         },
         restart: {
-            title: "Restart",
-            message: "Changes require restart. Would you like to restart now?",
-            ok: "RESTART"
+            title: "راه اندازی مجدد",
+            message: "تغییرات نیاز به راه اندازی مجدد دارند. آیا میخواهید اکنون دوباره راه اندازی نمایید؟",
+            ok: "راه اندازی مجدد"
         },
         showPrivateKeys: {
-            title: "Show private keys",
-            message: "Do you want to view your private keys?",
-            ok: "SHOW"
+            title: "نمایش کلیدهای خصوصی",
+            message: "آیا میخواهید کلید های خصوصی خود را مشاهده نمایید؟",
+            ok: "مشاهده"
         },
         stake: {
-            title: "Stake",
-            message: "Do you want to stake?",
-            ok: "STAKE"
+            title: "تعهد",
+            message: "آیا میخواهید متعهد شوید؟",
+            ok: "تعهد"
         },
         sweepAll: {
-            title: "Sweep all",
-            message: "Do you want to sweep all?",
-            ok: "SWEEP ALL"
+            title: "حذف همه",
+            message: "آیا میخواهید همه را حذف نمایید؟",
+            ok: "حذف همه"
         },
         sweepAllWarning: {
-            title: "Sweep all warning",
-            message: "You are about to combine all of your unspent funds by sending a transaction to yourself, your wallet may show a balance of 0 temporarily, after 18 blocks your funds will unlock and you may stake normally.",
-            ok: "CONTINUE"
+            title: "حذف همه هشدار ها",
+            message: "شما میخواهیدبا ارسال یک تراکنش به خود تمام وجوه مصرف نشده را ادغام نمایید،امکان دارد کیف پول به شما موجودی 0 را به طور موقت نشان دهد،پس از 18 تایید تراکنش دارایی شما دردسترس و به حالت عادی باز میگردد..",
+            ok: "ادامه"
         },
         switchWallet: {
-            title: "Switch wallet",
-            closeMessage: "Are you sure you want to close the current wallet?",
-            restartMessage: "The wallet RPC is currently syncing. \nIf you wish to switch wallets then you must restart the application. \nYou will lose your syncing progress and have to rescan the blockchain again."
+            title: "تغییرکیف پول",
+            closeMessage: "آیا مطمین هستید میخواهیدکیف پول فعلی راببندید؟",
+            restartMessage: "فرایند همگام سازی ازراه دور اطلاعات کیف پول در حال انجام است. \nاگر میخواهید کیف پول را عوض کنید ،باید مجدد برنامه را راه اندازی نمایید. \nشما فرایند همگام سازی خود را از دست خواهید داد وباید مجدد دامنه اطلاعات بلاکچین را اسکن نمایید."
         },
         transactionDetails: {
-            title: "Transaction details",
-            ok: "CLOSE"
+            title: "جزئیات تراکنش ها",
+            ok: "بستن"
         },
         transfer: {
-            title: "Transfer",
-            message: "Do you want to send the transaction?",
-            ok: "SEND"
+            title: "منتقل کردن",
+            message: "آیا میخواهید تراکنش را ارسال نمایید؟",
+            ok: "ارسال"
         },
         unlockConfirm: {
-            title: "Confirm unlock",
-            ok: "UNLOCK"
+            title: "تایید بازکردن",
+            ok: "بازکردن"
         },
         unlockServiceNode: {
-            title: "Unlock service node",
-            confirmTitle: "Confirm unlock",
-            message: "Do you want to unlock the service node?",
-            ok: "UNLOCK"
+            title: "بازکردن خدمات نود",
+            confirmTitle: "تایید بازکردن",
+            message: "آیا میخواهید خدمات سرویس نود را باز کنید؟",
+            ok: "بازکردن"
         },
         unlockServiceNodeWarning: {
             title: "Unlock service node warning",
