@@ -461,65 +461,65 @@ export default {
                 failed: "ناموفق"
             }
         },
-        unspentOutputs: "Unspent outputs",
-        userNotUsedAddress: "You have not used this address",
-        userUsedAddress: "You have used this address",
-        viewKey: "View key",
-        viewOnlyMode: "View only mode. Please load full wallet in order to send coins."
+        unspentOutputs: "خروجی های مصرف نشده",
+        userNotUsedAddress: "شما از این آدرس استفاده نکرده اید",
+        userUsedAddress: "شما از این آدرس استفاده کرده اید",
+        viewKey: "مشاهده کلید",
+        viewOnlyMode: "فقط حالت مشاهده، لطفا برای ارسال ارز کیف پول را کامل بارگیری نمایید."
     },
     titles: {
-        addressBook: "Address book",
-        addressDetails: "Address details",
+        addressBook: "دفترچه آدرس",
+        addressDetails: "جزیئات آدرس",
         advanced: {
-            checkTransaction: "CHECK TRANSACTION",
-            prove: "PROVE"
+            checkTransaction: "بررسی تراکنش ها",
+            prove: "ثابت کردن"
         },
-        changePassword: "Change password",
-        configure: "Configure",
-        currentlyStakedNodes: "Currently staked nodes",
-        privateKeys: "Private keys",
-        rescanWallet: "Rescan wallet",
+        changePassword: "تغییر رمز عبور",
+        configure: "پیکربندی",
+        currentlyStakedNodes: "نود های موجود در حال حاظر",
+        privateKeys: "کلیدهای خصوصی",
+        rescanWallet: "بازبینی کیف پول",
         serviceNode: {
-            registration: "REGISTRATION",
-            staking: "STAKING"
+            registration: "ثبت",
+            staking: "گرفتن"
         },
         settings: {
-            title: "Settings",
+            title: "تنظیمات",
             tabs: {
-                general: "General",
-                language: "Language",
-                peers: "Peers",
-                exchange: "Exchange"
+                general: "عمومی",
+                language: "زبان",
+                peers: "هم گروهی ها",
+                exchange: "مبادلات"
             }
         },
-        transactionDetails: "Transaction details",
-        transactions: "Transactions",
+        transactionDetails: "جزئیات تراکنش",
+        transactions: "تراکنش ها",
         wallet: {
-            createNew: "Create new wallet",
-            mcreateNew: "Create multisig new wallet",
-            createdOrRestored: "Wallet created/restored",
-            importFromFile: "Import wallet from file",
-            importFromLegacyGUI: "Import wallet from legacy GUI",
-            importFromOldGUI: "Import wallet from old GUI",
-            restoreFromSeed: "Restore wallet from seed",
-            restoreViewOnly: "Restore view-only wallet"
+            createNew: "ساخت کیف پول جدید",
+            mcreateNew: "ایجاد کیف پول جدید چندمنظوره",
+            createdOrRestored: "کیف پول  ساختن/بازیابی ",
+            importFromFile: "کیف پول را از پوشه وارد نمایید",
+            importFromLegacyGUI: "وارد کردن کیف پول های قبل",
+            importFromOldGUI: "وارد کردن کیف پول قبلی",
+            restoreFromSeed: "بازیابی کیف پول از هسته",
+            restoreViewOnly: "بازیابی کیف پول فقط برای مشاهده"
         },
-        welcome: "Welcome",
-        yourWallets: "Your Wallets"
+        welcome: "خوش آمدید",
+        yourWallets: "کیف پول های شما"
     },
     headers: {
-        address: "Address",
-        amount: "Amount",
-        confirmations: "Confirmations",
-        double_spend_seen: "Double Spend Seen",
-        fee: "Fee",
-        height: "Height",
-        note: "Note",
-        paymentid: "PaymentID",
-        suggestedConfirmationsThreshold: "Suggested Confirmations Threshold",
-        timestamp: "Time Stamp",
-        txid: "TxID",
-        type: "Type",
-        unlockTime: "Unlock Time"
+        address: "آدرس",
+        amount: "مقدار",
+        confirmations: "تائید ها",
+        double_spend_seen: "دوبار دیده شدن",
+        fee: "هزینه",
+        height: "ارتفاع",
+        note: "یادداشت",
+        paymentid: "شناسه پرداخت",
+        suggestedConfirmationsThreshold: "آستانه تایید های پیشنهادی",
+        timestamp: "زمان تمبر",
+        txid: "شناسه متنی",
+        type: "تایپ کنید",
+        unlockTime: "زمان باز کردن قفل"
     }
 }
