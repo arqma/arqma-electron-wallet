@@ -11,7 +11,7 @@ const languages = [
     { name: "Português", code: "pt-br", flag: "pt" },
     { name: "Čeština", code: "cs", flag: "cz" },
     { name: "Polski", code: "pl", flag: "pl" },
-    { name: "فارسی", code: "fa", flag: "fa" }
+    { name: "فارسی", code: "fa-ir", flag: "fa" }
 ]
 
 export { languages }

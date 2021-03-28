@@ -1,4 +1,4 @@
-import VueTimeago from "vue-timeago"
+import VueTimeago from "persian-vue-timeago"
 export default ({
     app,
     router,
@@ -17,7 +17,7 @@ export default ({
             pl: require("date-fns/locale/pl"),
             cs: require("date-fns/locale/cs"),
             cn: require("date-fns/locale/zh_cn"),
-            fa: require("date-fns/locale/fa")
+            fa: require("date-fns/locale/pl")
 
         }
     })
