@@ -5,13 +5,13 @@ const languages = [
     { name: "English", code: "en-us", flag: "gb" },
     { name: "中文", code: "zh-cn", flag: "cn" },
     { name: "русский", code: "ru", flag: "ru" },
-    { name: "Deutsche", code: "de", flag: "de" },
+    { name: "Deutsch", code: "de", flag: "de" },
     { name: "Français", code: "fr", flag: "fr" },
     { name: "Español", code: "es", flag: "es" },
     { name: "Português", code: "pt-br", flag: "pt" },
     { name: "Čeština", code: "cs", flag: "cz" },
     { name: "Polski", code: "pl", flag: "pl" },
-    { name: "فارسی", code: "fa-ir", flag: "fa" }
+    { name: "فارسی", code: "fa-ir", flag: "ir" }
 ]
 
 export { languages }

@@ -15,7 +15,7 @@
                 </q-item>
                 <q-item v-if="daemon_type != 'remote'" v-close-overlay @click.native="openPool">
                     <q-item-main>
-                        <q-item-tile label>Solo Mining</q-item-tile>
+                        <q-item-tile label>{{ $t("menuItems.soloMining") }}</q-item-tile>
                     </q-item-main>
                 </q-item>
                 <q-item v-close-overlay @click.native="showAbout(true)">
@@ -39,8 +39,8 @@
 
             <img class="q-mb-md" src="statics/arqma.svg" height="42" />
 
-            <p class="q-my-sm">Wallet Version: v{{version}}</p>
-            <p class="q-my-sm">Daemon Version: v{{daemonVersion}}</p>
+            <p class="q-my-sm">{{ $t("titles.versionWallet") }}: v{{ version }}</p>
+            <p class="q-my-sm">{{ $t("titles.versionDaemon") }}: v{{ daemonVersion }}</p>
             <p class="q-my-sm">Copyright (c) 2018-2020, ArQmA Project</p>
             <p class="q-my-sm">Copyright (c) 2018-2020, Ryo Currency Project</p>
             <p class="q-my-sm">All rights reserved.</p>

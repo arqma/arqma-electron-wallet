@@ -1,7 +1,7 @@
 <template>
 <div class="row items-baseline q-my-xl">
     <div class="q-mr-md col-auto">
-        Password strength:
+        {{ $t('strings.passwordStrength') }}:
     </div>
     <template v-for="n in password_strength.score">
         <div class="q-mr-xs col-auto round-borders" v-bind:style="{ backgroundColor: password_strength_color[0], width: '20px', height: '10px' }" />
@@ -19,6 +19,7 @@
 
 <script>
 import { mapState } from "vuex"
+import { i18n } from "../plugins/i18n"
 const zxcvbn = require("zxcvbn")
 export default {
     name: "PasswordStrength",
@@ -38,10 +39,10 @@ export default {
         password_strength_tips() {
             let tips = []
             if(this.password == "") {
-                tips.push("Using an empty password will leave your wallet unencrypted on your file system")
+                tips.push(i18n.t("strings.usingEmptyPass"))
             } else {
                 if(this.password_strength.score < 3) {
-                    tips.push("Using an insecure password could allow attackers to brute-force your wallet")
+                    tips.push(i18n.t("strings.usingInsecurePass"))
                 }
                 if(this.password_strength.feedback.warning != "") {
                     tips.push(this.password_strength.feedback.warning)

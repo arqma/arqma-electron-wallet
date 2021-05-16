@@ -29,8 +29,8 @@ export default {
         restoreWallet: "WALLET WIEDERHERSTELLEN",
         save: "SPEICHERN",
         saveTxNotes: "TX NOTES SPEICHERN",
-        selectLocation: "STANDORT AUSWÄHLEN",
-        selectWalletFile: "WALLET DATEU AUSWÄHLEN",
+        selectLocation: "VERZEICHNIS AUSWÄHLEN",
+        selectWalletFile: "WALLET-DATEI AUSWÄHLEN",
         send: "SENDEN",
         sendCoins: "COINS SENDEN",
         serviceNode: "SERVICE NODE",
@@ -66,9 +66,9 @@ export default {
             // Copy {seedWords/viewKey/spendKey}
             title: "Kopieren {type}",
             message: "Sei vorsichtig, wem du deine Private Keys sendest, denn derjenige erhält dadurch die Kontrolle über deine Einlagen",
-            seedWords: "Seed Wörter",
-            viewKey: "View Key",
-            spendKey: "Spend Key"
+            seedWords: "Seed-Wörter",
+            viewKey: "Anzeigeschlüssel",
+            spendKey: "Bezahlschlüssel"
         },
         deleteWallet: {
             title: "Wallet löschen",
@@ -132,7 +132,7 @@ export default {
         },
         switchWallet: {
             title: "Wallet wechseln",
-            closeMessage: "Bist du sicher, dass du die aktuelle Wallet schliessen möchtest?",
+            closeMessage: "Bist du sicher, dass du die aktuelle Wallet schließen möchtest?",
             restartMessage: "Die Wallet RPC synchronisiert sich gerade\n Wenn du deine Wallet wechseln möchtest, musst du die Anwendung erneut starten. \n Die Synchronisation wird abgebrochen und du musst die Blockchain erneut scannen. "
         },
         transactionDetails: {
@@ -164,13 +164,12 @@ export default {
         // Field labels are also all uppercased
         address: "ADRESSE",
         amount: "BETRAG",
-        awardRecepientAddress: "EMPFÄNGER ADRESSE FÜR DIE VERGÜTUNG",
         confirmPassword: "PASSWORT BESTÄTIGEN",
-        chooseNetwork: "NETZWERK AUSWÄHLEN",
-        daemonLogLevel: "DAEMON LOG LEVEL",
-        daemonP2pPort: "DAEMON P2P PORT",
-        daemonZMQPort: "DAEMON ZMQ PORT",
-        dataStoragePath: "DATENSICHERUNGSPFAD",
+        daemonLogLevel: "LOG-TIEFE DES DAEMONS",
+        daemonP2pPort: "P2P-PORT DES DAEMONS",
+        daemonZMQIP: "IP DES LOKALEN ZMQ-DAEMONS",
+        daemonZMQPort: "PORT DES LOKALEN ZMQ-DAEMONS",
+        dataStoragePath: "VERZEICHNIS FÜR DIE DATENABLAGE",
         filter: "FILTER",
         filterTransactionType: "FILTERN NACH TRANSAKTIONSTYP",
         internalWalletPort: "INTERNER WALLET PORT",
@@ -178,47 +177,50 @@ export default {
             exportDirectory: "KEY IMAGE EXPORTVERZEICHNIS",
             importFile: "KEY IMAGE IMPORT FILE"
         },
-        limitDownloadRate: "DOWNLOAD RATE LIMITIEREN",
-        limitUploadRate: "UPLOAD RATE LIMITIEREN",
-        localDaemonIP: "LOKALE DAEMON IP",
-        localDaemonPort: "LOKALER DAEMON PORT",
+        limitDownloadRate: "DOWNLOAD-RATE LIMITIEREN",
+        limitUploadRate: "UPLOAD-RATE LIMITIEREN",
+        localDaemonIP: "IP DES LOKALEN DAEMONS",
+        localDaemonPort: "PORT DES LOKALEN DAEMONS",
         maxIncomingPeers: "MAX EINGEHENDE PEERS",
         maxOutgoingPeers: "MAX AUSGEHENDE PEERS",
         message: "MESSAGE",
         mnemonicSeed: "MNEMONIC SEED",
         name: "NAME",
         newWalletName: "NEUER WALLET NAME",
-        network: "NETZWERK",
         notes: "NOTIZEN",
         optional: "OPTIONAL",
         password: "PASSWORT",
         paymentId: "PAYMENT ID",
         priority: "PRIORITÄT",
-        remoteNodeHost: "REMOTE NODE HOST",
-        remoteNodePort: "REMOTE NODE PORT",
+        remoteNodeHost: "HOST DES REMOTE-DAEMONS",
+        remoteNodePort: "PORT DES REMOTE-DAEMONS",
         restoreFromBlockHeight: "WIEDERHERSTELLUNG VON BLOCKHÖHE",
         restoreFromDate: "WIEDERHERSTELLUNG VON DATUM",
-        seedLanguage: "SEED SPRACHE",
+        seedLanguage: "SPRACHE DER SEED-WÖRTER",
         serviceNodeCommand: "SERVICE NODE COMMAND",
         serviceNodeKey: "SERVICE NODE KEY",
         signature: "SIGNATURE",
         transactionId: "TRANSACTION ID",
+        wallet247: "WIRST DU DIE WALLET RUND UM DIE UHR BETREIBEN?",
         walletFile: "WALLET FILE",
-        walletLogLevel: "WALLET LOG LEVEL",
-        walletName: "WALLET NAME",
-        walletRPCPort: "WALLET RPC PORT",
+        walletLogLevel: "LOG-TIEFE DER WALLET",
+        walletName: "WALLET-NAME",
+        walletRPCPort: "RPC-PORT DER WALLET",
         walletStoragePath: "WALLET SICHERUNGSPFAD",
         protocol: "PROTOKOLL",
         hostname: "HOSTNAME",
         endpoint: "ENDPUNKT",
-        port: "HAFEN",
+        port: "PORT",
+
         // These are specific labels which do not get uppercased
         confirmNewPassword: "Neues Passwort bestätigen",
         newPassword: "Neues Passwort",
         oldPassword: "Altes Passwort",
         rescanFullBlockchain: "Gesamte Blockchain erneut scannen",
         rescanSpentOutputs: "Spent Outputs erneut scannen",
-        transactionNotes: "Transaktionsnotizen"
+        transactionNotes: "Transaktionsnotizen",
+        network: "Netzwerk",
+        testnet: "Testnet verwenden"
     },
     footer: {
         ready: "FERTIG",
@@ -229,12 +231,12 @@ export default {
         wallet: "Wallet"
     },
     menuItems: {
-        about: "Über ",
+        about: "Über Arqma Wallet",
         changePassword: "Passwort ändern",
         copyAddress: "Adresse kopieren",
         copyQR: "QR Code kopieren",
         copySeedWords: "Seed Wörter kopieren",
-        copySpendKey: "Spend Key kopieren",
+        copySpendKey: "Bezahlschlüssel kopieren",
         copyServiceNodeKey: "Copy service node key",
         copyTransactionId: "Transaktions ID kopieren",
         copyViewKey: "View Key kopieren",
@@ -242,19 +244,21 @@ export default {
         deleteWallet: "Wallet löschen",
         exportWallet: "Export Brieftasche",
         exportTransactions: "Transaktionen exportieren",
-        exit: "Arqma GUI Wallet schliessen",
+        exit: "Arqma Wallet schließen",
         importOldGUIWallet: "Wallets von alter GUI importieren",
         manageKeyImages: "Key Images verwalten",
         openWallet: "Wallet öffnen",
         rescanWallet: "Wallet erneut scannen",
         restoreWalletFile: "Wallet aus Datei wiederherstellen",
         restoreWalletSeed: "Wallet aus Seed wiederherstellen ",
+        saveIdenticon: "Identicon in Datei speichern",
         saveQR: "QR in Datei speichern",
         sendToThisAddress: "Zu dieser Adresse senden",
         settings: "Einstellungen",
         showDetails: "Details anzeigen",
         showPrivateKeys: "Zeige Private Keys",
         showQRCode: "Zeige QR Code",
+        soloMining: "Solo-Mining",
         switchWallet: "Wallet wechseln",
         viewOnExplorer: "Zeige in Explorer"
     },
@@ -359,12 +363,17 @@ export default {
             subAddress: "Sub-Adresse",
             subAddressIndex: "Index {index}"
         },
-        advancedOptions: "Erweiterte Optionen",
+        advancedOptions: "Erweiterte Einstellungen",
         bannedPeers: {
             title: "Blockierte Peers (Blockierungen werden entfernt, wenn Wallet neu gestartet wird)",
             bannedUntil: "Blockieren bis {time}"
         },
+        backupSeedWord: "Backup your seed words in a secure location! This is the only way to access your funds if you switch devices.",
         blockHeight: "Höhe",
+        confirmWords: "Confirm your mnemonic seed words",
+        enter7words: "Enter the first seven words of your mnemonic seed in the correct order:",
+        usingEmptyPass: "Wenn du kein Passwort eingibst, wird deine Wallet unverschlüsselt im Dateisystem abgelegt!",
+        usingInsecurePass: "Wenn du ein zu einfaches Passwort eingibst, können Angreifer sich Zugang zu deiner Wallet verschaffen!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {
@@ -378,25 +387,33 @@ export default {
                 yes: "YES"
             }
         },
-        closing: "schliessen",
+        closing: "schließen ...",
         connectingToBackend: "Verbinden zum Backend",
         contribution: "Contribution",
         daemon: {
             local: {
                 title: "Nur lokaler Daemon",
-                description: "Volle Sicherheit. Wallet wird die gesamte Blockchain herunterladen. Du kannst keine Transaktionen durchführen, solange die Synchronisation nicht vollständig beendet wurde"
+                description: "Volle Sicherheit. Die Wallet wird die gesamte Blockchain herunterladen. Du kannst keine Transaktionen durchführen, solange die Synchronisation noch nicht abgeschlossen ist."
             },
             localRemote: {
-                title: "Lokal + Remote Daemon",
-                description: "Schnell starten mit dieser Standard Option. Wallet wird die Blockchain vollständig herunterladen, aber während der Synchronisation eine Remote Node nutzen"
+                title: "Lokaler + Remote-Daemon",
+                description: "Schnell starten mit dieser Standard Option. Die Wallet wird die Blockchain vollständig herunterladen, aber während der Synchronisation einen Remote-Node nutzen."
             },
             remote: {
-                title: "Nur Remote Node",
-                description: "Etwas weniger sicher. Wallet verbindet sich mit einer Remote Node, um Transaktionen über diese durchzuführen"
+                title: "Nur Remote-Daemon",
+                description: "Etwas weniger sicher. Die Wallet verbindet sich mit einem Remote-Node, um Transaktionen über diesen durchzuführen."
+            },
+            zmq: {
+                title: "Nur ZMQ-Daemon"
             }
         },
         destinationUnknown: "Ziel unbekannt",
         editAddressBookEntry: "Adressbucheintrag bearbeiten",
+        enhancedOptions: {
+            privateNetworkMode: "Nein - Nutzung nur in einem privaten Netzwerk",
+            interconnectedNetworkMode: "Ja - dauernde Verbindung zum Internet"
+        },
+        getStarted: "Um zu loszulegen, wähle aus den folgenden Möglichkeiten aus:",
         loading: "Beladung...",
         loadingSettings: "Einstellungen werden geladen",
         arqmaBalance: "Guthaben",
@@ -407,6 +424,7 @@ export default {
         notes: "Notizen",
         numberOfUnspentOutputs: "Anzahl der unspent outputs",
         paymentID: "Payment ID",
+        passwordStrength: "Passwort-Stärke",
         peerList: "Peer Liste",
         priorityOptions: {
             automatic: "Automatisch",
@@ -422,14 +440,15 @@ export default {
         rescanModalDescription: "Auswahl gesamter Rescan oder nur spent outputs",
         saveSeedWarning: "Bitte kopiere und verwahre deinen \"Seed\" an einem sicheren Ort",
         saveToAddressBook: "In Adressbuch speichern",
-        seedWords: "Seed Wörter",
+        seedWords: "Seed-Wörter",
         selectLanguage: "Sprache auswählen",
         serviceNodeRegistrationDescription: "Hier den {registerComand} Befehl, der mit Hilfe des Daemons durch das Kommando {prepareCommand} erzeugt wurde, eingeben, um eine Service Node zu aktivieren",
-        spendKey: "Spend key",
+        spendKey: "Bezahlschlüssel",
         startingDaemon: "Daemon wird gestartet",
         startingWallet: "Wallet wird gestartet",
         switchToDateSelect: "Wechsel zur Selektion nach Datum",
         switchToHeightSelect: "Wechsel zu Selektion nach Höhe",
+        syncingDaemon: "Sychronisiere Daemon",
         transactionID: "Transaktions ID",
         transactionConfirmed: "Transaktion bestätigt",
         transactions: {
@@ -458,7 +477,7 @@ export default {
         unspentOutputs: "Unspent outputs",
         userNotUsedAddress: "Du hast diese Adresse nicht benutzt",
         userUsedAddress: "Du hast diese Adresse benutzt",
-        viewKey: "View Key",
+        viewKey: "Anzeige-Schlüssel",
         viewOnlyMode: "Nur Anzeige Modus. Bitte die volle Wallet laden um Coins zu senden"
     },
     titles: {
@@ -469,7 +488,7 @@ export default {
             prove: "PROVE"
         },
         changePassword: "Passwort ändern",
-        configure: "Konfiguaration",
+        configure: "Konfiguration",
         currentlyStakedNodes: "Currently staked nodes",
         privateKeys: "Private Keys",
         rescanWallet: "Wallet erneut scannen",
@@ -490,6 +509,7 @@ export default {
         transactions: "Transaktionen",
         wallet: {
             createNew: "Neue Wallet erstellen",
+            mcreateNew: "Create multisig new wallet",
             createdOrRestored: "Wallet erstellt/wiederhergestellt",
             importFromFile: "Importieren der Wallet aus Datei",
             importFromLegacyGUI: "Wiederherstellung der Wallet von legacy GUI",
@@ -497,7 +517,10 @@ export default {
             restoreFromSeed: "Wiederherstellung Wallet von Seed Wörtern",
             restoreViewOnly: "Wiederherstellung Anzeige Wallet"
         },
+        versionDaemon: "Daemon-Version",
+        versionWallet: "Wallet-Version",
         welcome: "Willkommen",
+        welcomeNoWallet: "Willkommen bei deiner Arqma Electron Wallet",
         yourWallets: "Deine Wallets"
     },
     headers: {
