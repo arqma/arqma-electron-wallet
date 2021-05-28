@@ -6,7 +6,6 @@
  *
  **/
 
-import child_process from "child_process"
 const request = require("request-promise")
 const queue = require("promise-queue")
 const https = require("https")
@@ -31,7 +30,6 @@ export class Market {
     }
 
     handle (data) {
-        let params = data.data
         switch (data.method) {
         case "open_wallet":
             this.startHeartbeat()
@@ -77,7 +75,6 @@ export class Market {
     }
 
     sendRPC (params = {}, options = {}) {
-        let id = this.id++
         const protocol = options.protocol || this.protocol
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
