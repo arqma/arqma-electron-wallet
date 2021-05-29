@@ -6,9 +6,9 @@
  *
  **/
 
-const request = require("request-promise")
-const queue = require("promise-queue")
 const https = require("https")
+
+const axios = require('axios');
 
 export class Market {
     constructor (backend) {
@@ -17,7 +17,6 @@ export class Market {
         this.id = 0
 
         this.agent = new https.Agent({ keepAlive: true, maxSockets: 1 })
-        this.queue = new queue(1, Infinity)
         this.options = null
         this.endpoint = "/api/v3/coins/arqma/tickers"
     }
@@ -54,10 +53,8 @@ export class Market {
         this.sendRPC({}, this.options.market.exchange)
             .then(response => {
                 try {
-                    let result = JSON.parse(response.result)
                     let data = []
-                    for (let index in result.tickers) {
-                        let ticker = result.tickers[index]
+                    for (let ticker of response.result.tickers) {
                         let key = ticker.market.name
                         let symbol = ticker.target // btc
                         let label = `${key} ${symbol}`
@@ -74,13 +71,13 @@ export class Market {
         this.backend.send(method, data)
     }
 
-    sendRPC (params = {}, options = {}) {
+    async sendRPC (params = {}, options = {}) {
         const protocol = options.protocol || this.protocol
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
         const endpoint = options.endpoint || this.endpoint
         let requestOptions = {
-            uri: `${protocol}${hostname}:${port}${endpoint}`,
+            url: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -90,30 +87,22 @@ export class Market {
         if (Object.keys(params).length !== 0) {
             requestOptions.json.params = params
         }
-        return this.queue.add(() => {
-            return request(requestOptions)
-                .then((response) => {
-                    if (response.hasOwnProperty("error")) {
-                        return {
-                            params: params,
-                            error: response.error
-                        }
-                    }
-                    return {
-                        params: params,
-                        result: response
-                    }
-                }).catch(error => {
-                    return {
-                        params: params,
-                        error: {
-                            code: -1,
-                            message: "Cannot connect to daemon-rpc",
-                            cause: error.cause
-                        }
-                    }
-                })
-        })
+        try {
+            let response = await axios(requestOptions)
+            return {
+                params: params,
+                result: response.data
+            }
+        } catch (error) {
+            return {
+                params: params,
+                error: {
+                    code: -1,
+                    message: "Cannot connect to daemon-rpc",
+                    cause: error.response.data.error
+                }
+            }
+        }
     }
 
     quit () {
