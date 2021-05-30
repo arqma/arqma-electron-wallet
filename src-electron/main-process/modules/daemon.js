@@ -1,10 +1,9 @@
 import child_process from "child_process"
-const http = require("http")
+import { RPC } from "./rpc"
 const fs = require("fs")
 const path = require("path")
 const zmq = require("zeromq")
 const { fromEvent } = require("rxjs")
-const fetch = require("node-fetch")
 
 export class Daemon {
     constructor (backend) {
@@ -17,7 +16,6 @@ export class Daemon {
 
         this.daemon_info = {}
         this.dealer = {}
-        this.agent = new http.Agent({ keepAlive: true, maxSockets: 1 })
         this.zmq_enabled = false
     }
 
@@ -77,7 +75,7 @@ export class Daemon {
         } else {
             let uri = `http://${options.daemon.remote_host}:${options.daemon.remote_port}/json_rpc`
             return new Promise(async(resolve, reject) => {
-                await this.sendRPC("get_info", {}, uri)
+                await this.rpc.sendRPC("get_info", {}, uri)
                 resolve(data)
             })
         }
@@ -86,14 +84,15 @@ export class Daemon {
     start (options) {
         if (options.daemon.type === "remote") {
             this.local = false
-
+            
             // save this info for later RPC calls
             this.protocol = "http://"
             this.hostname = options.daemon.remote_host
             this.port = options.daemon.remote_port
+            this.rpc = new RPC(this.protocol, options.daemon.rpc_bind_ip, options.daemon.rpc_bind_port)
 
             return new Promise(async(resolve, reject) => {
-                const getInfoData = await this.sendRPC("get_info")
+                const getInfoData = await this.rpc.sendRPC("get_info")
                 if (!getInfoData.hasOwnProperty("error")) {
                     this.startHeartbeat()
                     resolve()
@@ -174,11 +173,12 @@ export class Daemon {
             this.daemonProcess.on("close", code => process.stderr.write(`Daemon: exited with code ${code}\n`))
 
             if (options.daemon.type !== "local_zmq") {
+                this.rpc = new RPC(this.protocol, options.daemon.rpc_bind_ip, options.daemon.rpc_bind_port)
                 this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
 
                 // To let caller know when the daemon is ready
                 let intrvl = setInterval(async() => {
-                    const getInfoData = await this.sendRPC("get_info")
+                    const getInfoData = await this.rpc.sendRPC("get_info")
                     if (!getInfoData.hasOwnProperty("error")) {
                         clearInterval(intrvl)
                         this.startHeartbeat()
@@ -270,7 +270,7 @@ export class Daemon {
             }]
         }
 
-        const setBansData = await this.sendRPC("set_bans", params)
+        const setBansData = await this.rpc.sendRPC("set_bans", params)
         if (setBansData.hasOwnProperty("error") || !setBansData.hasOwnProperty("result")) {
             this.sendGateway("show_notification", { type: "negative", message: "Error banning peer", timeout: 2000 })
             return
@@ -304,10 +304,10 @@ export class Daemon {
                 return resolve(pivot[0])
             }
 
-            const blockHeaderByHeightData = await this.sendRPC("get_block_header_by_height", { height: estimated_height })
+            const blockHeaderByHeightData = await this.rpc.sendRPC("get_block_header_by_height", { height: estimated_height })
             if (blockHeaderByHeightData.hasOwnProperty("error") || !blockHeaderByHeightData.hasOwnProperty("result")) {
                 if (blockHeaderByHeightData.error.code === -2) { // Too big height
-                    const getLastBlockHeaderData = await this.sendRPC("get_last_block_header")
+                    const getLastBlockHeaderData = await this.rpc.sendRPC("get_last_block_header")
                     if (getLastBlockHeaderData.hasOwnProperty("error") || !getLastBlockHeaderData.hasOwnProperty("result")) {
                         return reject()
                     }
@@ -364,11 +364,11 @@ export class Daemon {
         // No difference between local and remote heartbeat action for now
         if (this.local) {
             data = [
-                await this.sendRPC("get_info")
+                await this.rpc.sendRPC("get_info")
             ]
         } else {
             data = [
-                await this.sendRPC("get_info")
+                await this.rpc.sendRPC("get_info")
             ]
         }
 
@@ -389,8 +389,8 @@ export class Daemon {
         let data = []
         if (this.local) {
             data = [
-                await this.sendRPC("get_connections"),
-                await this.sendRPC("get_bans")
+                await this.rpc.sendRPC("get_connections"),
+                await this.rpc.sendRPC("get_bans")
             ]
         } else {
             data = []
@@ -415,44 +415,6 @@ export class Daemon {
         this.backend.send(method, data)
     }
 
-    async sendRPC (method, params = {}, uri = false) {
-        let id = this.id++
-        let url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
-        let body = {
-            jsonrpc: "2.0",
-            id: id,
-            method: method,
-        }
-        let options = {
-            method: "POST",
-            agent: this.agent
-        }
-        if (Object.keys(params).length !== 0) {
-            body.params = params
-        }
-
-        options.body = JSON.stringify(body)
-        try {
-            let response = await fetch(url, options)
-            let data = await response.json()
-            return {
-                method: method,
-                params: params,
-                result: data.result
-            }
-        }catch(error) {
-            return {
-                method: method,
-                params: params,
-                error: {
-                    code: -1,
-                    message: "Cannot connect to wallet-rpc",
-                    cause: error.errno
-                }
-            }
-        }
-    }
-
     quit () {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat)
@@ -465,7 +427,6 @@ export class Daemon {
         return new Promise((resolve, reject) => {
             if (this.daemonProcess) {
                 this.daemonProcess.on("close", code => {
-                    this.agent.destroy()
                     resolve()
                 })
                 this.daemonProcess.kill()

@@ -7,10 +7,12 @@ import { Miner } from "./pool/miner"
 import { Block } from "./pool/block"
 import { Database } from "./pool/database"
 import { diff1, noncePattern, uid, logger } from "./pool/utils"
+import { RPC } from "./rpc"
 const zmq = require("zeromq")
 const { fromEvent } = require("rxjs")
 const http = require("http")
 const fetch = require("node-fetch")
+
 
 export class Pool {
     constructor (backend) {
@@ -69,6 +71,8 @@ export class Pool {
         this.protocol = "http://"
         this.hostname = options.daemon.rpc_bind_ip
         this.port = options.daemon.rpc_bind_port
+
+        this.rpc = new RPC(this.protocol, this.hostname, this.port)
 
         try {
             this.sendStatus(0)
@@ -645,55 +649,15 @@ export class Pool {
 
     getBlock (force = false) {
         return new Promise(async(resolve, reject) => {
-            const getBlockTemplateData = await this.sendRPC("get_block_template", this.BlockTemplateParameters)
+            const getBlockTemplateData = await this.rpc.sendRPC("get_block_template", this.BlockTemplateParameters)
+            console.log('>>>>>>>>>>>>>>>>>>>>>',getBlockTemplateData, '<<<<<<<<<<<<<<<<<<<<<<<')
             const result = this.addBlockAndInformMiners(getBlockTemplateData, force)
             !result ? resolve() : reject(result)
         })
     }
 
     submitBlock (block) {
-        return this.sendRPC("submit_block", [block], false)
-    }
-
-    async sendRPC (method, params = {}, queue = true) {
-        if (queue) {
-            return this.backend.daemon.sendRPC(method, params)
-        }
-        let id = this.id++
-        const url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
-        let body = {
-            jsonrpc: "2.0",
-            id: id,
-            method: method
-        }
-        let options = {
-            method: "POST",
-            agent: this.agent
-        }
-        if (Array.isArray(params) || Object.keys(params).length !== 0) {
-            body.params = params
-        }
-        options.body = JSON.stringify(body)
-
-        try {
-            let response = await fetch(url, options)
-            let data = await response.json()
-            return {
-                method: method,
-                params: params,
-                result: data.result
-            }
-        }catch(error) {
-            return {
-                method: method,
-                params: params,
-                error: {
-                    code: -1,
-                    message: "Cannot connect to daemon-rpc",
-                    cause: error.errno
-                }
-            }
-        }
+        return this.rpc.sendRPC("submit_block", [block], false)
     }
 
     sendStatus (status) {

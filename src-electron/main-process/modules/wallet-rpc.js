@@ -1,11 +1,13 @@
 import child_process from "child_process"
-const http = require("http")
+import { throwDeprecation } from "process"
+import { RPC } from "./rpc"
+// const http = require("http")
 const os = require("os")
 const fs = require("fs")
 const path = require("path")
 const crypto = require("crypto")
 
-const DigestFetch = require("digest-fetch")
+// const DigestFetch = require("digest-fetch")
 
 export class WalletRPC {
     constructor (backend) {
@@ -35,12 +37,11 @@ export class WalletRPC {
         this.height_regex2 = /Skipped block by height: (\d+)/
         this.height_regex3 = /Skipped block by timestamp, height: (\d+)/
 
-        this.agent = new http.Agent({ keepAlive: true, maxSockets: 1 })
+        // this.agent = new http.Agent({ keepAlive: true, maxSockets: 1 })
     }
 
     // this function will take an options object for testnet, data-dir, etc
     start (options) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>start<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise((resolve, reject) => {
             let daemon_address = `${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`
             if (options.daemon.type === "remote") {
@@ -98,9 +99,11 @@ export class WalletRPC {
                 this.hostname = "127.0.0.1"
                 this.port = options.wallet.rpc_bind_port
 
+                this.rpc = new RPC(this.protocol, this.hostname, this.port).setAuthorization(this.auth[0], this.auth[1])
+                
                 this.walletRPCProcess.stdout.on("data", (data) => {
                     process.stdout.write(`Wallet: ${data}`)
-
+                    
                     let lines = data.toString().split("\n")
                     let match, height = null
                     lines.forEach((line) => {
@@ -130,31 +133,29 @@ export class WalletRPC {
                 })
                 this.walletRPCProcess.on("error", err => process.stderr.write(`Wallet: ${err}\n`))
                 this.walletRPCProcess.on("close", code => process.stderr.write(`Wallet: exited with code ${code}\n`))
-
+                
                 // To let caller know when the wallet is ready
                 let intrvl = setInterval(async() => {
-                    const getLanguagesData = await this.sendRPC("get_languages")
+                    const getLanguagesData = await this.rpc.sendRPC_WithMD5("get_languages")
                     if (!getLanguagesData.hasOwnProperty("error")) {
                         clearInterval(intrvl)
                         resolve()
                     } else {
                         if (getLanguagesData.error.cause &&
                             getLanguagesData.error.cause === "ECONNREFUSED") {
-                            // Ignore
-                        } else {
-                            clearInterval(intrvl)
-                            reject(getLanguagesData.error)
+                                // Ignore
+                            } else {
+                                clearInterval(intrvl)
+                                reject(getLanguagesData.error)
+                            }
                         }
-                    }
-                }, 1000)
+                    }, 1000)
             })
         })
     }
 
     async handle (data) {
         let params = data.data
-
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>${data.method}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
 
         switch (data.method) {
         case "validate_address":
@@ -255,10 +256,9 @@ export class WalletRPC {
     }
 
     async createWallet (filename, password, language, type) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>createWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         let short_address = type === "kurz"
 
-        const createWalletData = this.sendRPC("create_wallet", {
+        const createWalletData = this.rpc.sendRPC_WithMD5("create_wallet", {
             filename,
             password,
             language,
@@ -278,7 +278,6 @@ export class WalletRPC {
     }
 
     hasPassword () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>hasPassword<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         if (this.wallet_state.password_hash === null) {
             this.sendGateway("set_has_password", false)
             return
@@ -296,8 +295,7 @@ export class WalletRPC {
     }
 
     async validateAddress (address) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>validateAddress<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
-        let validateAddressData = await this.sendRPC("validate_address", {address})
+        let validateAddressData = await this.rpc.sendRPC_WithMD5("validate_address", {address})
         if (validateAddressData.hasOwnProperty("error")) {
             this.sendGateway("set_valid_address", {
                 address,
@@ -317,7 +315,6 @@ export class WalletRPC {
     }
 
     async restoreWallet (filename, password, seed, refresh_type, refresh_start_timestamp_or_height) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>restoreWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         if (refresh_type === "date") {
             // Convert timestamp to 00:00 and move back a day
             // Core code also moved back some amount of blocks
@@ -343,7 +340,7 @@ export class WalletRPC {
         seed = seed.trim().replace(/\s{2,}/g, " ")
 
         this.sendGateway("reset_wallet_error")
-        let restorDeterministicWalletData = await this.sendRPC("restore_deterministic_wallet", {
+        let restorDeterministicWalletData = await this.rpc.sendRPC_WithMD5("restore_deterministic_wallet", {
             filename,
             password,
             seed,
@@ -363,7 +360,6 @@ export class WalletRPC {
     }
 
     async restoreViewWallet (filename, password, address, viewkey, refresh_type, refresh_start_timestamp_or_height) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>restoreViewWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         if (refresh_type === "date") {
             // Convert timestamp to 00:00 and move back a day
             // Core code also moved back some amount of blocks
@@ -382,7 +378,7 @@ export class WalletRPC {
             refresh_start_height = 0
         }
 
-        let restoreViewWalletData = await this.sendRPC("restore_view_wallet", {
+        let restoreViewWalletData = await this.rpc.sendRPC_WithMD5("restore_view_wallet", {
             filename,
             password,
             address,
@@ -403,7 +399,6 @@ export class WalletRPC {
     }
 
     async importWallet (filename, password, import_path) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>importWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         // trim off suffix if exists
         if (import_path.endsWith(".keys")) {
             import_path = import_path.substring(0, import_path.length - ".keys".length)
@@ -427,7 +422,7 @@ export class WalletRPC {
                 fs.copyFileSync(import_path + ".keys", destination + ".keys", fs.constants.COPYFILE_EXCL)
             }
 
-            let openWalletData = await this.sendRPC("open_wallet", {
+            let openWalletData = await this.rpc.sendRPC_WithMD5("open_wallet", {
                 filename,
                 password
             })
@@ -449,14 +444,13 @@ export class WalletRPC {
     }
 
     async finalizeNewWallet (filename, newly_created = false) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>finalizeNewWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         let data = []
-        data.push(await this.sendRPC("get_address"))
-        data.push(await this.sendRPC("getheight"))
-        data.push(await this.sendRPC("getbalance", { account_index: 0 }))
-        data.push(await this.sendRPC("query_key", { key_type: "mnemonic" }))
-        data.push(await this.sendRPC("query_key", { key_type: "spend_key" }))
-        data.push(await this.sendRPC("query_key", { key_type: "view_key" }))
+        data.push(await this.rpc.sendRPC_WithMD5("get_address"))
+        data.push(await this.rpc.sendRPC_WithMD5("getheight"))
+        data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }))
+        data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "mnemonic" }))
+        data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "spend_key" }))
+        data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "view_key" }))
         let wallet = {
             info: {
                 name: filename,
@@ -510,8 +504,7 @@ export class WalletRPC {
     }
 
     async openWallet (filename, password) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>openWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
-        let openWalletData = await this.sendRPC("open_wallet", {filename, password})
+        let openWalletData = await this.rpc.sendRPC_WithMD5("open_wallet", {filename, password})
         if (openWalletData.hasOwnProperty("error")) {
             this.sendGateway("set_wallet_error", { status: openWalletData.error })
             return
@@ -520,7 +513,7 @@ export class WalletRPC {
         let address_txt_path = path.join(this.wallet_dir, filename + ".address.txt")
         if (!fs.existsSync(address_txt_path)) {
             try {
-                let getAddressData = await this.sendRPC("get_address", { account_index: 0 })
+                let getAddressData = await this.rpc.sendRPC_WithMD5("get_address", { account_index: 0 })
                 if (getAddressData.hasOwnProperty("error") || !getAddressData.hasOwnProperty("result")) {
                     return
                 }
@@ -540,13 +533,11 @@ export class WalletRPC {
         this.startHeartbeat()
 
         // Check if we have a view only wallet by querying the spend key
-        let queryKeyData = await this.sendRPC("query_key", { key_type: "spend_key" })
+        let queryKeyData = await this.rpc.sendRPC_WithMD5("query_key", { key_type: "spend_key" })
         if (queryKeyData.hasOwnProperty("error") || !queryKeyData.hasOwnProperty("result")) {
             return
         }
-        console.log('before test ', queryKeyData.result.key)
         if (/^0*$/.test(queryKeyData.result.key)) {
-            console.log('after test ', queryKeyData.result.key)
             this.sendGateway("set_wallet_data", {
                 info: {
                     view_only: true
@@ -556,7 +547,6 @@ export class WalletRPC {
     }
 
     startHeartbeat () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>startHeartbeat<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         clearInterval(this.heartbeat)
         this.heartbeat = setInterval(() => {
             this.heartbeatAction()
@@ -565,11 +555,10 @@ export class WalletRPC {
     }
 
     async heartbeatAction (extended = false) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>heartbeatAction<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         let data = []
-        data.push(await this.sendRPC("get_address", { account_index: 0 }, 5000))
-        data.push(await this.sendRPC("getheight", {}, 5000))
-        data.push(await this.sendRPC("getbalance", { account_index: 0 }, 5000))
+        data.push(await this.rpc.sendRPC_WithMD5("get_address", { account_index: 0 }, 5000))
+        data.push(await this.rpc.sendRPC_WithMD5("getheight", {}, 5000))
+        data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }, 5000))
 
         let didError = false
         let wallet = {
@@ -660,11 +649,9 @@ export class WalletRPC {
     }
 
     transfer (password, amount, address, payment_id, priority, note, address_book = {}) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>transfer<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         console.log(password, amount, address, payment_id, priority, note, address_book)
         crypto.pbkdf2(password, this.auth[2], 1000, 64, "sha512", async (err, password_hash) => {
             if (err) {
-                console.log("error")
                 this.sendGateway("set_tx_status", {
                     code: -1,
                     i18n: "notification.errors.internalError",
@@ -672,9 +659,7 @@ export class WalletRPC {
                 })
                 return
             }
-            // if (!this.isValidPasswordHash(password_hash)) {
             if (this.wallet_state.password_hash !== password_hash.toString("hex")) {
-                console.log("invalidHash")
                 this.sendGateway("set_tx_status", {
                     code: -1,
                     i18n: "notification.errors.invalidPassword",
@@ -703,7 +688,7 @@ export class WalletRPC {
                 params.payment_id = payment_id
             }
 
-            const transferData = await this.sendRPC(rpc_endpoint, params)
+            const transferData = await this.rpc.sendRPC_WithMD5(rpc_endpoint, params)
             if (transferData.hasOwnProperty("error")) {
                 let error = transferData.error.message.charAt(0).toUpperCase() + transferData.error.message.slice(1)
                 this.sendGateway("set_tx_status", {
@@ -732,7 +717,6 @@ export class WalletRPC {
     }
 
     async proveTransaction (txid, address, message) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>proveTransaction<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         const _address = address.trim() === "" ? null : address
         const _message = message.trim() === "" ? null : message
 
@@ -748,7 +732,7 @@ export class WalletRPC {
             message: ""
         })
 
-        let proveTransactionData = await this.sendRPC(rpc_endpoint, params)
+        let proveTransactionData = await this.rpc.sendRPC_WithMD5(rpc_endpoint, params)
         if (proveTransactionData.hasOwnProperty("error")) {
             let error = proveTransactionData.error.message.charAt(0).toUpperCase() + proveTransactionData.error.message.slice(1)
             this.sendGateway("set_prove_transaction_status", {
@@ -770,7 +754,6 @@ export class WalletRPC {
     }
 
     async checkTransactionProof (signature, txid, address, message) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>checkTransactionProof<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         const _address = address.trim() === "" ? null : address
         const _message = message.trim() === "" ? null : message
 
@@ -787,7 +770,7 @@ export class WalletRPC {
             message: ""
         })
 
-        let checkTransactionProofData = await this.sendRPC(rpc_endpoint, params)
+        let checkTransactionProofData = await this.rpc.sendRPC_WithMD5(rpc_endpoint, params)
         if (checkTransactionProofData.hasOwnProperty("error")) {
             let error = checkTransactionProofData.error.message.charAt(0).toUpperCase() + checkTransactionProofData.error.message.slice(1)
             this.sendGateway("set_check_transaction_status", {
@@ -808,17 +791,14 @@ export class WalletRPC {
         })
     }
     async rescanBlockchain () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>rescanBlockchain<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
-        await this.sendRPC("rescan_blockchain")
+        await this.rpc.sendRPC_WithMD5("rescan_blockchain")
     }
 
     async rescanSpent () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>rescanSpent<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
-        await this.sendRPC("rescan_spent")
+        await this.rpc.sendRPC_WithMD5("rescan_spent")
     }
 
     getPrivateKeys (password) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>getPrivateKeys<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         crypto.pbkdf2(password, this.auth[2], 1000, 64, "sha512", async (err, password_hash) => {
             if (err) {
                 this.sendGateway("set_wallet_data", {
@@ -847,17 +827,17 @@ export class WalletRPC {
                         view_key: ""
                     }
                 }
-            const mnemonicData = await this.sendRPC("query_key", { key_type: "mnemonic" })
+            const mnemonicData = await this.rpc.sendRPC_WithMD5("query_key", { key_type: "mnemonic" })
             if (!mnemonicData.hasOwnProperty("error") && mnemonicData.hasOwnProperty("result")) {
                 wallet.secret[mnemonicData.params.key_type] = mnemonicData.result.key
             }
 
-            const queryKeyData = await this.sendRPC("query_key", { key_type: "spend_key" })
+            const queryKeyData = await this.rpc.sendRPC_WithMD5("query_key", { key_type: "spend_key" })
             if (!queryKeyData.hasOwnProperty("error") && queryKeyData.hasOwnProperty("result")) {
                 wallet.secret[queryKeyData.params.key_type] = queryKeyData.result.key
             }
 
-            const spendKeyData = await this.sendRPC("query_key", { key_type: "view_key" })
+            const spendKeyData = await this.rpc.sendRPC_WithMD5("query_key", { key_type: "view_key" })
             if (!spendKeyData.hasOwnProperty("error") && spendKeyData.hasOwnProperty("result")) {
                 wallet.secret[spendKeyData.params.key_type] = spendKeyData.result.key
             }
@@ -866,15 +846,14 @@ export class WalletRPC {
     }
 
     getAddressList () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>getAddressList<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise(async(resolve, reject) => {
 
-            const getAddressData = await this.sendRPC("get_address", { account_index: 0 })
+            const getAddressData = await this.rpc.sendRPC_WithMD5("get_address", { account_index: 0 })
             if (getAddressData.hasOwnProperty("error") || !getAddressData.hasOwnProperty("result")) {
                 resolve({})
                 return
             }
-            const getBalanceData = await this.sendRPC("getbalance", { account_index: 0 })
+            const getBalanceData = await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 })
             if (getBalanceData.hasOwnProperty("error") || !getBalanceData.hasOwnProperty("result")) {
                 resolve({})
                 return
@@ -926,7 +905,7 @@ export class WalletRPC {
                 !wallet.address_list.primary[0].address.startsWith("ar") &&
                 !wallet.address_list.primary[0].address.startsWith("aRi")) {
                 for (let n = wallet.address_list.unused.length; n < num_unused_addresses; n++) {
-                    let createAddressData = await this.sendRPC("create_address", { account_index: 0 })
+                    let createAddressData = await this.rpc.sendRPC_WithMD5("create_address", { account_index: 0 })
                     wallet.address_list.unused.push(createAddressData.result)
                     if (wallet.address_list.unused.length == num_unused_addresses) {
                         // should sort them here
@@ -940,9 +919,8 @@ export class WalletRPC {
     }
 
     getTransactions () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>getTransactions<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise(async (resolve, reject) => {
-            let getTransfersData = await this.sendRPC("get_transfers", { in: true, out: true, pending: true, failed: true, pool: true })
+            let getTransfersData = await this.rpc.sendRPC_WithMD5("get_transfers", { in: true, out: true, pending: true, failed: true, pool: true })
             if (getTransfersData.hasOwnProperty("error") || !getTransfersData.hasOwnProperty("result")) {
                 resolve({})
                 return
@@ -988,9 +966,8 @@ export class WalletRPC {
     }
 
     getAddressBook () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>getAddressBook<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise(async (resolve, reject) => {
-            const getAddressBookData = await this.sendRPC("get_address_book")
+            const getAddressBookData = await this.rpc.sendRPC_WithMD5("get_address_book")
             if (getAddressBookData.hasOwnProperty("error") || !getAddressBookData.hasOwnProperty("result")) {
                 resolve({})
                 return
@@ -1036,9 +1013,8 @@ export class WalletRPC {
     }
 
     async deleteAddressBook (index = false) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>deleteAddressBook<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         if (index !== false) {
-            await this.sendRPC("delete_address_book", { index: index })
+            await this.rpc.sendRPC_WithMD5("delete_address_book", { index: index })
             await this.saveWallet()
             const getAddressBookData = await this.getAddressBook()
             this.sendGateway("set_wallet_data", getAddressBookData)
@@ -1046,9 +1022,8 @@ export class WalletRPC {
     }
 
     async addAddressBook (address, payment_id = null, description = "", name = "", starred = false, index = false) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>addAddressBook<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         if (index !== false) {
-            await this.sendRPC("delete_address_book", { index: index })
+            await this.rpc.sendRPC_WithMD5("delete_address_book", { index: index })
             await this.addAddressBook(address, payment_id, description, name, starred)
             return
         }
@@ -1067,21 +1042,19 @@ export class WalletRPC {
 
         params.description = desc.join("::")
 
-        await this.sendRPC("add_address_book", params)
+        await this.rpc.sendRPC_WithMD5("add_address_book", params)
         await this.saveWallet()
         const getAddressBookData = await this.getAddressBook()
         this.sendGateway("set_wallet_data", getAddressBookData)
     }
 
     async saveTxNotes (txid, note) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>saveTxNotes<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
-        await this.sendRPC("set_tx_notes", { txids: [txid], notes: [note] })
+        await this.rpc.sendRPC_WithMD5("set_tx_notes", { txids: [txid], notes: [note] })
         const walletData = await this.getTransactions()
         this.sendGateway("set_wallet_data", walletData)
     }
 
     exportKeyImages (password, filename = null) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>exportKeyImages<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         crypto.pbkdf2(password, this.auth[2], 1000, 64, "sha512", async(err, password_hash) => {
             if (err) {
                 this.sendGateway("show_notification", { type: "negative", message: "Internal error", timeout: 2000 })
@@ -1094,7 +1067,7 @@ export class WalletRPC {
 
             if (filename == null) { filename = path.join(this.data_dir, "gui", "key_image_export") } else { filename = path.join(filename, "key_image_export") }
 
-            const exportKeyImagesData = await this.sendRPC("export_key_images", { filename })
+            const exportKeyImagesData = await this.rpc.sendRPC_WithMD5("export_key_images", { filename })
             if (exportKeyImagesData.hasOwnProperty("error") || !exportKeyImagesData.hasOwnProperty("result")) {
                 this.sendGateway("show_notification", { type: "negative", message: "Error exporting key images", timeout: 2000 })
                 return
@@ -1105,7 +1078,6 @@ export class WalletRPC {
     }
 
     importKeyImages (password, filename = null) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>importKeyImages<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         crypto.pbkdf2(password, this.auth[2], 1000, 64, "sha512", async (err, password_hash) => {
             if (err) {
                 this.sendGateway("show_notification", { type: "negative", message: "Internal error", timeout: 2000 })
@@ -1118,7 +1090,7 @@ export class WalletRPC {
 
             if (filename == null) { filename = path.join(this.data_dir, "gui", "key_image_export") }
 
-            const importKeyImagesData = await this.sendRPC("import_key_images", { filename })
+            const importKeyImagesData = await this.rpc.sendRPC_WithMD5("import_key_images", { filename })
             if (importKeyImagesData.hasOwnProperty("error") || !importKeyImagesData.hasOwnProperty("result")) {
                 this.sendGateway("show_notification", { type: "negative", message: "Error importing key images", timeout: 2000 })
                 return
@@ -1129,7 +1101,6 @@ export class WalletRPC {
     }
 
     listWallets (legacy = false) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>listWallets<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         let wallets = {
             list: []
         }
@@ -1205,7 +1176,6 @@ export class WalletRPC {
     }
 
     changeWalletPassword (old_password, new_password) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>changeWalletPassword<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         crypto.pbkdf2(old_password, this.auth[2], 1000, 64, "sha512", async (err, password_hash) => {
             if (err) {
                 this.sendGateway("show_notification", { type: "negative", message: "Internal error", timeout: 2000 })
@@ -1216,7 +1186,7 @@ export class WalletRPC {
                 return
             }
 
-            const changeWalletPasswordData = await this.sendRPC("change_wallet_password", { old_password, new_password })
+            const changeWalletPasswordData = await this.rpc.sendRPC_WithMD5("change_wallet_password", { old_password, new_password })
             if (changeWalletPasswordData.hasOwnProperty("error") || !changeWalletPasswordData.hasOwnProperty("result")) {
                 this.sendGateway("show_notification", { type: "negative", message: "Error changing password", timeout: 2000 })
                 return
@@ -1224,13 +1194,13 @@ export class WalletRPC {
 
             // store hash of the password so we can check against it later when requesting private keys, or for sending txs
             this.wallet_state.password_hash = crypto.pbkdf2Sync(new_password, this.auth[2], 1000, 64, "sha512").toString("hex")
+            this.rpc.setAuthorization(this.auth[0], this.auth[1])
 
             this.sendGateway("show_notification", { message: "Password updated", timeout: 2000 })
         })
     }
 
     deleteWallet (password) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>deleteWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         crypto.pbkdf2(password, this.auth[2], 1000, 64, "sha512", async (err, password_hash) => {
             if (err) {
                 this.sendGateway("show_notification", { type: "negative", message: "Internal error", timeout: 2000 })
@@ -1252,15 +1222,13 @@ export class WalletRPC {
     }
 
     saveWallet () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>saveWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise(async (resolve, reject) => {
-            await this.sendRPC("store")
+            await this.rpc.sendRPC_WithMD5("store")
             resolve()
         })
     }
 
     closeWallet () {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>closeWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise(async (resolve, reject) => {
             clearInterval(this.heartbeat)
             this.wallet_state = {
@@ -1275,7 +1243,7 @@ export class WalletRPC {
             }
 
             await this.saveWallet()
-            await this.sendRPC("close_wallet")
+            await this.rpc.sendRPC_WithMD5("close_wallet")
             resolve()
         })
     }
@@ -1288,52 +1256,8 @@ export class WalletRPC {
         this.backend.send(method, data)
     }
 
-    async sendRPC (method, params = {}, timeout = 0) {
-        let id = this.id++
-        let url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
-        let body = {
-            jsonrpc: "2.0",
-            id: id,
-            method: method,
-        }
-        let options = {
-            method: "POST",
-            agent: this.agent
-        }
-        if (Object.keys(params).length !== 0) {
-            body.params = params
-        }
-        if (timeout) {
-            options.timeout = timeout
-        }
-
-        options.body = JSON.stringify(body)
-
-        try {
-            const client = new DigestFetch(this.auth[0], this.auth[1], {algorithm: 'MD5'})
-
-            let response = await client.fetch(url, options)
-            let data = await response.json()
-            return {
-                method: method,
-                params: params,
-                result: data.result
-            }
-        }catch(error) {
-            return {
-                method: method,
-                params: params,
-                error: {
-                    code: -1,
-                    message: "Cannot connect to wallet-rpc",
-                    cause: error.errno
-                }
-            }
-        }
-    }
-
     getRPC (parameter, params = {}) {
-        return this.sendRPC(`get_${parameter}`, params)
+        return this.rpc.sendRPC_WithMD5(`get_${parameter}`, params)
     }
 
     quit () {
@@ -1346,7 +1270,6 @@ export class WalletRPC {
                 })
                 setTimeout(() => {
                     this.walletRPCProcess.on("close", code => {
-                        this.agent.destroy()
                         clearTimeout(this.forceKill)
                         resolve()
                     })
@@ -1367,7 +1290,6 @@ export class WalletRPC {
     }
 
     exportTransactions (params) {
-        console.log(`>>>>>>>>>>>>>>>>>>>>>>exportTransactions<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
         return new Promise((resolve, reject) => {
             if (params.hasOwnProperty("export_path")) {
                 if (!fs.existsSync(params.export_path)) 

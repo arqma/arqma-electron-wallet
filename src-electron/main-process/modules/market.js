@@ -54,7 +54,7 @@ export class Market {
 
     async heartbeatSlowAction () {
         try {
-            let response = await this.rpc.sendRPC({}, this.options.market.exchange)
+            let response = await this.rpc.callAPI({}, this.options.market.exchange)
             let data = []
             for (let ticker of response.result.tickers) {
                 let key = ticker.market.name
