@@ -1,11 +1,10 @@
 import child_process from "child_process"
-const request = require("request-promise")
-const queue = require("promise-queue")
 const http = require("http")
 const fs = require("fs")
 const path = require("path")
 const zmq = require("zeromq")
 const { fromEvent } = require("rxjs")
+const fetch = require("node-fetch")
 
 export class Daemon {
     constructor (backend) {
@@ -19,7 +18,6 @@ export class Daemon {
         this.daemon_info = {}
         this.dealer = {}
         this.agent = new http.Agent({ keepAlive: true, maxSockets: 1 })
-        this.queue = new queue(1, Infinity)
         this.zmq_enabled = false
     }
 
@@ -78,10 +76,9 @@ export class Daemon {
             })
         } else {
             let uri = `http://${options.daemon.remote_host}:${options.daemon.remote_port}/json_rpc`
-            return new Promise((resolve, reject) => {
-                this.sendRPC("get_info", {}, uri).then((data) => {
-                    resolve(data)
-                })
+            return new Promise(async(resolve, reject) => {
+                await this.sendRPC("get_info", {}, uri)
+                resolve(data)
             })
         }
     }
@@ -95,15 +92,14 @@ export class Daemon {
             this.hostname = options.daemon.remote_host
             this.port = options.daemon.remote_port
 
-            return new Promise((resolve, reject) => {
-                this.sendRPC("get_info").then((data) => {
-                    if (!data.hasOwnProperty("error")) {
-                        this.startHeartbeat()
-                        resolve()
-                    } else {
-                        reject()
-                    }
-                })
+            return new Promise(async(resolve, reject) => {
+                const getInfoData = await this.sendRPC("get_info")
+                if (!getInfoData.hasOwnProperty("error")) {
+                    this.startHeartbeat()
+                    resolve()
+                } else {
+                    reject()
+                }
             })
         }
         return new Promise((resolve, reject) => {
@@ -181,22 +177,21 @@ export class Daemon {
                 this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
 
                 // To let caller know when the daemon is ready
-                let intrvl = setInterval(() => {
-                    this.sendRPC("get_info").then((data) => {
-                        if (!data.hasOwnProperty("error")) {
-                            clearInterval(intrvl)
-                            this.startHeartbeat()
-                            resolve()
+                let intrvl = setInterval(async() => {
+                    const getInfoData = await this.sendRPC("get_info")
+                    if (!getInfoData.hasOwnProperty("error")) {
+                        clearInterval(intrvl)
+                        this.startHeartbeat()
+                        resolve()
+                    } else {
+                        if (getInfoData.error.cause &&
+                            getInfoData.error.cause === "ECONNREFUSED") {
+                            // Ignore
                         } else {
-                            if (data.error.cause &&
-                               data.error.cause.code === "ECONNREFUSED") {
-                                // Ignore
-                            } else {
-                                clearInterval(intrvl)
-                                reject(error)
-                            }
+                            clearInterval(intrvl)
+                            reject(error)
                         }
-                    })
+                    }
                 }, 2000)
             } else {
                 this.checkRemoteHeight()
@@ -264,7 +259,7 @@ export class Daemon {
         }
     }
 
-    banPeer (host, seconds = 3600) {
+    async banPeer (host, seconds = 3600) {
         if (!seconds) { seconds = 3600 }
 
         let params = {
@@ -275,22 +270,21 @@ export class Daemon {
             }]
         }
 
-        this.sendRPC("set_bans", params).then((data) => {
-            if (data.hasOwnProperty("error") || !data.hasOwnProperty("result")) {
-                this.sendGateway("show_notification", { type: "negative", message: "Error banning peer", timeout: 2000 })
-                return
-            }
+        const setBansData = await this.sendRPC("set_bans", params)
+        if (setBansData.hasOwnProperty("error") || !setBansData.hasOwnProperty("result")) {
+            this.sendGateway("show_notification", { type: "negative", message: "Error banning peer", timeout: 2000 })
+            return
+        }
 
-            let end_time = new Date(Date.now() + seconds * 1000).toLocaleString()
-            this.sendGateway("show_notification", { message: "Banned " + host + " until " + end_time, timeout: 2000 })
+        let end_time = new Date(Date.now() + seconds * 1000).toLocaleString()
+        this.sendGateway("show_notification", { message: "Banned " + host + " until " + end_time, timeout: 2000 })
 
-            // Send updated peer and ban list
-            this.heartbeatSlowAction()
-        })
+        // Send updated peer and ban list
+        this.heartbeatSlowAction()
     }
 
     timestampToHeight (timestamp, pivot = null, recursion_limit = null) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             if (timestamp > 999999999999) {
                 // We have got a JS ms timestamp, convert
                 timestamp = Math.floor(timestamp / 1000)
@@ -310,44 +304,43 @@ export class Daemon {
                 return resolve(pivot[0])
             }
 
-            this.getRPC("block_header_by_height", { height: estimated_height }).then((data) => {
-                if (data.hasOwnProperty("error") || !data.hasOwnProperty("result")) {
-                    if (data.error.code === -2) { // Too big height
-                        this.getRPC("last_block_header").then((data) => {
-                            if (data.hasOwnProperty("error") || !data.hasOwnProperty("result")) {
-                                return reject()
-                            }
-
-                            let new_pivot = [data.result.block_header.height, data.result.block_header.timestamp]
-
-                            // If we are within an hour that is good enough
-                            // If for some reason there is a > 1h gap between blocks
-                            // the recursion limit will take care of infinite loop
-                            if (Math.abs(timestamp - new_pivot[1]) < 3600) {
-                                return resolve(new_pivot[0])
-                            }
-
-                            // Continue recursion with new pivot
-                            resolve(new_pivot)
-                        })
-                        return
-                    } else {
+            const blockHeaderByHeightData = await this.sendRPC("get_block_header_by_height", { height: estimated_height })
+            if (blockHeaderByHeightData.hasOwnProperty("error") || !blockHeaderByHeightData.hasOwnProperty("result")) {
+                if (blockHeaderByHeightData.error.code === -2) { // Too big height
+                    const getLastBlockHeaderData = await this.sendRPC("get_last_block_header")
+                    if (getLastBlockHeaderData.hasOwnProperty("error") || !getLastBlockHeaderData.hasOwnProperty("result")) {
                         return reject()
                     }
+
+                    let new_pivot = [data.result.block_header.height, data.result.block_header.timestamp]
+
+                    // If we are within an hour that is good enough
+                    // If for some reason there is a > 1h gap between blocks
+                    // the recursion limit will take care of infinite loop
+                    if (Math.abs(timestamp - new_pivot[1]) < 3600) {
+                        return resolve(new_pivot[0])
+                    }
+
+                    // Continue recursion with new pivot
+                    resolve(new_pivot)
+                    return
+                } else {
+                    return reject()
                 }
+            }
 
-                let new_pivot = [data.result.block_header.height, data.result.block_header.timestamp]
+            let new_pivot = [data.result.block_header.height, data.result.block_header.timestamp]
 
-                // If we are within an hour that is good enough
-                // If for some reason there is a > 1h gap between blocks
-                // the recursion limit will take care of infinite loop
-                if (Math.abs(timestamp - new_pivot[1]) < 3600) {
-                    return resolve(new_pivot[0])
-                }
+            // If we are within an hour that is good enough
+            // If for some reason there is a > 1h gap between blocks
+            // the recursion limit will take care of infinite loop
+            if (Math.abs(timestamp - new_pivot[1]) < 3600) {
+                return resolve(new_pivot[0])
+            }
 
-                // Continue recursion with new pivot
-                resolve(new_pivot)
-            })
+            // Continue recursion with new pivot
+            resolve(new_pivot)
+
         }).then((pivot_or_height) => {
             return Array.isArray(pivot_or_height)
                 ? this.timestampToHeight(timestamp, pivot_or_height, recursion_limit + 1)
@@ -357,126 +350,107 @@ export class Daemon {
         })
     }
 
-    startHeartbeat () {
+    async startHeartbeat () {
         clearInterval(this.heartbeat)
-        this.heartbeat = setInterval(() => {
-            this.heartbeatAction()
+        this.heartbeat = setInterval(async() => {
+            await this.heartbeatAction()
         }, this.local ? 5 * 1000 : 30 * 1000) // 5 seconds for local daemon, 30 seconds for remote
-        this.heartbeatAction()
+        await this.heartbeatAction()
     }
 
-    heartbeatAction () {
-        let actions = []
+    async heartbeatAction () {
+        let data = []
 
         // No difference between local and remote heartbeat action for now
         if (this.local) {
-            actions = [
-                this.getRPC("info")
+            data = [
+                await this.sendRPC("get_info")
             ]
         } else {
-            actions = [
-                this.getRPC("info")
+            data = [
+                await this.sendRPC("get_info")
             ]
         }
 
-        Promise.all(actions).then((data) => {
-            let daemon_info = {
+
+        let daemon_info = {
+        }
+        for (let n of data) {
+            if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
+            if (n.method === "get_info") {
+                daemon_info.info = n.result
+                this.daemon_info = n.result
             }
-            for (let n of data) {
-                if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
-                if (n.method === "get_info") {
-                    daemon_info.info = n.result
-                    this.daemon_info = n.result
-                }
-            }
-            this.sendGateway("set_daemon_data", daemon_info)
-        })
+        }
+        this.sendGateway("set_daemon_data", daemon_info)
     }
 
-    heartbeatSlowAction (daemon_info = {}) {
-        let actions = []
+    async heartbeatSlowAction (daemon_info = {}) {
+        let data = []
         if (this.local) {
-            actions = [
-                this.getRPC("connections"),
-                this.getRPC("bans")
-                // this.getRPC("txpool_backlog"),
+            data = [
+                await this.sendRPC("get_connections"),
+                await this.sendRPC("get_bans")
             ]
         } else {
-            actions = [
-                // this.getRPC("txpool_backlog"),
-            ]
+            data = []
         }
 
-        if (actions.length === 0) return
+        if (data.length === 0) return
 
-        Promise.all(actions).then((data) => {
-            for (let n of data) {
-                if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
-                if (n.method === "get_connections" && n.result.hasOwnProperty("connections")) {
-                    daemon_info.connections = n.result.connections
-                } else if (n.method === "get_bans" && n.result.hasOwnProperty("bans")) {
-                    daemon_info.bans = n.result.bans
-                } else if (n.method === "get_txpool_backlog" && n.result.hasOwnProperty("backlog")) {
-                    daemon_info.tx_pool_backlog = n.result.backlog
-                }
+        for (let n of data) {
+            if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
+            if (n.method === "get_connections" && n.result.hasOwnProperty("connections")) {
+                daemon_info.connections = n.result.connections
+            } else if (n.method === "get_bans" && n.result.hasOwnProperty("bans")) {
+                daemon_info.bans = n.result.bans
+            } else if (n.method === "get_txpool_backlog" && n.result.hasOwnProperty("backlog")) {
+                daemon_info.tx_pool_backlog = n.result.backlog
             }
-            this.sendGateway("set_daemon_data", daemon_info)
-        })
+        }
+        this.sendGateway("set_daemon_data", daemon_info)
     }
 
     sendGateway (method, data) {
         this.backend.send(method, data)
     }
 
-    sendRPC (method, params = {}, uri = false) {
+    async sendRPC (method, params = {}, uri = false) {
         let id = this.id++
+        let url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
+        let body = {
+            jsonrpc: "2.0",
+            id: id,
+            method: method,
+        }
         let options = {
-            uri: uri || `${this.protocol}${this.hostname}:${this.port}/json_rpc`,
             method: "POST",
-            json: {
-                jsonrpc: "2.0",
-                id: id,
-                method: method
-            },
             agent: this.agent
         }
-        if (Array.isArray(params) || Object.keys(params).length !== 0) {
-            options.json.params = params
+        if (Object.keys(params).length !== 0) {
+            body.params = params
         }
-        return this.queue.add(() => {
-            return request(options)
-                .then((response) => {
-                    if (response.hasOwnProperty("error")) {
-                        return {
-                            method: method,
-                            params: params,
-                            error: response.error
-                        }
-                    }
-                    return {
-                        method: method,
-                        params: params,
-                        result: response.result
-                    }
-                }).catch(error => {
-                    return {
-                        method: method,
-                        params: params,
-                        error: {
-                            code: -1,
-                            message: "Cannot connect to daemon-rpc",
-                            cause: error.cause
-                        }
-                    }
-                })
-        })
-    }
 
-    /**
-     * Call one of the get_* RPC calls
-     */
-    getRPC (parameter, args) {
-        return this.sendRPC(`get_${parameter}`, args)
+        options.body = JSON.stringify(body)
+        try {
+            let response = await fetch(url, options)
+            let data = await response.json()
+            return {
+                method: method,
+                params: params,
+                result: data.result
+            }
+        }catch(error) {
+            return {
+                method: method,
+                params: params,
+                error: {
+                    code: -1,
+                    message: "Cannot connect to wallet-rpc",
+                    cause: error.errno
+                }
+            }
+        }
     }
 
     quit () {
@@ -488,7 +462,6 @@ export class Daemon {
             this.dealer = null
         }
 
-        this.queue.queue = []
         return new Promise((resolve, reject) => {
             if (this.daemonProcess) {
                 this.daemonProcess.on("close", code => {

@@ -9,8 +9,8 @@ import { Database } from "./pool/database"
 import { diff1, noncePattern, uid, logger } from "./pool/utils"
 const zmq = require("zeromq")
 const { fromEvent } = require("rxjs")
-const request = require("request-promise")
 const http = require("http")
+const fetch = require("node-fetch")
 
 export class Pool {
     constructor (backend) {
@@ -56,7 +56,6 @@ export class Pool {
 
         this.checkHeight().then(response => {
             logger.log("info", "Contacted remote API -- watchdog is active")
-            logger.log("info", response)
         }).catch(() => {
             logger.log("warn", "Could not contact remote API")
         })
@@ -214,7 +213,7 @@ export class Pool {
         if (this.testnet) {
             url = "https://stageblocks.arqma.com/api/networkinfo"
         }
-        return request(url)
+        return fetch(url)
     }
 
     statsHeartbeat () {
@@ -645,11 +644,10 @@ export class Pool {
     }
 
     getBlock (force = false) {
-        return new Promise((resolve, reject) => {
-            this.sendRPC("get_block_template", this.BlockTemplateParameters).then(data => {
-                const result = this.addBlockAndInformMiners(data, force)
-                !result ? resolve() : reject(result)
-            })
+        return new Promise(async(resolve, reject) => {
+            const getBlockTemplateData = await this.sendRPC("get_block_template", this.BlockTemplateParameters)
+            const result = this.addBlockAndInformMiners(getBlockTemplateData, force)
+            !result ? resolve() : reject(result)
         })
     }
 
@@ -657,48 +655,45 @@ export class Pool {
         return this.sendRPC("submit_block", [block], false)
     }
 
-    sendRPC (method, params = {}, queue = true) {
+    async sendRPC (method, params = {}, queue = true) {
         if (queue) {
             return this.backend.daemon.sendRPC(method, params)
         }
         let id = this.id++
+        const url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
+        let body = {
+            jsonrpc: "2.0",
+            id: id,
+            method: method
+        }
         let options = {
-            uri: `${this.protocol}${this.hostname}:${this.port}/json_rpc`,
             method: "POST",
-            json: {
-                jsonrpc: "2.0",
-                id: id,
-                method: method
-            },
             agent: this.agent
         }
         if (Array.isArray(params) || Object.keys(params).length !== 0) {
-            options.json.params = params
+            body.params = params
         }
-        return request(options).then(response => {
-            if (response.hasOwnProperty("error")) {
-                return {
-                    method: method,
-                    params: params,
-                    error: response.error
-                }
-            }
+        options.body = JSON.stringify(body)
+
+        try {
+            let response = await fetch(url, options)
+            let data = await response.json()
             return {
                 method: method,
                 params: params,
-                result: response.result
+                result: data.result
             }
-        }).catch(error => {
+        }catch(error) {
             return {
                 method: method,
                 params: params,
                 error: {
                     code: -1,
                     message: "Cannot connect to daemon-rpc",
-                    cause: error.cause
+                    cause: error.errno
                 }
             }
-        })
+        }
     }
 
     sendStatus (status) {

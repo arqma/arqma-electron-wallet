@@ -1,6 +1,6 @@
 
 const https = require("https")
-const axios = require('axios');
+const fetch = require("node-fetch")
 
 export class RPC {
     constructor(){
@@ -12,8 +12,8 @@ export class RPC {
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
         const endpoint = options.endpoint || this.endpoint
+        const url = `${protocol}${hostname}:${port}${endpoint}`
         let requestOptions = {
-            url: `${protocol}${hostname}:${port}${endpoint}`,
             method: "GET",
             headers: {
                 "Accept": "application/json"
@@ -21,13 +21,13 @@ export class RPC {
             agent: this.agent
         }
         if (Object.keys(params).length !== 0) {
-            requestOptions.json.params = params
+            requestOptions.body = JSON.stringify(params)
         }
         try {
-            let response = await axios(requestOptions)
+            let response = await fetch(url, requestOptions)
             return {
                 params: params,
-                result: response.data
+                result: await response.json()
             }
         } catch (error) {
             return {
@@ -35,7 +35,7 @@ export class RPC {
                 error: {
                     code: -1,
                     message: "Cannot connect to daemon-rpc",
-                    cause: error.response.data.error
+                    cause: error.errno
                 }
             }
         }
