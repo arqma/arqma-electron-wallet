@@ -70,7 +70,6 @@ export class RPC {
         }
 
         options.body = JSON.stringify(body)
-        console.log(url, ' ', options)
         try {
             let response = await fetch(url, options)
             let data = await response.json()
@@ -80,7 +79,6 @@ export class RPC {
                 result: data.result
             }
         }catch(error) {
-            console.log(error)
             return {
                 method: method,
                 params: params,
