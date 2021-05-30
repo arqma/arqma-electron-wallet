@@ -418,7 +418,7 @@ export class Daemon {
     quit () {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat)
-        if (this.zmq_enabled) {
+        if (this.zmq_enabled && this.dealer) {
             this.dealer.send(["", "EVICT"])
             this.dealer.close()
             this.dealer = null

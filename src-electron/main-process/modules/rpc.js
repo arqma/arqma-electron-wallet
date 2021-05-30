@@ -79,6 +79,7 @@ export class RPC {
                 result: data.result
             }
         }catch(error) {
+            console.log(error)
             return {
                 method: method,
                 params: params,
