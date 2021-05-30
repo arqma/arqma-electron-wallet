@@ -24,7 +24,7 @@ export class RPC {
         const hostname = options.hostname || this.hostname
         const port = options.port || this.port
         const endpoint = options.endpoint || this.endpoint
-        const url = `${protocol}${hostname}:${port}${endpoint}`
+        let url = `${protocol}${hostname}:${port}${endpoint}`
         let requestOptions = {
             method: "GET",
             headers: {
@@ -70,6 +70,7 @@ export class RPC {
         }
 
         options.body = JSON.stringify(body)
+        console.log(url, ' ', options)
         try {
             let response = await fetch(url, options)
             let data = await response.json()
@@ -79,6 +80,7 @@ export class RPC {
                 result: data.result
             }
         }catch(error) {
+            console.log(error)
             return {
                 method: method,
                 params: params,
