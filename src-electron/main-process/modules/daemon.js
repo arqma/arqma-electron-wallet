@@ -41,43 +41,43 @@ export class Daemon {
         })
     }
 
-    checkRemoteHeight () {
-        let url = "https://explorer.arqma.com/api/networkinfo"
-        if (this.testnet) {
-            url = "https://stageblocks.arqma.com/api/networkinfo"
+    async checkRemoteHeight () {
+        let options = {
+            protocol: "https://",
+            hostname: "explorer.arqma.com",
+            endpoint: "/api/networkinfo"
         }
-        request(url).then(response => {
-            try {
-                const json = JSON.parse(response)
-                if (json === null || typeof json !== "object" || !json.hasOwnProperty("data")) {
-                    return
-                }
-                if (json.data.hasOwnProperty("height") && this.blocks.current != null) {
-                    this.remote_height = json.data.height
-                }
-                this.remote_height = 0
-            } catch (error) {
-                this.remote_height = 0
+        if (this.testnet) {
+            options.hostname = "stageblocks.arqma.com"
+        }
+        const getInfoData = await this.rpc.callAPI({}, options)
+        try {
+            if (getInfoData === null || typeof getInfoData !== "object" || !getInfoData.hasOwnProperty("data")) {
+                return
             }
-        })
+            if (getInfoData.data.hasOwnProperty("height") && this.blocks.current != null) {
+                this.remote_height = getInfoData.data.height
+            }
+            this.remote_height = 0
+        } catch (error) {
+            this.remote_height = 0
+        }
     }
 
     checkRemoteDaemon (options) {
         if (options.daemon.type === "local") {
             return new Promise((resolve, reject) => {
-                resolve({
-                    result: {
+               resolve({
+                   result:  {
                         mainnet: !options.app.testnet,
                         testnet: options.app.testnet
                     }
-                })
+               })
             })
         } else {
+            this.rpc = new RPC()
             let uri = `http://${options.daemon.remote_host}:${options.daemon.remote_port}/json_rpc`
-            return new Promise(async(resolve, reject) => {
-                await this.rpc.sendRPC("get_info", {}, uri)
-                resolve(data)
-            })
+            return this.rpc.sendRPC("get_info", {}, uri)
         }
     }
 
@@ -172,8 +172,8 @@ export class Daemon {
             this.daemonProcess.on("error", err => process.stderr.write(`Daemon: ${err}\n`))
             this.daemonProcess.on("close", code => process.stderr.write(`Daemon: exited with code ${code}\n`))
 
+            this.rpc = new RPC(this.protocol, options.daemon.rpc_bind_ip, options.daemon.rpc_bind_port)
             if (options.daemon.type !== "local_zmq") {
-                this.rpc = new RPC(this.protocol, options.daemon.rpc_bind_ip, options.daemon.rpc_bind_port)
                 this.daemonProcess.stdout.on("data", data => process.stdout.write(`Daemon: ${data}`))
 
                 // To let caller know when the daemon is ready
@@ -418,7 +418,7 @@ export class Daemon {
     quit () {
         // TODO force close after few seconds!
         clearInterval(this.heartbeat)
-        if (this.zmq_enabled) {
+        if (this.zmq_enabled && this.dealer) {
             this.dealer.send(["", "EVICT"])
             this.dealer.close()
             this.dealer = null

@@ -10,7 +10,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-2016, macos-latest, ubuntu-latest]
+              os: [windows-2016, macos-latest, ubuntu-latest]
 
         steps:
             - name: Checkout git repo
