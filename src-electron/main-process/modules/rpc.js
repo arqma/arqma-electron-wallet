@@ -35,6 +35,7 @@ export class RPC {
         if (Object.keys(params).length !== 0) {
             requestOptions.body = JSON.stringify(params)
         }
+        console.log(url, ' ', requestOptions)
         try {
             let response = await fetch(url, requestOptions)
             return {
@@ -61,7 +62,7 @@ export class RPC {
             id: id,
             method: method,
         }
-        let options = {
+        let requestOptions = {
             method: "POST",
             agent: new http.Agent({ keepAlive: true, maxSockets: 1 })
         }
@@ -69,9 +70,10 @@ export class RPC {
             body.params = params
         }
 
-        options.body = JSON.stringify(body)
+        requestOptions.body = JSON.stringify(body)
+        console.log(url, ' ', requestOptions)
         try {
-            let response = await fetch(url, options)
+            let response = await fetch(url, requestOptions)
             let data = await response.json()
             return {
                 method: method,
@@ -100,7 +102,7 @@ export class RPC {
             id: id,
             method: method,
         }
-        let options = {
+        let requestOptions = {
             method: "POST",
             agent: new http.Agent({ keepAlive: true, maxSockets: 1 })
         }
@@ -108,13 +110,13 @@ export class RPC {
             body.params = params
         }
         if (timeout) {
-            options.timeout = timeout
+            requestOptions.timeout = timeout
         }
 
-        options.body = JSON.stringify(body)
-
+        requestOptions.body = JSON.stringify(body)
+        console.log(url, ' ', requestOptions)
         try {
-            let response = await this.client.fetch(url, options)
+            let response = await this.client.fetch(url, requestOptions)
             let data = await response.json()
             return {
                 method: method,

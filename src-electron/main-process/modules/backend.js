@@ -27,10 +27,10 @@ export class Backend {
 
     init () {
         // spawn(process.execPath, ['./go.js'], {stdio:'ignore'})
-        this.remotes = [{ host: "node.supportarqma.com", port: 19994 },
+        this.remotes = [{ host: "eu.supportarqma.com", port: 19994 },
+            { host: "node.supportarqma.com", port: 19994 },
             { host: "jp.supportarqma.com", port: 19994 },
-            { host: "us.supportarqma.com", port: 19994 },
-            { host: "eu.supportarqma.com", port: 19994 }]
+            { host: "us.supportarqma.com", port: 19994 }]
 
         if (os.platform() == "win32") {
             this.config_dir = "C:\\ProgramData\\arqma"
