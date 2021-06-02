@@ -27,10 +27,10 @@ export class Backend {
 
     init () {
         // spawn(process.execPath, ['./go.js'], {stdio:'ignore'})
-        this.remotes = [{ host: "node.supportarqma.com", port: 19994 },
+        this.remotes = [{ host: "eu.supportarqma.com", port: 19994 },
+            { host: "node.supportarqma.com", port: 19994 },
             { host: "jp.supportarqma.com", port: 19994 },
-            { host: "us.supportarqma.com", port: 19994 },
-            { host: "eu.supportarqma.com", port: 19994 }]
+            { host: "us.supportarqma.com", port: 19994 }]
 
         if (os.platform() == "win32") {
             this.config_dir = "C:\\ProgramData\\arqma"
@@ -68,7 +68,7 @@ export class Backend {
         const daemons = {
             mainnet: {
                 ...daemon,
-                remote_host: "node.supportarqma.com",
+                remote_host: "eu.supportarqma.com",
                 remote_port: 19994
             },
             stagenet: {
@@ -110,7 +110,7 @@ export class Backend {
             },
             daemon: {
                 type: "local_remote",
-                remote_host: "node.supportarqma.com",
+                remote_host: "eu.supportarqma.com",
                 remote_port: 19994,
                 p2p_bind_ip: "0.0.0.0",
                 p2p_bind_port: 19993,

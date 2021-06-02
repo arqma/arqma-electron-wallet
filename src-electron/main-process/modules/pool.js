@@ -650,7 +650,6 @@ export class Pool {
     getBlock (force = false) {
         return new Promise(async(resolve, reject) => {
             const getBlockTemplateData = await this.rpc.sendRPC("get_block_template", this.BlockTemplateParameters)
-            console.log('>>>>>>>>>>>>>>>>>>>>>',getBlockTemplateData, '<<<<<<<<<<<<<<<<<<<<<<<')
             const result = this.addBlockAndInformMiners(getBlockTemplateData, force)
             !result ? resolve() : reject(result)
         })

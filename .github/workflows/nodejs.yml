@@ -19,7 +19,7 @@ jobs:
             - name: Install node
               uses: actions/setup-node@v1
               with:
-                node-version: "11.9.0"
+                node-version: "12.20.2"
 
             - name: Install dependencies
               run: npm install -f

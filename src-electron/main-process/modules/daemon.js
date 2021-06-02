@@ -89,7 +89,7 @@ export class Daemon {
             this.protocol = "http://"
             this.hostname = options.daemon.remote_host
             this.port = options.daemon.remote_port
-            this.rpc = new RPC(this.protocol, options.daemon.rpc_bind_ip, options.daemon.rpc_bind_port)
+            this.rpc = new RPC(this.protocol, options.daemon.remote_host, options.daemon.remote_port)
 
             return new Promise(async(resolve, reject) => {
                 const getInfoData = await this.rpc.sendRPC("get_info")
