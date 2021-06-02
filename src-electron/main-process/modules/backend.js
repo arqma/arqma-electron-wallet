@@ -68,7 +68,7 @@ export class Backend {
         const daemons = {
             mainnet: {
                 ...daemon,
-                remote_host: "node.supportarqma.com",
+                remote_host: "eu.supportarqma.com",
                 remote_port: 19994
             },
             stagenet: {
@@ -110,7 +110,7 @@ export class Backend {
             },
             daemon: {
                 type: "local_remote",
-                remote_host: "node.supportarqma.com",
+                remote_host: "eu.supportarqma.com",
                 remote_port: 19994,
                 p2p_bind_ip: "0.0.0.0",
                 p2p_bind_port: 19993,

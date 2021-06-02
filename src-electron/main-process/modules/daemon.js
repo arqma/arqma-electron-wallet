@@ -77,7 +77,6 @@ export class Daemon {
         } else {
             this.rpc = new RPC()
             let uri = `http://${options.daemon.remote_host}:${options.daemon.remote_port}/json_rpc`
-            console.log('>>>>>>>>>>>>>>>>>>>> ' + uri + '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
             return this.rpc.sendRPC("get_info", {}, uri)
         }
     }
@@ -93,7 +92,6 @@ export class Daemon {
             this.rpc = new RPC(this.protocol, options.daemon.remote_host, options.daemon.remote_port)
 
             return new Promise(async(resolve, reject) => {
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>.wft')
                 const getInfoData = await this.rpc.sendRPC("get_info")
                 if (!getInfoData.hasOwnProperty("error")) {
                     this.startHeartbeat()

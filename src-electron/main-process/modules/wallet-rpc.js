@@ -445,12 +445,6 @@ export class WalletRPC {
 
     async finalizeNewWallet (filename, newly_created = false) {
         let data = []
-        data.push(await this.rpc.sendRPC_WithMD5("get_address"))
-        data.push(await this.rpc.sendRPC_WithMD5("getheight"))
-        data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }))
-        data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "mnemonic" }))
-        data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "spend_key" }))
-        data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "view_key" }))
         let wallet = {
             info: {
                 name: filename,
@@ -467,26 +461,37 @@ export class WalletRPC {
                 view_key: ""
             }
         }
-        for (let n of data) {
-            if (n.hasOwnProperty("error") || !n.hasOwnProperty("result")) {
-                continue
-            }
-            if (n.method === "get_address") {
-                wallet.info.address = n.result.address
-            } else if (n.method === "getheight") {
-                wallet.info.height = n.result.height
-            } else if (n.method === "getbalance") {
-                wallet.info.balance = n.result.balance
-                wallet.info.unlocked_balance = n.result.unlocked_balance
-            } else if (n.method === "query_key") {
-                wallet.secret[n.params.key_type] = n.result.key
-                if (n.params.key_type === "spend_key") {
-                    if (/^0*$/.test(n.result.key)) {
-                        wallet.info.view_only = true
+        try {
+            data.push(await this.rpc.sendRPC_WithMD5("get_address"))
+            data.push(await this.rpc.sendRPC_WithMD5("getheight"))
+            data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }))
+            data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "mnemonic" }))
+            data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "spend_key" }))
+            data.push(await this.rpc.sendRPC_WithMD5("query_key", { key_type: "view_key" }))
+            
+            for (let n of data) {
+                if (n.hasOwnProperty("error") || !n.hasOwnProperty("result")) {
+                    continue
+                }
+                if (n.method === "get_address") {
+                    wallet.info.address = n.result.address
+                } else if (n.method === "getheight") {
+                    wallet.info.height = n.result.height
+                } else if (n.method === "getbalance") {
+                    wallet.info.balance = n.result.balance
+                    wallet.info.unlocked_balance = n.result.unlocked_balance
+                } else if (n.method === "query_key") {
+                    wallet.secret[n.params.key_type] = n.result.key
+                    if (n.params.key_type === "spend_key") {
+                        if (/^0*$/.test(n.result.key)) {
+                            wallet.info.view_only = true
+                        }
                     }
                 }
             }
+            
         }
+        catch (error) {}
 
         await this.saveWallet()
         let address_txt_path = path.join(this.wallet_dir, filename + ".address.txt")
@@ -497,9 +502,9 @@ export class WalletRPC {
         } else {
             this.listWallets()
         }
-
+        
         this.sendGateway("set_wallet_data", wallet)
-
+        
         this.startHeartbeat()
     }
 
@@ -555,11 +560,6 @@ export class WalletRPC {
     }
 
     async heartbeatAction (extended = false) {
-        let data = []
-        data.push(await this.rpc.sendRPC_WithMD5("get_address", { account_index: 0 }, 5000))
-        data.push(await this.rpc.sendRPC_WithMD5("getheight", {}, 5000))
-        data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }, 5000))
-
         let didError = false
         let wallet = {
             status: {
@@ -580,60 +580,70 @@ export class WalletRPC {
                 address_book_starred: []
             }
         }
+        try {
+            let data = []
+            data.push(await this.rpc.sendRPC_WithMD5("get_address", { account_index: 0 }, 5000))
+            data.push(await this.rpc.sendRPC_WithMD5("getheight", {}, 5000))
+            data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }, 5000))
 
-        for (let n of data) {
-            if (n.hasOwnProperty("error") || !n.hasOwnProperty("result")) {
-                // Maybe we also need to look into the other error codes it could give us
-                // Error -13: No wallet file - This occurs when you call open wallet while another wallet is still syncing
-                if (extended && n.error && n.error.code === -13) {
-                    didError = true
+
+            for (let n of data) {
+                if (n.hasOwnProperty("error") || !n.hasOwnProperty("result")) {
+                    // Maybe we also need to look into the other error codes it could give us
+                    // Error -13: No wallet file - This occurs when you call open wallet while another wallet is still syncing
+                    if (extended && n.error && n.error.code === -13) {
+                        didError = true
+                    }
+                    continue
                 }
-                continue
+
+                if (n.method === "getheight") {
+                    wallet.info.height = n.result.height
+                    this.sendGateway("set_wallet_data", {
+                        info: {
+                            height: n.result.height
+                        }
+                    })
+                } else if (n.method === "get_address") {
+                    wallet.info.address = n.result.address
+                    this.sendGateway("set_wallet_data", {
+                        info: {
+                            address: n.result.address
+                        }
+                    })
+                } else if (n.method === "getbalance") {
+                    if (this.wallet_state.balance === n.result.balance &&
+                        this.wallet_state.unlocked_balance === n.result.unlocked_balance) {
+                        // continue
+                    }
+
+                    this.wallet_state.balance = wallet.info.balance = n.result.balance
+                    this.wallet_state.unlocked_balance = wallet.info.unlocked_balance = n.result.unlocked_balance
+                    this.sendGateway("set_wallet_data", {
+                        info: wallet.info
+                    })
+
+                    // if balance has recently changed, get updated list of transactions and used addresses
+                    let actions = [
+                        await this.getTransactions(),
+                        await this.getAddressList()
+                    ]
+                    if (true || extended) {
+                        actions.push(await this.getAddressBook())
+                    }
+                    Promise.all(actions).then((data) => {
+                        for (let n of data) {
+                            Object.keys(n).map(key => {
+                                wallet[key] = Object.assign(wallet[key], n[key])
+                            })
+                        }
+                        this.sendGateway("set_wallet_data", wallet)
+                    })
+                }
             }
-
-            if (n.method === "getheight") {
-                wallet.info.height = n.result.height
-                this.sendGateway("set_wallet_data", {
-                    info: {
-                        height: n.result.height
-                    }
-                })
-            } else if (n.method === "get_address") {
-                wallet.info.address = n.result.address
-                this.sendGateway("set_wallet_data", {
-                    info: {
-                        address: n.result.address
-                    }
-                })
-            } else if (n.method === "getbalance") {
-                if (this.wallet_state.balance === n.result.balance &&
-                    this.wallet_state.unlocked_balance === n.result.unlocked_balance) {
-                    // continue
-                }
-
-                this.wallet_state.balance = wallet.info.balance = n.result.balance
-                this.wallet_state.unlocked_balance = wallet.info.unlocked_balance = n.result.unlocked_balance
-                this.sendGateway("set_wallet_data", {
-                    info: wallet.info
-                })
-
-                // if balance has recently changed, get updated list of transactions and used addresses
-                let actions = [
-                    this.getTransactions(),
-                    this.getAddressList()
-                ]
-                if (true || extended) {
-                    actions.push(this.getAddressBook())
-                }
-                Promise.all(actions).then((data) => {
-                    for (let n of data) {
-                        Object.keys(n).map(key => {
-                            wallet[key] = Object.assign(wallet[key], n[key])
-                        })
-                    }
-                    this.sendGateway("set_wallet_data", wallet)
-                })
-            }
+        }
+        catch(error) {
+            didError = true
         }
 
         // Set the wallet state on initial heartbeat
@@ -873,47 +883,52 @@ export class WalletRPC {
                 }
             }
 
-            for (let address of getAddressData.result.addresses) {
-                address.balance = null
-                address.unlocked_balance = null
-                address.num_unspent_outputs = null
-
-                if (getBalanceData.result.hasOwnProperty("per_subaddress")) {
-                    for (let address_balance of getBalanceData.result.per_subaddress) {
-                        if (address_balance.address_index === address.address_index) {
-                            address.balance = address_balance.balance
-                            address.unlocked_balance = address_balance.unlocked_balance
-                            address.num_unspent_outputs = address_balance.num_unspent_outputs
-                            break
+            try {
+                for (let address of getAddressData.result.addresses) {
+                    address.balance = null
+                    address.unlocked_balance = null
+                    address.num_unspent_outputs = null
+    
+                    if (getBalanceData.result.hasOwnProperty("per_subaddress")) {
+                        for (let address_balance of getBalanceData.result.per_subaddress) {
+                            if (address_balance.address_index === address.address_index) {
+                                address.balance = address_balance.balance
+                                address.unlocked_balance = address_balance.unlocked_balance
+                                address.num_unspent_outputs = address_balance.num_unspent_outputs
+                                break
+                            }
                         }
                     }
-                }
-
-                if (address.address_index === 0) {
-                    wallet.address_list.primary.push(address)
-                } else if (address.used) {
-                    wallet.address_list.used.push(address)
-                } else {
-                    wallet.address_list.unused.push(address)
-                }
-            }
-
-            // limit to 10 unused addresses
-            wallet.address_list.unused = wallet.address_list.unused.slice(0, 10)
-
-            if (wallet.address_list.unused.length < num_unused_addresses &&
-                !wallet.address_list.primary[0].address.startsWith("ar") &&
-                !wallet.address_list.primary[0].address.startsWith("aRi")) {
-                for (let n = wallet.address_list.unused.length; n < num_unused_addresses; n++) {
-                    let createAddressData = await this.rpc.sendRPC_WithMD5("create_address", { account_index: 0 })
-                    wallet.address_list.unused.push(createAddressData.result)
-                    if (wallet.address_list.unused.length == num_unused_addresses) {
-                        // should sort them here
-                        resolve(wallet)
+    
+                    if (address.address_index === 0) {
+                        wallet.address_list.primary.push(address)
+                    } else if (address.used) {
+                        wallet.address_list.used.push(address)
+                    } else {
+                        wallet.address_list.unused.push(address)
                     }
                 }
-            } else {
-                resolve(wallet)
+    
+                // limit to 10 unused addresses
+                wallet.address_list.unused = wallet.address_list.unused.slice(0, 10)
+    
+                if (wallet.address_list.unused.length < num_unused_addresses &&
+                    !wallet.address_list.primary[0].address.startsWith("ar") &&
+                    !wallet.address_list.primary[0].address.startsWith("aRi")) {
+                    for (let n = wallet.address_list.unused.length; n < num_unused_addresses; n++) {
+                        let createAddressData = await this.rpc.sendRPC_WithMD5("create_address", { account_index: 0 })
+                        wallet.address_list.unused.push(createAddressData.result)
+                        if (wallet.address_list.unused.length == num_unused_addresses) {
+                            // should sort them here
+                            resolve(wallet)
+                        }
+                    }
+                } else {
+                    resolve(wallet)
+                }
+            }
+            catch (error) {
+                reject()
             }
         })
     }
@@ -967,48 +982,51 @@ export class WalletRPC {
 
     getAddressBook () {
         return new Promise(async (resolve, reject) => {
-            const getAddressBookData = await this.rpc.sendRPC_WithMD5("get_address_book")
-            if (getAddressBookData.hasOwnProperty("error") || !getAddressBookData.hasOwnProperty("result")) {
-                resolve({})
-                return
-            }
             let wallet = {
                 address_list: {
                     address_book: [],
                     address_book_starred: []
                 }
             }
-
-            if (getAddressBookData.result.entries) {
-                let i
-                for (i = 0; i < getAddressBookData.result.entries.length; i++) {
-                    let entry = getAddressBookData.result.entries[i]
-                    let desc = entry.description.split("::")
-                    if (desc.length === 3) {
-                        entry.starred = desc[0] === "starred"
-                        entry.name = desc[1]
-                        entry.description = desc[2]
-                    } else if (desc.length === 2) {
-                        entry.starred = false
-                        entry.name = desc[0]
-                        entry.description = desc[1]
-                    } else {
-                        entry.starred = false
-                        entry.name = entry.description
-                        entry.description = ""
-                    }
-
-                    if (/^0*$/.test(entry.payment_id)) {
-                        entry.payment_id = ""
-                    } else if (/^0*$/.test(entry.payment_id.substring(16))) {
-                        entry.payment_id = entry.payment_id.substring(0, 16)
-                    }
-
-                    if (entry.starred) { wallet.address_list.address_book_starred.push(entry) } else { wallet.address_list.address_book.push(entry) }
+            try {
+                const getAddressBookData = await this.rpc.sendRPC_WithMD5("get_address_book")
+                if (getAddressBookData.hasOwnProperty("error") || !getAddressBookData.hasOwnProperty("result")) {
+                    resolve({})
+                    return
                 }
-            }
 
-            resolve(wallet)
+                if (getAddressBookData.result.entries) {
+                    for (const i = 0; i < getAddressBookData.result.entries.length; i++) {
+                        let entry = getAddressBookData.result.entries[i]
+                        let desc = entry.description.split("::")
+                        if (desc.length === 3) {
+                            entry.starred = desc[0] === "starred"
+                            entry.name = desc[1]
+                            entry.description = desc[2]
+                        } else if (desc.length === 2) {
+                            entry.starred = false
+                            entry.name = desc[0]
+                            entry.description = desc[1]
+                        } else {
+                            entry.starred = false
+                            entry.name = entry.description
+                            entry.description = ""
+                        }
+
+                        if (/^0*$/.test(entry.payment_id)) {
+                            entry.payment_id = ""
+                        } else if (/^0*$/.test(entry.payment_id.substring(16))) {
+                            entry.payment_id = entry.payment_id.substring(0, 16)
+                        }
+
+                        if (entry.starred) { wallet.address_list.address_book_starred.push(entry) } else { wallet.address_list.address_book.push(entry) }
+                    }
+                }
+                resolve(wallet)
+            } 
+            catch (error) {
+                resolve(wallet)
+            }
         })
     }
 

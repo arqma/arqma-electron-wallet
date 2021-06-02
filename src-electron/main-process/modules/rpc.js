@@ -35,7 +35,7 @@ export class RPC {
         if (Object.keys(params).length !== 0) {
             requestOptions.body = JSON.stringify(params)
         }
-        console.log(url, ' ', requestOptions)
+        // console.log(url, ' ', requestOptions)
         try {
             let response = await fetch(url, requestOptions)
             return {
@@ -71,7 +71,7 @@ export class RPC {
         }
 
         requestOptions.body = JSON.stringify(body)
-        console.log(url, ' ', requestOptions)
+        // console.log(url, ' ', requestOptions)
         try {
             let response = await fetch(url, requestOptions)
             let data = await response.json()
@@ -81,7 +81,6 @@ export class RPC {
                 result: data.result
             }
         }catch(error) {
-            console.log(error)
             return {
                 method: method,
                 params: params,
@@ -114,7 +113,7 @@ export class RPC {
         }
 
         requestOptions.body = JSON.stringify(body)
-        console.log(url, ' ', requestOptions)
+        // console.log(url, ' ', requestOptions)
         try {
             let response = await this.client.fetch(url, requestOptions)
             let data = await response.json()
