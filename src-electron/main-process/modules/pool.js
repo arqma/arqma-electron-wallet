@@ -65,6 +65,7 @@ export class Pool {
 
     init (options) {
         if (this.daemon_type === "remote") {
+            this.sendStatus(0)
             return false
         }
 
