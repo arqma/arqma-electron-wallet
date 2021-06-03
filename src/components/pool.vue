@@ -34,7 +34,7 @@
                         <div class="infoBox">
                             <div class="infoBoxContent">
                                 <div class="text"><span>Hashrate</span></div>
-                                <div class="value"><span>{{ pool.stats.h.hashrate_5min | hashrate }}</span></div>
+                                <div class="value"><span>{{ pool.stats.h ? pool.stats.h.hashrate_5min : 0  | hashrate }}</span></div>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <div class="infoBox">
                             <div class="infoBoxContent">
                                 <div class="text"><span>Hashrate (1 hour)</span></div>
-                                <div class="value"><span>{{ pool.stats.h.hashrate_1hr | hashrate }}</span></div>
+                                <div class="value"><span>{{ pool.stats.h ? pool.stats.h.hashrate_1hr : 0 | hashrate }}</span></div>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="infoBox">
                             <div class="infoBoxContent">
                                 <div class="text"><span>Hashrate (6 hours)</span></div>
-                                <div class="value"><span>{{ pool.stats.h.hashrate_6hr | hashrate }}</span></div>
+                                <div class="value"><span>{{ pool.stats.h ? pool.stats.h.hashrate_6hr : 0 | hashrate }}</span></div>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                         <div class="infoBox">
                             <div class="infoBoxContent">
                                 <div class="text"><span>Hashrate (24 hours)</span></div>
-                                <div class="value"><span>{{ pool.stats.h.hashrate_24hr | hashrate }}</span></div>
+                                <div class="value"><span>{{ pool.stats.h ? pool.stats.h.hashrate_24hr : 0 | hashrate }}</span></div>
                             </div>
                         </div>
                     </div>
@@ -1114,7 +1114,9 @@ export default {
             return Math.round(val * 100) + "%"
         },
         commas: (num) => {
-            return num.toLocaleString()
+            if (!!num)
+                return num.toLocaleString()
+            return num
         },
         time: (val) => {
             if(val == null) {
