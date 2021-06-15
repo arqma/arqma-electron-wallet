@@ -1,7 +1,7 @@
 import { diff1, uid, logger } from "./utils"
 
 export class Miner {
-    constructor(pool, id, workerName, varDiff, ip, socket) {
+    constructor (pool, id, workerName, varDiff, ip, socket) {
         this.pool = pool
         this.id = id
         this.workerName = workerName
@@ -24,19 +24,19 @@ export class Miner {
         this.heartbeat()
     }
 
-    push(method, params) {
-        if(!this.socket.writable) {
+    push (method, params) {
+        if (!this.socket.writable) {
             return
         }
         this.socket.write(JSON.stringify({ jsonrpc: "2.0", method, params }) + "\n")
     }
 
-    heartbeat() {
+    heartbeat () {
         this.lastHeartbeat = Date.now()
     }
 
-    retarget() {
-        const { targetTime, maxDiff, minDiff, variancePercent, maxJump} = this.varDiff
+    retarget () {
+        const { targetTime, maxDiff, minDiff, variancePercent, maxJump } = this.varDiff
         const variance = targetTime * variancePercent / 100
         const targetMin = targetTime - variance
         const targetMax = targetTime + variance
@@ -48,18 +48,18 @@ export class Miner {
 
         logger.log("info", "Share time stats { target: %ds, average: %ds, since_last: %ds, buffer: %d } for %s@%s", [targetTime, Math.round(shareAvg || 0), Math.round(shareDelta), this.shareTimes.length, this.workerName, this.ip])
 
-        if(targetMin <= shareAvg && shareAvg <= targetMax) {
+        if (targetMin <= shareAvg && shareAvg <= targetMax) {
             return false
         }
-        if(shareAvg < targetMin && this.shareTimes.length < 6) {
+        if (shareAvg < targetMin && this.shareTimes.length < 6) {
             return false
         }
-        if(shareAvg > targetMax && shareDelta < 2 * targetTime) {
+        if (shareAvg > targetMax && shareDelta < 2 * targetTime) {
             return false
         }
 
-        if(shareDelta < targetMax) {
-            if(shareAvg == 0 || this.shareTimes.length == 0) {
+        if (shareDelta < targetMax) {
+            if (shareAvg === 0 || this.shareTimes.length === 0) {
                 return false
             }
         } else {
@@ -77,7 +77,7 @@ export class Miner {
         newDiff = Math.max(newDiff, newDiffMin, minDiff)
         newDiff = Math.round(newDiff)
 
-        if(!isNaN(newDiff) && this.difficulty.now != newDiff) {
+        if (!isNaN(newDiff) && this.difficulty.now !== newDiff) {
             this.difficulty.pending = newDiff
             this.pushJob()
             return true
@@ -85,7 +85,7 @@ export class Miner {
         return false
     }
 
-    updateVarDiff(varDiff) {
+    updateVarDiff (varDiff) {
         this.varDiff = varDiff
         this.lastShare = Date.now() / 1000
         this.shareTimes = []
@@ -96,45 +96,45 @@ export class Miner {
         }
     }
 
-    recordShare() {
+    recordShare () {
         const dateNow = Date.now() / 1000
         this.shareTimes.push(dateNow - this.lastShare)
-        while(this.shareTimes.length > 16) {
+        while (this.shareTimes.length > 16) {
             this.shareTimes.shift()
         }
         this.lastShare = dateNow
     }
 
-    calcShareAvg(extra=0) {
+    calcShareAvg (extra = 0) {
         return this.shareTimes.reduce((sum, x) => sum + x, extra) / (this.shareTimes.length + (extra ? 1 : 0))
     }
 
-    addJobSubmission(job, nonce) {
+    addJobSubmission (job, nonce) {
         job.submissions.push(nonce)
     }
 
-    checkJobSubmission(job, nonce) {
-        return job.submissions.indexOf(nonce) == -1
+    checkJobSubmission (job, nonce) {
+        return job.submissions.indexOf(nonce) === -1
     }
 
-    pushJob(force=false) {
+    pushJob (force = false) {
         this.push("job", this.getJob(force))
     }
 
-    addJob(job) {
+    addJob (job) {
         this.jobs.push(job)
     }
 
-    findJob(job_id) {
-        return this.jobs.filter(job => job.id == job_id).pop()
+    findJob (job_id) {
+        return this.jobs.filter(job => job.id === job_id).pop()
     }
 
-    getJob(force=false) {
+    getJob (force = false) {
         const block = this.pool.blocks.current
         let job_id = "", blob = "", target = "", seed_hash = "", next_seed_hash = ""
-        if(block.height != this.lastHeight || this.difficulty.pending || force) {
+        if (block.height !== this.lastHeight || this.difficulty.pending || force) {
             this.lastHeight = block.height
-            if(this.difficulty.pending) {
+            if (this.difficulty.pending) {
                 this.difficulty = {
                     now: this.difficulty.pending,
                     pending: null,
@@ -142,7 +142,7 @@ export class Miner {
                 }
             }
 
-            let difficulty = Math.min(this.difficulty.now, block.difficulty-1)
+            let difficulty = Math.min(this.difficulty.now, block.difficulty - 1)
 
             job_id = uid()
             blob = block.newBlob()
@@ -158,14 +158,14 @@ export class Miner {
                 seed_hash: block.seed_hash,
                 next_seed_hash: block.next_seed_hash
             })
-            while(this.jobs.length > 4) {
+            while (this.jobs.length > 4) {
                 this.jobs.shift()
             }
         }
         return { blob, job_id, target, seed_hash, next_seed_hash }
     }
 
-    targetToCompact(diff) {
+    targetToCompact (diff) {
         let padded = Buffer.alloc(32)
         padded.fill(0)
 
@@ -177,7 +177,7 @@ export class Miner {
         const buff = padded.slice(0, 4)
         let buffReversed = Buffer.allocUnsafe(buff.length)
 
-        for(let i = 0, j = buff.length - 1; i <= j; ++i, --j) {
+        for (let i = 0, j = buff.length - 1; i <= j; ++i, --j) {
             buffReversed[i] = buff[j]
             buffReversed[j] = buff[i]
         }

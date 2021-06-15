@@ -85,6 +85,7 @@ export default {
         },
         clickNext () {
             if(this.$refs.stepper.steps[this.$refs.stepper.length-1].active) {
+                console.log(this.pending_config)
                 this.$gateway.send("core", "save_config_init", this.pending_config);
                 this.$router.replace({ path: "/" });
             } else {

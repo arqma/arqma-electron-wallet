@@ -2,15 +2,12 @@ import SQL from "better-sqlite3"
 import { join } from "path"
 import { logger } from "./utils"
 
-//const path = require("path")
-//const SQL = require("better-sqlite3")
-
 export class Database {
-    constructor(pool, options) {
+    constructor (pool, options) {
         this.pool = pool
         this.db = null
         this.stats = {}
-        if(options.testnet) {
+        if (options.testnet) {
             this.sqlitePath = join(options.data_dir, "gui", "pool_stats_testnet.sqlite")
         } else {
             this.sqlitePath = join(options.data_dir, "gui", "pool_stats.sqlite")
@@ -18,8 +15,7 @@ export class Database {
         this.vacuum_interval = 1000 * 60 * 60 * 24 // 24 hours
     }
 
-    start() {
-
+    start () {
         this.db = new SQL(this.sqlitePath)
 
         this.getTables()
@@ -51,41 +47,39 @@ export class Database {
 
             hashrate_avg: this.db.prepare("SELECT * FROM hashrateAvg"),
             hashrate_avg_add: this.db.prepare("INSERT OR IGNORE INTO hashrateAvg(miner, time, hashes) VALUES(:miner, :time, :hashes)"),
-            hashrate_avg_clean: this.db.prepare("DELETE FROM hashrate WHERE time < :time"),
+            hashrate_avg_clean: this.db.prepare("DELETE FROM hashrate WHERE time < :time")
         }
-
 
         this.vacuum()
 
         setInterval(() => {
             this.vacuum()
         }, this.vacuum_interval)
-
     }
 
-    stop() {
-        if(this.db) {
+    stop () {
+        if (this.db) {
             this.db.close()
         }
     }
 
-    getTables() {
+    getTables () {
         return this.db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all()
     }
 
-    vacuum() {
-        if(!this.db) {
+    vacuum () {
+        if (!this.db) {
             return
         }
         try {
             this.db.exec("VACUUM")
             logger.log("info", "Success vacuuming database")
-        } catch(error) {
+        } catch (error) {
             logger.log("error", "Error vacuuming database")
         }
     }
 
-    init() {
+    init () {
         this.db.prepare("CREATE TABLE IF NOT EXISTS round(miner TEXT PRIMARY KEY, hashes INTEGER) WITHOUT ROWID;").run()
         this.db.prepare("CREATE TABLE IF NOT EXISTS hashrate(miner TEXT, time DATETIME, hashes INTEGER);").run()
         this.db.prepare("CREATE TABLE IF NOT EXISTS hashrateAvg(miner TEXT, time DATETIME, hashes INTEGER);").run()
@@ -93,7 +87,7 @@ export class Database {
         this.db.prepare("CREATE TABLE IF NOT EXISTS blocks(hash TEXT PRIMARY KEY, height INTEGER, reward INTEGER, miner TEXT, timeFound DATETIME, minedTo TEXT, diff INTEGER, hashes INTEGER, status INTEGER) WITHOUT ROWID;").run()
     }
 
-    heartbeat() {
+    heartbeat () {
         const dateNow = Date.now()
 
         this.unlockBlocks()
@@ -104,8 +98,8 @@ export class Database {
         }
 
         let activeWorkers = 0
-        for(let worker of Object.keys(workers)) {
-            if(workers[worker].hasOwnProperty("lastShare") && workers[worker].lastShare > dateNow - 10 * 60 * 1000) { // 10 minutes
+        for (let worker of Object.keys(workers)) {
+            if (workers[worker].hasOwnProperty("lastShare") && workers[worker].lastShare > dateNow - 10 * 60 * 1000) { // 10 minutes
                 workers[worker].active = true
                 activeWorkers++
             } else {
@@ -118,14 +112,14 @@ export class Database {
             hashrate_5min: 0,
             hashrate_1hr: 0,
             hashrate_6hr: 0,
-            hashrate_24hr: 0,
+            hashrate_24hr: 0
         }
 
-        for(let worker of Object.keys(hashrates)) {
+        for (let worker of Object.keys(hashrates)) {
             workers[worker].hashrate_graph = hashrates[worker].hashrate_graph
             h.hashrate_5min += workers[worker].hashrate_5min = hashrates[worker].hashrate_5min
-            h.hashrate_1hr  += workers[worker].hashrate_1hr  = hashrates[worker].hashrate_1hr
-            h.hashrate_6hr  += workers[worker].hashrate_6hr  = hashrates[worker].hashrate_6hr
+            h.hashrate_1hr += workers[worker].hashrate_1hr = hashrates[worker].hashrate_1hr
+            h.hashrate_6hr += workers[worker].hashrate_6hr = hashrates[worker].hashrate_6hr
             h.hashrate_24hr += workers[worker].hashrate_24hr = hashrates[worker].hashrate_24hr
         }
 
@@ -135,14 +129,14 @@ export class Database {
 
         let diff = 0
         let height = 0
-        if(this.pool.blocks && this.pool.blocks.current) {
+        if (this.pool.blocks && this.pool.blocks.current) {
             diff = this.pool.blocks.current.difficulty
             height = this.pool.blocks.current.height
         }
 
         let averageEffort = 0
-        if(blockHashes.length) {
-            for(let hash of blockHashes) {
+        if (blockHashes.length) {
+            for (let hash of blockHashes) {
                 let block = blocks[hash]
                 averageEffort += block.hashes / block.diff
             }
@@ -151,7 +145,7 @@ export class Database {
 
         const roundHashes = this.getRoundHashes()
         let effort = 0
-        if(diff != 0) {
+        if (diff !== 0) {
             effort = Math.round(100 * roundHashes / diff) / 100
         }
 
@@ -177,27 +171,26 @@ export class Database {
         }
 
         return this.stats
-
     }
 
-    unlockBlocks() {
+    unlockBlocks () {
         const blocks = this.stmt.blocks_status_0.all()
-        for(const block of blocks) {
+        for (const block of blocks) {
             this.pool.sendRPC("get_block", { height: block.height }).then(data => {
-                if(data.hasOwnProperty("error")) {
+                if (data.hasOwnProperty("error")) {
                     logger.log("error", "Error calling get_block %j", [data.error.message])
                     return false
                 }
-                if(block.reward == -1) {
+                if (block.reward === -1) {
                     const json = JSON.parse(data.result.json)
                     const reward = json.miner_tx.vout[0].amount
                     this.stmt.blocks_update.run({ status: 0, reward: reward, hash: block.hash })
                 }
-                if(data.result.block_header.hash != block.hash) {
+                if (data.result.block_header.hash !== block.hash) {
                     logger.log("error", "Block %s ophaned", [block.hash])
                     this.stmt.blocks_update.run({ status: 1, reward: 0, hash: block.hash })
                 }
-                if(data.result.block_header.depth > 18) {
+                if (data.result.block_header.depth > 18) {
                     logger.log("success", "Block %s unlocked", [block.hash])
                     this.stmt.blocks_update.run({ status: 2, reward: block.reward, hash: block.hash })
                 }
@@ -205,35 +198,35 @@ export class Database {
         }
     }
 
-    getBlocks() {
+    getBlocks () {
         let blocks = {}
-        for(const block of this.stmt.blocks.all()) {
+        for (const block of this.stmt.blocks.all()) {
             blocks[block.hash] = block
         }
         return blocks
     }
 
-    getWorkers() {
+    getWorkers () {
         let workers = {}
-        for(const worker of this.stmt.workers.all()) {
+        for (const worker of this.stmt.workers.all()) {
             workers[worker.miner] = worker
         }
         return workers
     }
 
-    cleanStats() {
+    cleanStats () {
         const one_day = Date.now() - 24 * 60 * 60 * 1000
         this.stmt.hashrate_clean.run({ time: one_day })
         this.stmt.hashrate_avg_clean.run({ time: one_day })
         this.stmt.workers_clean.run({ time: one_day })
     }
 
-    getHashrates(workers) {
+    getHashrates (workers) {
         const dateNow = Date.now()
         const start_of_two_minute = dateNow - (dateNow % (2 * 60 * 1000))
 
         let hashrates = {}
-        for(let worker of Object.keys(workers)) {
+        for (let worker of Object.keys(workers)) {
             hashrates[worker] = {
                 hashrate_5min: 0,
                 hashrate_1hr: 0,
@@ -243,60 +236,60 @@ export class Database {
             }
         }
 
-        const hashrate_5min  = this.calcHashrate(5*60)
-        const hashrate_1hr   = this.calcHashrate(60*60)
-        const hashrate_6hr   = this.calcHashrate(6*60*60)
-        const hashrate_24hr  = this.calcHashrate(24*60*60)
+        const hashrate_5min = this.calcHashrate(5 * 60)
+        const hashrate_1hr = this.calcHashrate(60 * 60)
+        const hashrate_6hr = this.calcHashrate(6 * 60 * 60)
+        const hashrate_24hr = this.calcHashrate(24 * 60 * 60)
         const hashrate_graph = this.getHashrateGraph(workers)
 
-        for(let worker of Object.keys(hashrate_5min)) {
+        for (let worker of Object.keys(hashrate_5min)) {
             this.stmt.hashrate_avg_add.run({ miner: worker, time: start_of_two_minute, hashes: hashrate_5min[worker] })
             hashrates[worker].hashrate_5min = hashrate_5min[worker]
         }
-        for(let worker of Object.keys(hashrate_1hr)) {
+        for (let worker of Object.keys(hashrate_1hr)) {
             hashrates[worker].hashrate_1hr = hashrate_1hr[worker]
         }
-        for(let worker of Object.keys(hashrate_6hr)) {
+        for (let worker of Object.keys(hashrate_6hr)) {
             hashrates[worker].hashrate_6hr = hashrate_6hr[worker]
         }
-        for(let worker of Object.keys(hashrate_24hr)) {
+        for (let worker of Object.keys(hashrate_24hr)) {
             hashrates[worker].hashrate_24hr = hashrate_24hr[worker]
         }
-        for(let worker of Object.keys(hashrate_graph)) {
+        for (let worker of Object.keys(hashrate_graph)) {
             hashrates[worker].hashrate_graph = hashrate_graph[worker]
         }
 
         return hashrates
     }
 
-    calcHashrate(n_time = 300, end_time = false) {
-        if(!end_time) {
+    calcHashrate (n_time = 300, end_time = false) {
+        if (!end_time) {
             end_time = Date.now()
         }
         const start_time = end_time - n_time * 1000
 
         let hashrates = {}
-        for(const h of this.stmt.hashrate_calc.all({ start_time, end_time })) {
-            hashrates[h.miner] = Math.round(100 * h.hashes / Math.max(300, (end_time - h.start_time) / 1000) ) / 100
+        for (const h of this.stmt.hashrate_calc.all({ start_time, end_time })) {
+            hashrates[h.miner] = Math.round(100 * h.hashes / Math.max(300, (end_time - h.start_time) / 1000)) / 100
         }
         return hashrates
     }
 
-    getHashrateGraph(workers) {
+    getHashrateGraph (workers) {
         const dateNow = Date.now()
         const start_of_two_minute = dateNow - (dateNow % (2 * 60 * 1000))
 
         let graphs = {}
-        for(let worker of Object.keys(workers)) {
+        for (let worker of Object.keys(workers)) {
             graphs[worker] = {}
             // initialize hashrate graph to empty
-            for(let j = start_of_two_minute - 24 * 60 * 60 * 1000; j <= start_of_two_minute; j += 2 * 60 * 1000) {
+            for (let j = start_of_two_minute - 24 * 60 * 60 * 1000; j <= start_of_two_minute; j += 2 * 60 * 1000) {
                 graphs[worker][j] = 0
             }
         }
 
-        for(const h of this.stmt.hashrate_avg.all()) {
-            if(graphs.hasOwnProperty(h.miner)) {
+        for (const h of this.stmt.hashrate_avg.all()) {
+            if (graphs.hasOwnProperty(h.miner)) {
                 graphs[h.miner][h.time] = h.hashes
             }
         }
@@ -304,16 +297,16 @@ export class Database {
         return graphs
     }
 
-    getRoundHashes() {
+    getRoundHashes () {
         const row = this.stmt.round_hashes.get()
         return typeof row !== "undefined" ? row.hashes : 0
     }
 
-    addWorker(workerName) {
+    addWorker (workerName) {
         this.stmt.worker_add.run({ miner: workerName, lastShare: Date.now() })
     }
 
-    recordShare(miner, job, blockCandidate, hash, blockTemplate) {
+    recordShare (miner, job, blockCandidate, hash, blockTemplate) {
         const dateNow = Date.now()
         const workerName = miner.workerName
         const shareDiff = job.difficulty
@@ -330,7 +323,7 @@ export class Database {
         this.stmt.hashrate_add.run({ miner: workerName, time: dateNow, hashes: shareDiff })
 
         // If is block, add to block table
-        if(blockCandidate) {
+        if (blockCandidate) {
             const totalHashes = this.getRoundHashes()
             this.stmt.round_clear.run()
             this.stmt.blocks_add.run({
@@ -345,6 +338,5 @@ export class Database {
                 status: 0
             })
         }
-
     }
 }
