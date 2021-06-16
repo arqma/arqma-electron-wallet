@@ -597,21 +597,21 @@ export class WalletRPC {
                     continue
                 }
 
-                if (n.method === "getheight") {
+                if (wallet.info && n && n.result && n.method === "getheight") {
                     wallet.info.height = n.result.height
                     this.sendGateway("set_wallet_data", {
                         info: {
                             height: n.result.height
                         }
                     })
-                } else if (n.method === "get_address") {
+                } else if (wallet.info && n && n.result && n.method  === "get_address") {
                     wallet.info.address = n.result.address
                     this.sendGateway("set_wallet_data", {
                         info: {
                             address: n.result.address
                         }
                     })
-                } else if (n.method === "getbalance") {
+                } else if (wallet.info && n && n.result && this.wallet_state && n.method  === "getbalance") {
                     if (this.wallet_state.balance === n.result.balance &&
                         this.wallet_state.unlocked_balance === n.result.unlocked_balance) {
                         // continue
@@ -643,6 +643,7 @@ export class WalletRPC {
             }
         }
         catch(error) {
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
             didError = true
         }
 

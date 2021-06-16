@@ -21,7 +21,6 @@
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "lint-fix": "eslint --fix .",
     "test": "echo \"No test specified\" && exit 0",
-    "preinstall": "npm i -g npx",
     "postinstall": "npx electron-rebuild"
   },
   "dependencies": {
