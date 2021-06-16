@@ -580,13 +580,17 @@ export class WalletRPC {
                 address_book_starred: []
             }
         }
+        let data = []
         try {
-            let data = []
             data.push(await this.rpc.sendRPC_WithMD5("get_address", { account_index: 0 }, 5000))
             data.push(await this.rpc.sendRPC_WithMD5("getheight", {}, 5000))
             data.push(await this.rpc.sendRPC_WithMD5("getbalance", { account_index: 0 }, 5000))
 
-
+        } catch (error) {
+            didError = true
+            console.log('during adding <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+        }
+        try {
             for (let n of data) {
                 if (n.hasOwnProperty("error") || !n.hasOwnProperty("result")) {
                     // Maybe we also need to look into the other error codes it could give us
@@ -597,32 +601,50 @@ export class WalletRPC {
                     continue
                 }
 
-                if (wallet.info && n && n.result && n.method === "getheight") {
-                    wallet.info.height = n.result.height
-                    this.sendGateway("set_wallet_data", {
-                        info: {
-                            height: n.result.height
-                        }
-                    })
-                } else if (wallet.info && n && n.result && n.method  === "get_address") {
-                    wallet.info.address = n.result.address
-                    this.sendGateway("set_wallet_data", {
-                        info: {
-                            address: n.result.address
-                        }
-                    })
-                } else if (wallet.info && n && n.result && this.wallet_state && n.method  === "getbalance") {
-                    if (this.wallet_state.balance === n.result.balance &&
-                        this.wallet_state.unlocked_balance === n.result.unlocked_balance) {
-                        // continue
+                if (n.method === "getheight" && n.result && wallet.info) {
+                    try {
+                        wallet.info.height = n.result.height
+                        this.sendGateway("set_wallet_data", {
+                            info: {
+                                height: n.result.height
+                            }
+                        })
+                    } catch (error) {
+                        didError = true
+                        console.log('getheight', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                        break
                     }
-
-                    this.wallet_state.balance = wallet.info.balance = n.result.balance
-                    this.wallet_state.unlocked_balance = wallet.info.unlocked_balance = n.result.unlocked_balance
-                    this.sendGateway("set_wallet_data", {
-                        info: wallet.info
-                    })
-
+                } else if (n.method  === "get_address" && n.result && wallet.info) {
+                    try {
+                        wallet.info.address = n.result.address
+                        this.sendGateway("set_wallet_data", {
+                            info: {
+                                address: n.result.address
+                            }
+                        })
+                    } catch (error) {
+                        didError = true
+                        console.log('get_address', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                        break
+                    }
+                } else if (n.method  === "getbalance" && n.result && this.wallet_state) {
+                    try {
+                        if (this.wallet_state.balance === n.result.balance &&
+                            this.wallet_state.unlocked_balance === n.result.unlocked_balance) {
+                            // continue
+                        }
+    
+                        this.wallet_state.balance = wallet.info.balance = n.result.balance
+                        this.wallet_state.unlocked_balance = wallet.info.unlocked_balance = n.result.unlocked_balance
+                        this.sendGateway("set_wallet_data", {
+                            info: wallet.info
+                        })
+    
+                    } catch (error) {
+                        didError = true
+                        console.log('getbalance', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+                        break
+                    }
                     // if balance has recently changed, get updated list of transactions and used addresses
                     let actions = [
                         await this.getTransactions(),
@@ -632,18 +654,22 @@ export class WalletRPC {
                         actions.push(await this.getAddressBook())
                     }
                     Promise.all(actions).then((data) => {
-                        for (let n of data) {
-                            Object.keys(n).map(key => {
-                                wallet[key] = Object.assign(wallet[key], n[key])
-                            })
+                        try {
+                            for (let n of data) {
+                                Object.keys(n).map(key => {
+                                    wallet[key] = Object.assign(wallet[key], n[key])
+                                })
+                            }
+                            this.sendGateway("set_wallet_data", wallet)
+                        } catch (error) {
+                            didError = true
+                            console.log('after promise all', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
                         }
-                        this.sendGateway("set_wallet_data", wallet)
                     })
                 }
             }
         }
         catch(error) {
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', error, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
             didError = true
         }
 
