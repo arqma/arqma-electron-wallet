@@ -17,6 +17,8 @@ export class Daemon {
         this.daemon_info = {}
         this.dealer = {}
         this.zmq_enabled = false
+
+        
     }
 
     checkVersion () {
@@ -76,8 +78,8 @@ export class Daemon {
             })
         } else {
             this.rpc = new RPC()
-            let uri = `http://${options.daemon.remote_host}:${options.daemon.remote_port}/json_rpc`
-            return this.rpc.sendRPC("get_info", {}, uri)
+            let uri = `http://${options.daemons[options.app.net_type].remote_host}:${options.daemons[options.app.net_type].remote_port}/json_rpc`
+             return this.rpc.sendRPC("get_info", {}, uri)
         }
     }
 
@@ -87,9 +89,11 @@ export class Daemon {
             
             // save this info for later RPC calls
             this.protocol = "http://"
-            this.hostname = options.daemon.remote_host
-            this.port = options.daemon.remote_port
-            this.rpc = new RPC(this.protocol, options.daemon.remote_host, options.daemon.remote_port)
+            // this.hostname = options.daemon.remote_host
+            // this.port = options.daemon.remote_port
+            this.hostname = options.daemons[options.app.net_type].remote_host
+            this.port = options.daemons[options.app.net_type].remote_port
+            this.rpc = new RPC(this.protocol, this.hostname, this.port)
 
             return new Promise(async(resolve, reject) => {
                 const getInfoData = await this.rpc.sendRPC("get_info")
@@ -277,7 +281,6 @@ export class Daemon {
         }
 
         let end_time = new Date(Date.now() + seconds * 1000).toLocaleString()
-        console.log('banPeer sendGateway<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         this.sendGateway("show_notification", { message: "Banned " + host + " until " + end_time, timeout: 2000 })
 
         // Send updated peer and ban list
@@ -362,7 +365,7 @@ export class Daemon {
     async heartbeatAction () {
         try {
             let data = []
-
+            
             // No difference between local and remote heartbeat action for now
             if (this.local) {
                 data = [
@@ -373,10 +376,9 @@ export class Daemon {
                     await this.rpc.sendRPC("get_info")
                 ]
             }
-    
-    
-            let daemon_info = {
-            }
+           
+            let daemon_info = {}
+
             for (let n of data) {
                 if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
                 if (n.method === "get_info") {
@@ -386,7 +388,6 @@ export class Daemon {
             }
             this.sendGateway("set_daemon_data", daemon_info)
         } catch (error) {
-            console.log('fucker<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         }
     }
 
@@ -417,7 +418,6 @@ export class Daemon {
     }
 
     sendGateway (method, data) {
-        console.log("daemon sendGateway1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         if (data)
             this.backend.send(method, data)
         else

@@ -168,7 +168,6 @@ export class Gateway {
     }
 
     receive(message) {
-
         if (typeof message !== "object" ||
             !message.hasOwnProperty("event") ||
             !message.hasOwnProperty("data"))

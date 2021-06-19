@@ -48,6 +48,8 @@ export class WalletRPC {
                 daemon_address = `${options.daemon.remote_host}:${options.daemon.remote_port}`
             }
 
+            console.log(daemon_address, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+
             crypto.randomBytes(64 + 64 + 32, (err, buffer) => {
                 if (err) throw err
 
@@ -175,8 +177,8 @@ export class WalletRPC {
             break
 
         case "restore_wallet":
-            await this.restoreWallet(params.name, params.password, params.seed,
-                params.refresh_type, params.refresh_type === "date" ? params.refresh_start_date : params.refresh_start_height)
+                await this.restoreWallet(params.name, params.password, params.seed,
+                    params.refresh_type, params.refresh_type === "date" ? params.refresh_start_date : params.refresh_start_height)
             break
 
         case "restore_view_wallet":
@@ -515,6 +517,7 @@ export class WalletRPC {
 
     async openWallet (filename, password) {
         let openWalletData = await this.rpc.sendRPC_WithMD5("open_wallet", {filename, password})
+        console.log('openwallet <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         if (openWalletData.hasOwnProperty("error")) {
             this.sendGateway("set_wallet_error", { status: openWalletData.error })
             return

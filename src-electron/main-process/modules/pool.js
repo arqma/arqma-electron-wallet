@@ -73,7 +73,9 @@ export class Pool {
         this.hostname = options.daemon.rpc_bind_ip
         this.port = options.daemon.rpc_bind_port
 
+        try {
         this.rpc = new RPC(this.protocol, this.hostname, this.port)
+        }catch(error){console.log("WTF<<<<<<<<<<<<<<<<<<<<<<<")}
 
         try {
             this.sendStatus(0)
@@ -281,6 +283,7 @@ export class Pool {
 
     watchdog () {
         // check for desynced daemon and incorrect local clock
+        console.log("but why your turned off")
         this.checkHeight().then(response => {
             try {
                 const json = JSON.parse(response)
@@ -651,12 +654,14 @@ export class Pool {
     getBlock (force = false) {
         return new Promise(async(resolve, reject) => {
             const getBlockTemplateData = await this.rpc.sendRPC("get_block_template", this.BlockTemplateParameters)
+            console.log("getBlock<<<<<<<<<<<<<<<<<<<<<<,")
             const result = this.addBlockAndInformMiners(getBlockTemplateData, force)
             !result ? resolve() : reject(result)
         })
     }
 
     submitBlock (block) {
+        console.log("submitBlock<<<<<<<<<<<<<<<<<<<<")
         return this.rpc.sendRPC("submit_block", [block], false)
     }
 
