@@ -20,28 +20,28 @@ export class RPC {
     }
 
     async callAPI (params = {}, options = {}) {
-        const protocol = options.protocol || this.protocol
-        const hostname = options.hostname || this.hostname
-        const port = options.port || this.port
-        const endpoint = options.endpoint || this.endpoint
-        let url = `${protocol}${hostname}:${port}${endpoint}`
-        let requestOptions = {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            },
-            agent: new https.Agent({ keepAlive: true, maxSockets: 1 })
-        }
-        if (Object.keys(params).length !== 0) {
-            requestOptions.body = JSON.stringify(params)
-        }
-        // console.log(url, ' ', requestOptions)
         try {
-            let response = await fetch(url, requestOptions)
-            return {
-                params: params,
-                result: await response.json()
+            const protocol = options.protocol || this.protocol
+            const hostname = options.hostname || this.hostname
+            const port = options.port || this.port
+            const endpoint = options.endpoint || this.endpoint
+            let url = `${protocol}${hostname}:${port}${endpoint}`
+            let requestOptions = {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                },
+                agent: new https.Agent({ keepAlive: true, maxSockets: 1 })
             }
+            if (Object.keys(params).length !== 0) {
+                requestOptions.body = JSON.stringify(params)
+            }
+            // console.log(url, ' ', requestOptions)
+                let response = await fetch(url, requestOptions)
+                return {
+                    params: params,
+                    result: await response.json()
+                }
         } catch (error) {
             return {
                 params: params,
@@ -55,31 +55,31 @@ export class RPC {
     }
 
     async sendRPC (method, params = {}, uri = false) {
-        let id = this.id++
-        let url = uri ? uri : `${this.protocol}${this.hostname}:${this.port}/json_rpc`
-        let body = {
-            jsonrpc: "2.0",
-            id: id,
-            method: method,
-        }
-        let requestOptions = {
-            method: "POST",
-            agent: new http.Agent({ keepAlive: true, maxSockets: 1 })
-        }
-        if (Array.isArray(params) || Object.keys(params).length !== 0) {
-            body.params = params
-        }
-
-        requestOptions.body = JSON.stringify(body)
-        // console.log(url, ' ', requestOptions)
         try {
-            let response = await fetch(url, requestOptions)
-            let data = await response.json()
-            return {
+            let id = this.id++
+            let url = uri ? uri : `${this.protocol}${this.hostname}:${this.port}/json_rpc`
+            let body = {
+                jsonrpc: "2.0",
+                id: id,
                 method: method,
-                params: params,
-                result: data.result
             }
+            let requestOptions = {
+                method: "POST",
+                agent: new http.Agent({ keepAlive: true, maxSockets: 1 })
+            }
+            if (Array.isArray(params) || Object.keys(params).length !== 0) {
+                body.params = params
+            }
+
+            requestOptions.body = JSON.stringify(body)
+            // console.log(url, ' ', requestOptions)
+                let response = await fetch(url, requestOptions)
+                let data = await response.json()
+                return {
+                    method: method,
+                    params: params,
+                    result: data.result
+                }
         }catch(error) {
             return {
                 method: method,
@@ -94,27 +94,27 @@ export class RPC {
     }
 
     async sendRPC_WithMD5 (method, params = {}, timeout = 0) {
-        let id = this.id++
-        let url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
-        let body = {
-            jsonrpc: "2.0",
-            id: id,
-            method: method,
-        }
-        let requestOptions = {
-            method: "POST",
-            agent: new http.Agent({ keepAlive: true, maxSockets: 1 })
-        }
-        if (Object.keys(params).length !== 0) {
-            body.params = params
-        }
-        if (timeout) {
-            requestOptions.timeout = timeout
-        }
-
-        requestOptions.body = JSON.stringify(body)
-        // console.log(url, ' ', requestOptions)
         try {
+            let id = this.id++
+            let url = `${this.protocol}${this.hostname}:${this.port}/json_rpc`
+            let body = {
+                jsonrpc: "2.0",
+                id: id,
+                method: method,
+            }
+            let requestOptions = {
+                method: "POST",
+                agent: new http.Agent({ keepAlive: true, maxSockets: 1 })
+            }
+            if (Object.keys(params).length !== 0) {
+                body.params = params
+            }
+            if (timeout) {
+                requestOptions.timeout = timeout
+            }
+
+            requestOptions.body = JSON.stringify(body)
+            // console.log(url, ' ', requestOptions)
             let response = await this.client.fetch(url, requestOptions)
             let data = await response.json()
             return {
@@ -123,6 +123,7 @@ export class RPC {
                 result: data.result
             }
         }catch(error) {
+            console.log('sendRPC_WithMD5<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
             return {
                 method: method,
                 params: params,

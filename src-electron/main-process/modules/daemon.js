@@ -277,6 +277,7 @@ export class Daemon {
         }
 
         let end_time = new Date(Date.now() + seconds * 1000).toLocaleString()
+        console.log('banPeer sendGateway<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         this.sendGateway("show_notification", { message: "Banned " + host + " until " + end_time, timeout: 2000 })
 
         // Send updated peer and ban list
@@ -359,30 +360,34 @@ export class Daemon {
     }
 
     async heartbeatAction () {
-        let data = []
+        try {
+            let data = []
 
-        // No difference between local and remote heartbeat action for now
-        if (this.local) {
-            data = [
-                await this.rpc.sendRPC("get_info")
-            ]
-        } else {
-            data = [
-                await this.rpc.sendRPC("get_info")
-            ]
-        }
-
-
-        let daemon_info = {
-        }
-        for (let n of data) {
-            if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
-            if (n.method === "get_info") {
-                daemon_info.info = n.result
-                this.daemon_info = n.result
+            // No difference between local and remote heartbeat action for now
+            if (this.local) {
+                data = [
+                    await this.rpc.sendRPC("get_info")
+                ]
+            } else {
+                data = [
+                    await this.rpc.sendRPC("get_info")
+                ]
             }
+    
+    
+            let daemon_info = {
+            }
+            for (let n of data) {
+                if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
+                if (n.method === "get_info") {
+                    daemon_info.info = n.result
+                    this.daemon_info = n.result
+                }
+            }
+            this.sendGateway("set_daemon_data", daemon_info)
+        } catch (error) {
+            console.log('fucker<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         }
-        this.sendGateway("set_daemon_data", daemon_info)
     }
 
     async heartbeatSlowAction (daemon_info = {}) {
@@ -396,7 +401,7 @@ export class Daemon {
             data = []
         }
 
-        if (data.length === 0) return
+        if (!data || data.length === 0) return
 
         for (let n of data) {
             if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
@@ -412,7 +417,11 @@ export class Daemon {
     }
 
     sendGateway (method, data) {
-        this.backend.send(method, data)
+        console.log("daemon sendGateway1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        if (data)
+            this.backend.send(method, data)
+        else
+        console.log("daemon sendGateway2<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     }
 
     quit () {
