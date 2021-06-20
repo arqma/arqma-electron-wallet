@@ -362,7 +362,6 @@ export class WalletRPC {
             
             this.finalizeNewWallet(filename)
         } catch (error) {
-            console.log("restoreWallet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
             this.sendGateway("set_wallet_error", { status: error })
         }
     }
@@ -518,7 +517,6 @@ export class WalletRPC {
 
     async openWallet (filename, password) {
         let openWalletData = await this.rpc.sendRPC_WithMD5("open_wallet", {filename, password})
-        console.log('openwallet <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         if (openWalletData.hasOwnProperty("error")) {
             this.sendGateway("set_wallet_error", { status: openWalletData.error })
             return
@@ -597,7 +595,6 @@ export class WalletRPC {
 
         } catch (error) {
             didError = true
-            console.log('during adding <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         }
         try {
             for (let n of data) {
@@ -620,7 +617,6 @@ export class WalletRPC {
                         })
                     } catch (error) {
                         didError = true
-                        console.log('getheight', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
                         break
                     }
                 } else if (n.method  === "get_address" && n.result && wallet.info) {
@@ -633,7 +629,6 @@ export class WalletRPC {
                         })
                     } catch (error) {
                         didError = true
-                        console.log('get_address', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
                         break
                     }
                 } else if (n.method  === "getbalance" && n.result && this.wallet_state) {
@@ -651,7 +646,6 @@ export class WalletRPC {
     
                     } catch (error) {
                         didError = true
-                        console.log('getbalance', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
                         break
                     }
                     // if balance has recently changed, get updated list of transactions and used addresses
@@ -677,7 +671,6 @@ export class WalletRPC {
                             }
                         } catch (error) {
                             didError = true
-                            console.log('after promise all', '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
                         }
                     })
                 }
@@ -969,7 +962,6 @@ export class WalletRPC {
                 }
             }
             catch (error) {
-                console.log("getAddressList<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 resolve({})
             }
         })
@@ -1021,7 +1013,6 @@ export class WalletRPC {
 
                 resolve(wallet)
             } catch (error) {
-                console.log("getTransactions<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
                 reject()
             }
         })
