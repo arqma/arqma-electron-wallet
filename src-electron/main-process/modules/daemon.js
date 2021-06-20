@@ -418,10 +418,8 @@ export class Daemon {
     }
 
     sendGateway (method, data) {
-        if (data)
+        // if (data)
             this.backend.send(method, data)
-        else
-        console.log("daemon sendGateway2<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     }
 
     quit () {

@@ -114,17 +114,16 @@ export class RPC {
             }
 
             requestOptions.body = JSON.stringify(body)
-            console.log(url, ' ', requestOptions)
+            // console.log(url, ' ', requestOptions)
             let response = await this.client.fetch(url, requestOptions)
             let data = await response.json()
-            console.log(data)
+            // console.log(data)
             return {
                 method: method,
                 params: params,
                 result: data.result
             }
         }catch(error) {
-            console.log('sendRPC_WithMD5<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', error)
             return {
                 method: method,
                 params: params,

@@ -45,10 +45,11 @@ export class WalletRPC {
         return new Promise((resolve, reject) => {
             let daemon_address = `${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`
             if (options.daemon.type === "remote") {
-                daemon_address = `${options.daemon.remote_host}:${options.daemon.remote_port}`
+                // daemon_address = `${options.daemon.remote_host}:${options.daemon.remote_port}`
+                daemon_address = `${options.daemons[options.app.net_type].remote_host}:${options.daemons[options.app.net_type].remote_port}`
             }
 
-            console.log(daemon_address, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+
 
             crypto.randomBytes(64 + 64 + 32, (err, buffer) => {
                 if (err) throw err
