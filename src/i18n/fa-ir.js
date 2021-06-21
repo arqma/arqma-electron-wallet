@@ -429,7 +429,38 @@ export default {
         saveToAddressBook: "ذخیره در دفترچه آدرس",
         seedWords: "کلمات هسته",
         selectLanguage: "انتخاب زبان",
+        serviceNodeContributionDescription:
+        "Staking contributes to the safety of the ARQMA network. For your contribution, you earn ARQMA. Once staked, you will have to wait either 15 or 30 days to have your ARQMA unlocked, depending on if a stake was unlocked by a contributor or the node was deregistered. To learn more about staking, please visit the documentation on the",
         serviceNodeRegistrationDescription: "وارد نمایید {registerCommand} توضیحات ثبت خدمات نود ،دستور تولید شبکه ثبت نود برای تبدیل به خدمات نود \"{prepareCommand}\" دستور",
+
+
+
+        serviceNodeStartStakingDescription:
+        "To start staking, please visit the Staking tab",
+        noServiceNodesCurrentlyAvailable:
+            "There are currently no service nodes available for contribution",
+        serviceNodeDetails: {
+            contributors: "Contributors",
+            lastRewardBlockHeight: "Last reward block height",
+            lastUptimeProof: "Last uptime proof",
+            maxContribution: "Max contribution",
+            minContribution: "Min contribution",
+            operatorFee: "Operator Fee",
+            registrationHeight: "Registration height",
+            unlockHeight: "Unlock height",
+            reserved: "Reserved",
+            serviceNodeKey: "Service Node Key",
+            snKey: "SN Key",
+            stakingRequirement: "Staking requirement",
+            totalContributed: "Total contributed"
+        },
+        signAndVerifyDescription:
+            "Sign data with your primary address's private key or verify a signature against a public address.",
+
+
+
+
+
         spendKey: "کلید صرف شدن",
         startingDaemon: "شروع شبکه",
         startingWallet: "شروع کیف پول",
@@ -465,7 +496,8 @@ export default {
         userNotUsedAddress: "شما از این آدرس استفاده نکرده اید",
         userUsedAddress: "شما از این آدرس استفاده کرده اید",
         viewKey: "مشاهده کلید",
-        viewOnlyMode: "فقط حالت مشاهده، لطفا برای ارسال ارز کیف پول را کامل بارگیری نمایید."
+        viewOnlyMode: "فقط حالت مشاهده، لطفا برای ارسال ارز کیف پول را کامل بارگیری نمایید.",
+        website: "website"
     },
     titles: {
         addressBook: "دفترچه آدرس",
@@ -474,15 +506,22 @@ export default {
             checkTransaction: "بررسی تراکنش ها",
             prove: "ثابت کردن"
         },
+        availableForContribution: "Service nodes available for contribution",
         changePassword: "تغییر رمز عبور",
         configure: "پیکربندی",
         currentlyStakedNodes: "نود های موجود در حال حاظر",
+        onsRecordDetails: "ONS record details",
+        onsSessionRecords: "Session records",
+        onsArqmaRecords: "Arqma records",
+        onsWalletRecords: "Wallet records",
         privateKeys: "کلیدهای خصوصی",
         rescanWallet: "بازبینی کیف پول",
         serviceNode: {
             registration: "ثبت",
-            staking: "گرفتن"
+            staking: "گرفتن",
+            myStakes: "My Stakes"
         },
+        serviceNodeDetails: "Service node details",
         settings: {
             title: "تنظیمات",
             tabs: {

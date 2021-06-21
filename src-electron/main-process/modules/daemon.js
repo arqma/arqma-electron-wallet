@@ -360,6 +360,12 @@ export class Daemon {
             await this.heartbeatAction()
         }, this.local ? 5 * 1000 : 30 * 1000) // 5 seconds for local daemon, 30 seconds for remote
         await this.heartbeatAction()
+
+        clearInterval(this.serviceNodeHeartbeat)
+        this.serviceNodeHeartbeat = setInterval(async() => {
+          await this.updateServiceNodes()
+        }, 5 * 60 * 1000); // 5 minutes
+        await this.updateServiceNodes()
     }
 
     async heartbeatAction () {
@@ -416,6 +422,22 @@ export class Daemon {
         }
         this.sendGateway("set_daemon_data", daemon_info)
     }
+
+    async updateServiceNodes() {
+        const service_nodes = {
+          fetching: true,
+          nodes: []
+        }
+        this.sendGateway("set_daemon_data", { service_nodes })
+        let data = await this.rpc.sendRPC("get_service_nodes")
+        if (!data.result) return
+    
+        if (data.result.service_node_states)
+        service_nodes.nodes = data.result.service_node_states
+        service_nodes.fetching = false
+
+        this.sendGateway("set_daemon_data", { service_nodes })
+      }
 
     sendGateway (method, data) {
         // if (data)

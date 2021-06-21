@@ -532,23 +532,34 @@ footer,
 
 .service-node-list {
     .q-item {
-        background: #313131;
+        cursor: pointer;
+        color: #1F1C47;
+        background: white;
         -webkit-transition: background-color 0.2s ease-in;
         transition: background-color 0.2s ease-in;
 
-        border-radius: 3px;
+        border: 1px solid #1F1C47;
+        border-radius: 4px;
 
         + .q-item {
             margin-top: 10px;
         }
+
+        .contrib-amounts {
+            color: #1F1C47;
+        }
+    }
+    
+    .q-item-label {
+        color: #1F1C47;
     }
 
-    .q-item-sublabel {
-        color: $arqma-black-50;
+    .fee {
+        color: #1F1C47;
     }
 
     .q-item:hover {
-        background: rgba(117,117,117,0.3);
+        background: $off-grey;
     }
 
 }
@@ -642,5 +653,14 @@ footer,
     .title {
         color: #b7b7b7;
         font-size: 14px;
+    }
+}
+
+.serviceNodeDetails {
+    .address {
+        color: white;
+    }
+    .name {
+        color: #979797;
     }
 }

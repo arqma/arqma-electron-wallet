@@ -429,7 +429,38 @@ export default {
         saveToAddressBook: "保存到地址簿",
         seedWords: "种子词",
         selectLanguage: "选择语言",
+        serviceNodeContributionDescription:
+        "Staking contributes to the safety of the ARQMA network. For your contribution, you earn ARQMA. Once staked, you will have to wait either 15 or 30 days to have your ARQMA unlocked, depending on if a stake was unlocked by a contributor or the node was deregistered. To learn more about staking, please visit the documentation on the",
         serviceNodeRegistrationDescription: "输入 {registerCommand} 由守护进程生成的命令，该守护进程使用注册成为服务节点 \"{prepareCommand}\" 命令",
+
+
+
+        serviceNodeStartStakingDescription:
+        "To start staking, please visit the Staking tab",
+        noServiceNodesCurrentlyAvailable:
+            "There are currently no service nodes available for contribution",
+        serviceNodeDetails: {
+            contributors: "Contributors",
+            lastRewardBlockHeight: "Last reward block height",
+            lastUptimeProof: "Last uptime proof",
+            maxContribution: "Max contribution",
+            minContribution: "Min contribution",
+            operatorFee: "Operator Fee",
+            registrationHeight: "Registration height",
+            unlockHeight: "Unlock height",
+            reserved: "Reserved",
+            serviceNodeKey: "Service Node Key",
+            snKey: "SN Key",
+            stakingRequirement: "Staking requirement",
+            totalContributed: "Total contributed"
+        },
+        signAndVerifyDescription:
+            "Sign data with your primary address's private key or verify a signature against a public address.",
+
+
+
+
+
         spendKey: "花钱钥匙",
         startingDaemon: "启动守护进程",
         startingWallet: "启动钱包",
@@ -465,7 +496,8 @@ export default {
         userNotUsedAddress: "你还没有用过这个地址",
         userUsedAddress: "您已使用此地址",
         viewKey: "查看密钥",
-        viewOnlyMode: "仅查看模式。 请加载完整的钱包以发送硬币."
+        viewOnlyMode: "仅查看模式。 请加载完整的钱包以发送硬币.",
+        website: "website"
     },
     titles: {
         addressBook: "地址簿",
@@ -474,15 +506,22 @@ export default {
             checkTransaction: "检查交易",
             prove: "证明"
         },
+        availableForContribution: "Service nodes available for contribution",
         changePassword: "更改密码",
         configure: "配置",
         currentlyStakedNodes: "目前赌注的节点",
+        onsRecordDetails: "ONS record details",
+        onsSessionRecords: "Session records",
+        onsArqmaRecords: "Arqma records",
+        onsWalletRecords: "Wallet records",
         privateKeys: "私钥",
         rescanWallet: "重新扫描钱包",
         serviceNode: {
             registration: "注册",
-            staking: "罢工"
+            staking: "罢工",
+            myStakes: "My Stakes"
         },
+        serviceNodeDetails: "Service node details",
         settings: {
             title: "设置",
             tabs: {

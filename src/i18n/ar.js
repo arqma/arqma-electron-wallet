@@ -442,7 +442,37 @@ export default {
         saveToAddressBook: "حفظ في دفتر العناوين ",
         seedWords: "كلمات الأمان",
         selectLanguage: "اختار اللغة",
+        serviceNodeContributionDescription:
+        "Staking contributes to the safety of the ARQMA network. For your contribution, you earn ARQMA. Once staked, you will have to wait either 15 or 30 days to have your ARQMA unlocked, depending on if a stake was unlocked by a contributor or the node was deregistered. To learn more about staking, please visit the documentation on the",
         serviceNodeRegistrationDescription: "ادخل {registerCommand} الأمر الذي تم إنشاؤه بواسطة البرنامج الخفي الذي يتم تسجيله ليصبح عقدة خدمة باستخدام  \"{prepareCommand}\" الأمر",
+
+
+        serviceNodeStartStakingDescription:
+        "To start staking, please visit the Staking tab",
+        noServiceNodesCurrentlyAvailable:
+            "There are currently no service nodes available for contribution",
+        serviceNodeDetails: {
+            contributors: "Contributors",
+            lastRewardBlockHeight: "Last reward block height",
+            lastUptimeProof: "Last uptime proof",
+            maxContribution: "Max contribution",
+            minContribution: "Min contribution",
+            operatorFee: "Operator Fee",
+            registrationHeight: "Registration height",
+            unlockHeight: "Unlock height",
+            reserved: "Reserved",
+            serviceNodeKey: "Service Node Key",
+            snKey: "SN Key",
+            stakingRequirement: "Staking requirement",
+            totalContributed: "Total contributed"
+        },
+        signAndVerifyDescription:
+            "Sign data with your primary address's private key or verify a signature against a public address.",
+
+
+
+
+
         spendKey: "مفتاح الإنفاق",
         startingDaemon: "بدء البرنامج الخفي",
         startingWallet: "بدء المحفظة ",
@@ -478,7 +508,8 @@ export default {
         userNotUsedAddress: "لم تستخدم هذا العنوان",
         userUsedAddress: "لقد استخدمت هذا العنوان",
         viewKey: "عرض مفتاح",
-        viewOnlyMode: "طريقة العرض فقط. يرجى تحميل المحفظة كاملة لإرسال العملات المعدنية."
+        viewOnlyMode: "طريقة العرض فقط. يرجى تحميل المحفظة كاملة لإرسال العملات المعدنية.",
+        website: "website"
     },
     titles: {
         addressBook: "دليل العناوين",
@@ -487,15 +518,22 @@ export default {
             checkTransaction: "تحقق من المعاملة ",
             prove: "إثبات"
         },
+        availableForContribution: "Service nodes available for contribution",
         changePassword: "تغيير كلمة المرور",
         configure: "تهيئة",
         currentlyStakedNodes: "العقد المتوقفة حاليًا",
+        onsRecordDetails: "ONS record details",
+        onsSessionRecords: "Session records",
+        onsArqmaRecords: "Arqma records",
+        onsWalletRecords: "Wallet records",
         privateKeys: "مفاتيح خاصة",
         rescanWallet: "إعادة فحص المحفظة",
         serviceNode: {
             registration: "التسجيل",
-            staking: "الرهان"
+            staking: "الرهان",
+            myStakes: "My Stakes"
         },
+        serviceNodeDetails: "Service node details",
         settings: {
             title: "إعدادات",
             tabs: {

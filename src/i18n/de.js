@@ -442,7 +442,38 @@ export default {
         saveToAddressBook: "In Adressbuch speichern",
         seedWords: "Seed-Wörter",
         selectLanguage: "Sprache auswählen",
+        serviceNodeContributionDescription:
+        "Staking contributes to the safety of the ARQMA network. For your contribution, you earn ARQMA. Once staked, you will have to wait either 15 or 30 days to have your ARQMA unlocked, depending on if a stake was unlocked by a contributor or the node was deregistered. To learn more about staking, please visit the documentation on the",
         serviceNodeRegistrationDescription: "Hier den {registerComand} Befehl, der mit Hilfe des Daemons durch das Kommando {prepareCommand} erzeugt wurde, eingeben, um eine Service Node zu aktivieren",
+
+
+
+        serviceNodeStartStakingDescription:
+        "To start staking, please visit the Staking tab",
+        noServiceNodesCurrentlyAvailable:
+            "There are currently no service nodes available for contribution",
+        serviceNodeDetails: {
+            contributors: "Contributors",
+            lastRewardBlockHeight: "Last reward block height",
+            lastUptimeProof: "Last uptime proof",
+            maxContribution: "Max contribution",
+            minContribution: "Min contribution",
+            operatorFee: "Operator Fee",
+            registrationHeight: "Registration height",
+            unlockHeight: "Unlock height",
+            reserved: "Reserved",
+            serviceNodeKey: "Service Node Key",
+            snKey: "SN Key",
+            stakingRequirement: "Staking requirement",
+            totalContributed: "Total contributed"
+        },
+        signAndVerifyDescription:
+            "Sign data with your primary address's private key or verify a signature against a public address.",
+
+
+
+
+
         spendKey: "Bezahlschlüssel",
         startingDaemon: "Daemon wird gestartet",
         startingWallet: "Wallet wird gestartet",
@@ -478,7 +509,8 @@ export default {
         userNotUsedAddress: "Du hast diese Adresse nicht benutzt",
         userUsedAddress: "Du hast diese Adresse benutzt",
         viewKey: "Anzeige-Schlüssel",
-        viewOnlyMode: "Nur Anzeige Modus. Bitte die volle Wallet laden um Coins zu senden"
+        viewOnlyMode: "Nur Anzeige Modus. Bitte die volle Wallet laden um Coins zu senden",
+        website: "website"
     },
     titles: {
         addressBook: "Adressbuch",
@@ -487,15 +519,22 @@ export default {
             checkTransaction: "CHECK TRANSACTION",
             prove: "PROVE"
         },
+        availableForContribution: "Service nodes available for contribution",
         changePassword: "Passwort ändern",
         configure: "Konfiguration",
         currentlyStakedNodes: "Currently staked nodes",
+        onsRecordDetails: "ONS record details",
+        onsSessionRecords: "Session records",
+        onsArqmaRecords: "Arqma records",
+        onsWalletRecords: "Wallet records",
         privateKeys: "Private Keys",
         rescanWallet: "Wallet erneut scannen",
         serviceNode: {
             registration: "REGISTRIERUNG",
-            staking: "STAKING"
+            staking: "STAKING",
+            myStakes: "My Stakes"
         },
+        serviceNodeDetails: "Service node details",
         settings: {
             title: "Einstellungen",
             tabs: {

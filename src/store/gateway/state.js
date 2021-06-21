@@ -63,6 +63,26 @@ export default {
         code: 0,
         message: ""
     },
+    service_node_status: {
+        stake: {
+          code: 0,
+          message: "",
+          i18n: "",
+          sending: false
+        },
+        registration: {
+          code: 0,
+          message: "",
+          i18n: "",
+          sending: false
+        },
+        unlock: {
+          code: 0,
+          message: "",
+          i18n: "",
+          sending: false
+        }
+      },
     prove_transaction_status: {
         code: 0,
         message: "",

@@ -426,7 +426,37 @@ export default {
         saveToAddressBook: "Uložit do adresáře",
         seedWords: "Seed slova",
         selectLanguage: "Zvolte jazyk",
+        serviceNodeContributionDescription:
+        "Staking contributes to the safety of the ARQMA network. For your contribution, you earn ARQMA. Once staked, you will have to wait either 15 or 30 days to have your ARQMA unlocked, depending on if a stake was unlocked by a contributor or the node was deregistered. To learn more about staking, please visit the documentation on the",
         serviceNodeRegistrationDescription: "Vložte {registerCommand} příkaz vytvořený daemonem, který se registruje, aby se stal service node \"{prepareCommand}\" příkazem", // *?
+
+
+        serviceNodeStartStakingDescription:
+        "To start staking, please visit the Staking tab",
+        noServiceNodesCurrentlyAvailable:
+            "There are currently no service nodes available for contribution",
+        serviceNodeDetails: {
+            contributors: "Contributors",
+            lastRewardBlockHeight: "Last reward block height",
+            lastUptimeProof: "Last uptime proof",
+            maxContribution: "Max contribution",
+            minContribution: "Min contribution",
+            operatorFee: "Operator Fee",
+            registrationHeight: "Registration height",
+            unlockHeight: "Unlock height",
+            reserved: "Reserved",
+            serviceNodeKey: "Service Node Key",
+            snKey: "SN Key",
+            stakingRequirement: "Staking requirement",
+            totalContributed: "Total contributed"
+        },
+        signAndVerifyDescription:
+            "Sign data with your primary address's private key or verify a signature against a public address.",
+
+
+
+
+
         spendKey: "Spend key",
         startingDaemon: "Start daemona",
         startingWallet: "Spouštění peněženky",
@@ -462,7 +492,8 @@ export default {
         userNotUsedAddress: "Tuto adresu jste nepoužili",
         userUsedAddress: "Tuto adresu jste použili",
         viewKey: "View key",
-        viewOnlyMode: "Zobrazit pouze režim náhledu. Nahrajte prosím celou peněženku, abyste mohli posílat mince."
+        viewOnlyMode: "Zobrazit pouze režim náhledu. Nahrajte prosím celou peněženku, abyste mohli posílat mince.",
+        website: "website"
     },
     titles: {
         addressBook: "Adresář",
@@ -471,15 +502,22 @@ export default {
             checkTransaction: "ZKONTROLUJTE TRANSAKCI",
             prove: "PROVE"// **
         },
+        availableForContribution: "Service nodes available for contribution",
         changePassword: "Změnit heslo",
         configure: "Konfigurace",
         currentlyStakedNodes: "Currently staked nodes", // **
+        onsRecordDetails: "ONS record details",
+        onsSessionRecords: "Session records",
+        onsArqmaRecords: "Arqma records",
+        onsWalletRecords: "Wallet records",
         privateKeys: "Private keys",
         rescanWallet: "Prohledat znovu peněženku",
         serviceNode: {
             registration: "REGISTRACE",
-            staking: "STAKING"
+            staking: "STAKING",
+            myStakes: "My Stakes"
         },
+        serviceNodeDetails: "Service node details",
         settings: {
             title: "Nastavení",
             tabs: {

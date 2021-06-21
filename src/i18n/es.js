@@ -429,7 +429,38 @@ export default {
         saveToAddressBook: "Guardar en la libreta de direcciones",
         seedWords: "Palabras semilla",
         selectLanguage: "Escoja un idioma",
+        serviceNodeContributionDescription:
+        "Staking contributes to the safety of the ARQMA network. For your contribution, you earn ARQMA. Once staked, you will have to wait either 15 or 30 days to have your ARQMA unlocked, depending on if a stake was unlocked by a contributor or the node was deregistered. To learn more about staking, please visit the documentation on the",
         serviceNodeRegistrationDescription: "Introduzca la orden {registerCommand} generada por el servicio (arqmad) que se está intentado registrar como Nodo de Servicio usando la instrucción \"{prepareCommand}\"",
+
+
+
+        serviceNodeStartStakingDescription:
+        "To start staking, please visit the Staking tab",
+        noServiceNodesCurrentlyAvailable:
+            "There are currently no service nodes available for contribution",
+        serviceNodeDetails: {
+            contributors: "Contributors",
+            lastRewardBlockHeight: "Last reward block height",
+            lastUptimeProof: "Last uptime proof",
+            maxContribution: "Max contribution",
+            minContribution: "Min contribution",
+            operatorFee: "Operator Fee",
+            registrationHeight: "Registration height",
+            unlockHeight: "Unlock height",
+            reserved: "Reserved",
+            serviceNodeKey: "Service Node Key",
+            snKey: "SN Key",
+            stakingRequirement: "Staking requirement",
+            totalContributed: "Total contributed"
+        },
+        signAndVerifyDescription:
+            "Sign data with your primary address's private key or verify a signature against a public address.",
+
+
+
+
+
         spendKey: "Clave de gasto",
         startingDaemon: "Iniciando servicio",
         startingWallet: "Iniciando monedero",
@@ -464,7 +495,8 @@ export default {
         userNotUsedAddress: "No ha utilizado esta dirección",
         userUsedAddress: "Ha utilizado esta dirección",
         viewKey: "Clave de visualización",
-        viewOnlyMode: "Este monedero solo permite visualizar operaciones. Por favor, abra uno completo para poder transferir fondos."
+        viewOnlyMode: "Este monedero solo permite visualizar operaciones. Por favor, abra uno completo para poder transferir fondos.",
+        website: "website"
     },
     titles: {
         addressBook: "Libreta de direcciones",
@@ -473,15 +505,22 @@ export default {
             checkTransaction: "CHECK TRANSACTION",
             prove: "PROVE"
         },
+        availableForContribution: "Service nodes available for contribution",
         changePassword: "Modificar contraseña",
         configure: "Configurar",
         currentlyStakedNodes: "Currently staked nodes",
+        onsRecordDetails: "ONS record details",
+        onsSessionRecords: "Session records",
+        onsArqmaRecords: "Arqma records",
+        onsWalletRecords: "Wallet records",
         privateKeys: "Claves privadas",
         rescanWallet: "Volver a examinar monedero",
         serviceNode: {
             registration: "REGISTRO",
-            staking: "PARTICIPACIÓN"
+            staking: "PARTICIPACIÓN",
+            myStakes: "My Stakes"
         },
+        serviceNodeDetails: "Service node details",
         settings: {
             title: "Configuración",
             tabs: {
