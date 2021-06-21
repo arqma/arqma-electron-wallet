@@ -17,6 +17,8 @@ export class Daemon {
         this.daemon_info = {}
         this.dealer = {}
         this.zmq_enabled = false
+
+        
     }
 
     checkVersion () {
@@ -76,8 +78,8 @@ export class Daemon {
             })
         } else {
             this.rpc = new RPC()
-            let uri = `http://${options.daemon.remote_host}:${options.daemon.remote_port}/json_rpc`
-            return this.rpc.sendRPC("get_info", {}, uri)
+            let uri = `http://${options.daemons[options.app.net_type].remote_host}:${options.daemons[options.app.net_type].remote_port}/json_rpc`
+             return this.rpc.sendRPC("get_info", {}, uri)
         }
     }
 
@@ -87,9 +89,11 @@ export class Daemon {
             
             // save this info for later RPC calls
             this.protocol = "http://"
-            this.hostname = options.daemon.remote_host
-            this.port = options.daemon.remote_port
-            this.rpc = new RPC(this.protocol, options.daemon.remote_host, options.daemon.remote_port)
+            // this.hostname = options.daemon.remote_host
+            // this.port = options.daemon.remote_port
+            this.hostname = options.daemons[options.app.net_type].remote_host
+            this.port = options.daemons[options.app.net_type].remote_port
+            this.rpc = new RPC(this.protocol, this.hostname, this.port)
 
             return new Promise(async(resolve, reject) => {
                 const getInfoData = await this.rpc.sendRPC("get_info")
@@ -359,30 +363,32 @@ export class Daemon {
     }
 
     async heartbeatAction () {
-        let data = []
-
-        // No difference between local and remote heartbeat action for now
-        if (this.local) {
-            data = [
-                await this.rpc.sendRPC("get_info")
-            ]
-        } else {
-            data = [
-                await this.rpc.sendRPC("get_info")
-            ]
-        }
-
-
-        let daemon_info = {
-        }
-        for (let n of data) {
-            if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
-            if (n.method === "get_info") {
-                daemon_info.info = n.result
-                this.daemon_info = n.result
+        try {
+            let data = []
+            
+            // No difference between local and remote heartbeat action for now
+            if (this.local) {
+                data = [
+                    await this.rpc.sendRPC("get_info")
+                ]
+            } else {
+                data = [
+                    await this.rpc.sendRPC("get_info")
+                ]
             }
+           
+            let daemon_info = {}
+
+            for (let n of data) {
+                if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
+                if (n.method === "get_info") {
+                    daemon_info.info = n.result
+                    this.daemon_info = n.result
+                }
+            }
+            this.sendGateway("set_daemon_data", daemon_info)
+        } catch (error) {
         }
-        this.sendGateway("set_daemon_data", daemon_info)
     }
 
     async heartbeatSlowAction (daemon_info = {}) {
@@ -396,7 +402,7 @@ export class Daemon {
             data = []
         }
 
-        if (data.length === 0) return
+        if (!data || data.length === 0) return
 
         for (let n of data) {
             if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
@@ -412,7 +418,8 @@ export class Daemon {
     }
 
     sendGateway (method, data) {
-        this.backend.send(method, data)
+        // if (data)
+            this.backend.send(method, data)
     }
 
     quit () {

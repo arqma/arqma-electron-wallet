@@ -73,7 +73,9 @@ export class Pool {
         this.hostname = options.daemon.rpc_bind_ip
         this.port = options.daemon.rpc_bind_port
 
+
         this.rpc = new RPC(this.protocol, this.hostname, this.port)
+
 
         try {
             this.sendStatus(0)
