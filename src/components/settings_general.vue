@@ -1,47 +1,45 @@
 <template>
 <div class="settings-general">
     <div class="row justify-between q-mb-md">
-        <div><q-radio v-model="config.daemon.type" val="local_remote" label="Local + Remote Daemon" /></div>
-        <div><q-radio v-model="config.daemon.type" val="local" label="Local Daemon Only" /></div>
-        <div><q-radio v-model="config.daemon.type" val="remote" label="Remote Daemon Only" /></div>
-        <div><q-radio v-model="config.daemon.type" val="local_zmq" label="ZMQ Daemon Only" /></div>
+        <div><q-radio v-model="config.daemon.type" val="local_remote" :label="$t('strings.daemon.localRemote.title')" /></div>
+        <div><q-radio v-model="config.daemon.type" val="local" :label="$t('strings.daemon.local.title')" /></div>
+        <div><q-radio v-model="config.daemon.type" val="remote" :label="$t('strings.daemon.remote.title')" /></div>
+        <div><q-radio v-model="config.daemon.type" val="local_zmq" :label="$t('strings.daemon.zmq.title')" /></div>
     </div>
 
     <p v-if="config.daemon.type == 'local_remote'">
-        Get started quickly with this default option. Wallet will download the full blockchain, but use a remote node while syncing.
+        {{ $t("strings.daemon.localRemote.description") }}
     </p>
     <p v-if="config.daemon.type == 'local'">
-        Full security, wallet will download the full blockchain. You will not be able to transact until sync is completed.
+        {{ $t("strings.daemon.local.description") }}
     </p>
     <p v-if="config.daemon.type == 'remote'">
-        Less security, wallet will connect to a remote node to make all transactions.
+        {{ $t("strings.daemon.remote.description") }}
     </p>
 
     <q-field v-if="config.daemon.type != 'remote' && config.daemon.type != 'local_zmq'">
         <div class="row gutter-sm items-end">
             <div class="col-8">
-                <q-input v-model="config.daemon.rpc_bind_ip" float-label="Local Daemon IP" :dark="theme=='dark'" disable />
+                <q-input v-model="config.daemon.rpc_bind_ip" :float-label="$t('fieldLabels.localDaemonIP')"
+                         :dark="theme=='dark'" disable/>
             </div>
             <div class="col-4">
-                <q-input v-model="config.daemon.rpc_bind_port" float-label="Local Daemon Port (RPC)" type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'" />
+                <q-input v-model="config.daemon.rpc_bind_port" :float-label="$t('fieldLabels.localDaemonPort')"
+                         type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'"/>
             </div>
         </div>
     </q-field>
 
     <q-field v-if="config.daemon.type != 'local' && config.daemon.type != 'local_zmq'">
-    <div class="row q-mt-md pl-sm">
-        <div class="col-8" label="Remote Node Host">
-            <q-input
-                v-model="config_daemon.remote_host"
-                float-label="Remote Node Host"
-                :placeholder="daemon_defaults.remote_host"
-                :dark="theme=='dark'"
-
-            />
+        <div class="row q-mt-md pl-sm">
+            <div class="col-8" label="Remote Node Host">
+                <q-input v-model="config_daemon.remote_host" :float-label="$t('fieldLabels.remoteNodeHost')"
+                         :placeholder="daemon_defaults.remote_host" :dark="theme=='dark'"/>
                 <!-- Remote node presets -->
-               <q-btn-dropdown class="remote-dropdown" v-if="config.app.net_type === 'mainnet'" flat>
+                <q-btn-dropdown class="remote-dropdown" v-if="config.app.net_type === 'mainnet'" flat>
                     <q-list link dark no-border>
-                        <q-item v-for="option in remotes" v-bind:key="option.host" @click.native="setPreset(option)" v-close-overlay>
+                        <q-item v-for="option in remotes" v-bind:key="option.host" @click.native="setPreset(option)"
+                                v-close-overlay>
                             <q-item-main>
                                 <q-item-tile label>{{ option.host }}:{{ option.port }}</q-item-tile>
                             </q-item-main>
@@ -50,46 +48,35 @@
                 </q-btn-dropdown>
             </div>
             <div class="col-4">
-            <q-input
-               v-model="config_daemon.remote_port"
-               float-label="Remote Port (RPC)"
-               :placeholder="toString(daemon_defaults.remote_port)"
-               type="number"
-               :decimals="0"
-               :step="1"
-               min="1024"
-               max="65535"
-               :dark="theme=='dark'"
-
-           />
+                <q-input v-model="config_daemon.remote_port" :float-label="$t('fieldLabels.remoteNodePort')"
+                    :placeholder="toString(daemon_defaults.remote_port)" type="number" :decimals="0" :step="1"
+                    min="1024" max="65535" :dark="theme=='dark'"/>
             </div>
         </div>
-
     </q-field>
 
     <q-field v-if="config.daemon.type === 'local_zmq'">
         <div class="row gutter-sm items-end">
             <div class="col-8">
-                <q-input v-model="config.daemon.zmq_bind_ip" float-label="Local Daemon IP" :dark="theme=='dark'" disable />
+                <q-input v-model="config.daemon.zmq_bind_ip" :float-label="$t('fieldLabels.daemonZMQIP')" :dark="theme=='dark'"
+                         disable/>
             </div>
             <div class="col-4">
-                <q-input v-model="config.daemon.zmq_bind_port" float-label="Local Daemon Port (ZMQ)" type="number" :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'" />
+                <q-input v-model="config.daemon.zmq_bind_port" :float-label="$t('fieldLabels.daemonZMQPort')" type="number"
+                         :decimals="0" :step="1" min="1024" max="65535" :dark="theme=='dark'"/>
             </div>
         </div>
-
     </q-field>
 
     <q-field>
         <div class="row gutter-sm items-end">
             <div class="col-8">
-                <q-input v-model="config.app.data_dir" stack-label="Data Storage Path" disable :dark="theme=='dark'" />
+                <q-input v-model="config.app.data_dir" :stack-label="$t('fieldLabels.dataStoragePath')" disable :dark="theme=='dark'" />
                 <input type="file" webkitdirectory directory id="dataPath" v-on:change="setDataPath" ref="fileInput" hidden />
             </div>
             <div class="col-4">
-                <q-btn v-on:click="selectPath"
-                       :color="theme=='dark'?'dark':'standard'"
-                       :text-color="theme=='dark'?'white':'dark'">
-                    Select Location
+                <q-btn v-on:click="selectPath" :color="theme=='dark'?'dark':'standard'" :text-color="theme=='dark'?'white':'dark'">
+                    {{$t('buttons.selectLocation')}}
                 </q-btn>
             </div>
         </div>
@@ -98,26 +85,23 @@
     <q-field v-if="config.daemon.type != 'remote'">
         <div class="row gutter-sm items-end">
             <div class="col-8">
-                <q-select :dark="theme=='dark'"
-                          v-model="config.daemon.enhanced_ip_privacy"
-                          float-label="Do you plan to keep the wallet turned on 24/7?"
-                          :options="enhancedPrivacyOptions"
-                          />
+                <q-select :dark="theme=='dark'" v-model="config.daemon.enhanced_ip_privacy"
+                          :float-label="$t('fieldLabels.wallet247')" :options="enhancedPrivacyOptions" />
             </div>
         </div>
     </q-field>
 
-    <q-collapsible label="Advanced Options" header-class="non-selectable row reverse advanced-options-label">
+    <q-collapsible :label="$t('strings.advancedOptions')" header-class="non-selectable row reverse advanced-options-label">
 
         <q-field>
             <div class="row gutter-sm items-end">
                 <div class="col-3">
                     <q-input v-model="config.daemon.log_level" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Daemon Log Level" type="number" :decimals="0" :step="1" min="0" max="4" />
+                             :float-label="$t('fieldLabels.daemonLogLevel')" type="number" :decimals="0" :step="1" min="0" max="4" />
                 </div>
                 <div class="col-3">
                     <q-input v-model="config.wallet.log_level" :dark="theme=='dark'"
-                             float-label="Wallet Log Level" type="number" :decimals="0" :step="1" min="0" max="4" />
+                             :float-label="$t('fieldLabels.walletLogLevel')" type="number" :decimals="0" :step="1" min="0" max="4" />
                 </div>
 
                 <!--
@@ -128,8 +112,8 @@
                 </template>
                 -->
 
-                <div class="col-3 self-center">
-                    <q-checkbox v-model="config.app.testnet" label="Testnet" />
+                <div class="col-3 self-center" >
+                    <q-checkbox v-model="config.app.testnet" :label="$t('fieldLabels.testnet')" />
                 </div>
             </div>
         </q-field>
@@ -137,19 +121,19 @@
             <div class="row gutter-sm items-end">
                 <div class="col-3">
                     <q-input v-model="config.daemon.in_peers" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Max Incoming Peers" type="number" :decimals="0" :step="1" min="-1" max="65535" />
+                             :float-label="$t('fieldLabels.maxIncomingPeers')" type="number" :decimals="0" :step="1" min="-1" max="65535" />
                 </div>
                 <div class="col-3">
                     <q-input v-model="config.daemon.out_peers" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Max Outgoing Peers" type="number" :decimals="0" :step="1" min="-1" max="65535" />
+                             :float-label="$t('fieldLabels.maxOutgoingPeers')" type="number" :decimals="0" :step="1" min="-1" max="65535" />
                 </div>
                 <div class="col-3">
                     <q-input v-model="config.daemon.limit_rate_up" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Limit Upload Rate" type="number" suffix="kB/s" :decimals="0" :step="1" min="-1" max="65535" />
+                             :float-label="$t('fieldLabels.limitUploadRate')" type="number" suffix="kB/s" :decimals="0" :step="1" min="-1" max="65535" />
                 </div>
                 <div class="col-3">
                     <q-input v-model="config.daemon.limit_rate_down" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Limit Download Rate" type="number" suffix="kB/s" :decimals="0" :step="1" min="-1" max="65535" />
+                             :float-label="$t('fieldLabels.limitDownloadRate')" type="number" suffix="kB/s" :decimals="0" :step="1" min="-1" max="65535" />
                 </div>
             </div>
         </q-field>
@@ -157,15 +141,15 @@
             <div class="row gutter-sm items-end">
                 <div class="col-3">
                     <q-input v-model="config.daemon.p2p_bind_port" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Daemon P2P Port" type="number" :decimals="0" :step="1" min="1024" max="65535" />
+                             :float-label="$t('fieldLabels.daemonP2pPort')" type="number" :decimals="0" :step="1" min="1024" max="65535" />
                 </div>
                 <div class="col-3">
                     <q-input v-model="config.daemon.rpc_bind_port" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Daemon RPC Port" type="number" :decimals="0" :step="1" min="1024" max="65535" />
+                             :float-label="$t('fieldLabels.localDaemonPort')" type="number" :decimals="0" :step="1" min="1024" max="65535" />
                 </div>
                 <div class="col-3">
                     <q-input v-model="config.wallet.rpc_bind_port" :disable="config.daemon.type == 'remote'" :dark="theme=='dark'"
-                             float-label="Wallet RPC Port" type="number" :decimals="0" :step="1" min="1024" max="65535" />
+                             :float-label="$t('fieldLabels.walletRPCPort')" type="number" :decimals="0" :step="1" min="1024" max="65535" />
                 </div>
             </div>
         </q-field>
@@ -175,15 +159,16 @@
 </template>
 
 <script>
+import { i18n } from "plugins/i18n"
 import { mapState } from "vuex"
 export default {
     name: "SettingsGeneral",
     data () {
         return {
             enhancedPrivacyOptions: [
-                {label: "No - private network mode", value: true},
-                {label: "Yes - interconnected network mode", value: false}
-            ],
+                {label: i18n.t("strings.enhancedOptions.privateNetworkMode"), value: true},
+                {label: i18n.t("strings.enhancedOptions.interconnectedNetworkMode"), value: false}
+            ]
         }
     },
     computed: mapState({
@@ -223,7 +208,10 @@ export default {
 
             const { host, port } = option;
             if (host) this.config_daemon.remote_host = host;
-            if (port) this.config_daemon.remote_port = port;        },
+            if (port) this.config_daemon.remote_port = port; 
+            
+            console.log(host, '&&&&&&&&&&&&&&&&&&', port)
+        },
         toString (value) {
             if (!value && typeof value !== "number") return ""
             return String(value);

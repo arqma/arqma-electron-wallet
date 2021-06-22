@@ -33,7 +33,7 @@
 
             <q-item v-close-overlay
                     @click.native="$refs.identicon.saveIdenticon()">
-                <q-item-main label="Save identicon to file" />
+                <q-item-main :label="$t('menuItems.saveIdenticon')" />
             </q-item>
         </q-list>
     </q-context-menu>

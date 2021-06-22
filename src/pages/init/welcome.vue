@@ -7,8 +7,8 @@
 
             <div class="welcome-container">
                 <img src="statics/arqma.svg" height="100" class="q-mb-md">
-                <div>Wallet Version: v{{version}}</div>
-                <div>Deamon Version: v{{daemonVersion}}</div>
+                <div>{{ $t("titles.versionWallet") }}: v{{ version }}</div>
+                <div>{{ $t("titles.versionDaemon") }}: v{{ daemonVersion }}</div>
 
                 <language-select
                     class="q-mt-lg"
@@ -85,6 +85,7 @@ export default {
         },
         clickNext () {
             if(this.$refs.stepper.steps[this.$refs.stepper.length-1].active) {
+                console.log(this.pending_config)
                 this.$gateway.send("core", "save_config_init", this.pending_config);
                 this.$router.replace({ path: "/" });
             } else {
@@ -128,7 +129,6 @@ export default {
     border: 1px solid #ccc;
     cursor: pointer;
 
-
     .language-item-circle {
         background: #cc90e2;
         width: 50px;
@@ -149,6 +149,5 @@ export default {
         padding-top: 0;
         padding-bottom: 0;
     }
-
 }
 </style>

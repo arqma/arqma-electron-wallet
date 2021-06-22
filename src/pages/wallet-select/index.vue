@@ -2,16 +2,13 @@
 <q-page>
     <template v-if="!wallets.list.length">
         <div class="q-px-md q-py-lg">
-            <h2 class="q-my-sm text-weight-thin">Welcome to Arqma Wallet Atom</h2>
-            <p>To get started, select one of the options below.</p>
-
+            <h2 class="q-my-sm text-weight-thin">{{ $t('titles.welcomeNoWallet') }}</h2>
+            <p>{{ $t('strings.getStarted') }}</p>
         </div>
     </template>
 
-
     <q-list link no-border :dark="theme=='dark'">
         <template v-if="wallets.list.length">
-
             <q-item-main :label="$t('buttons.openWallet')" />
             <q-item v-for="(wallet, index) in wallets.list" :key="index" @click.native="openWallet(wallet)">
                 <q-item-side>
@@ -38,17 +35,17 @@
                     <q-list link separator style="min-width: 150px; max-height: 300px;">
                         <q-item v-close-overlay
                                 @click.native="openWallet(wallet)">
-                                <q-item-main :label="$t('buttons.openWallet')" />
+                                <q-item-main :label="$t('menuItems.openWallet')" />
                         </q-item>
 
                         <q-item v-close-overlay
                                 @click.native="copyAddress(wallet.address, $event)">
-                            <q-item-main label="Copy address" />
+                            <q-item-main :label="$t('menuItems.copyAddress')" />
                         </q-item>
 
                         <q-item v-close-overlay
                                 @click.native="$refs[`${index}-identicon`][0].saveIdenticon()">
-                            <q-item-main label="Save identicon to file" />
+                            <q-item-main :label="$t('menuItems.saveIdenticon')" />
                         </q-item>
                     </q-list>
                 </q-context-menu>
@@ -56,6 +53,7 @@
             </q-item>
             <q-item-separator />
         </template>
+
         <q-item @click.native="createNewWallet()">
             <q-item-side>
                 <q-icon name="add_circle_outline" size="40px" />

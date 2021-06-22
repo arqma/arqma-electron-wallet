@@ -51,7 +51,6 @@ export default {
             cancel: "CANCEL",
             open: "OPEN"
         },
-
         // Dialogs
         banPeer: {
             title: "Ban peer",
@@ -168,7 +167,8 @@ export default {
         confirmPassword: "CONFIRM PASSWORD",
         daemonLogLevel: "DAEMON LOG LEVEL",
         daemonP2pPort: "DAEMON P2P PORT",
-        daemonZMQPort: "DAEMON ZMQ PORT",
+        daemonZMQIP: "ZMQ DAEMON IP",
+        daemonZMQPort: "ZMQ DAEMON PORT",
         dataStoragePath: "DATA STORAGE PATH",
         filter: "FILTER",
         filterTransactionType: "FILTER BY TRANSACTION TYPE",
@@ -180,7 +180,7 @@ export default {
         limitDownloadRate: "LIMIT DOWNLOAD RATE",
         limitUploadRate: "LIMIT UPLOAD RATE",
         localDaemonIP: "LOCAL DAEMON IP",
-        localDaemonPort: "LOCAL DAEMON PORT",
+        localDaemonPort: "LOCAL DAEMON PORT (RPC)",
         maxIncomingPeers: "MAX INCOMING PEERS",
         maxOutgoingPeers: "MAX OUTGOING PEERS",
         message: "MESSAGE",
@@ -201,6 +201,7 @@ export default {
         serviceNodeKey: "SERVICE NODE KEY",
         signature: "SIGNATURE",
         transactionId: "TRANSACTION ID",
+        wallet247: "DO YOU PLAN TO KEEP THE WALLET TURNED ON 24/7?",
         walletFile: "WALLET FILE",
         walletLogLevel: "WALLET LOG LEVEL",
         walletName: "WALLET NAME",
@@ -218,8 +219,8 @@ export default {
         rescanFullBlockchain: "Rescan full blockchain",
         rescanSpentOutputs: "Rescan spent outputs",
         transactionNotes: "Transaction Notes",
-        chooseNetwork: "Choose a Network",
-        network: "Network"
+        network: "Network",
+        testnet: "Testnet"
     },
     footer: {
         ready: "READY",
@@ -250,12 +251,14 @@ export default {
         rescanWallet: "Rescan Wallet",
         restoreWalletFile: "Restore wallet from file",
         restoreWalletSeed: "Restore wallet from seed",
+        saveIdenticon: "Save identicon to file",
         saveQR: "Save QR code to file",
         sendToThisAddress: "Send to this address",
         settings: "Settings",
         showDetails: "Show details",
         showPrivateKeys: "Show Private Keys",
         showQRCode: "Show QR Code",
+        soloMining: "Solo Mining",
         switchWallet: "Switch Wallet",
         viewOnExplorer: "View on explorer"
     },
@@ -370,6 +373,7 @@ export default {
         confirmWords: "Confirm your mnemonic seed words",
         enter7words: "Enter the first seven words of your mnemonic seed in the correct order:",
         usingEmptyPass: "Using an empty password will leave your wallet unencrypted on your file system!",
+        usingInsecurePass: "Using an insecure password could allow attackers to brute-force your wallet!",
         checkTransaction: {
             description: "Verify that funds were paid to an address by supplying the transaction ID, the recipient address, the message used for signing and the signature.\nFor a 'Spend Proof' you dont need to provide the recipient address.",
             infoTitles: {
@@ -398,10 +402,18 @@ export default {
             remote: {
                 title: "Remote Daemon Only",
                 description: "Less security, wallet will connect to a remote node to make all transactions."
+            },
+            zmq: {
+                title: "ZMQ Daemon Only"
             }
         },
         destinationUnknown: "Destination Unknown",
         editAddressBookEntry: "Edit address book entry",
+        enhancedOptions: {
+            privateNetworkMode: "No - private network mode",
+            interconnectedNetworkMode: "Yes - interconnected network mode"
+        },
+        getStarted: "To get started, select one of the options below:",
         loading: "Loading...",
         loadingSettings: "Loading settings",
         arqmaBalance: "Balance",
@@ -412,6 +424,7 @@ export default {
         notes: "Notes",
         numberOfUnspentOutputs: "Number of unspent outputs",
         paymentID: "Payment ID",
+        passwordStrength: "Password strength",
         peerList: "Peer list",
         priorityOptions: {
             automatic: "Automatic",
@@ -504,7 +517,10 @@ export default {
             restoreFromSeed: "Restore wallet from seed",
             restoreViewOnly: "Restore view-only wallet"
         },
+        versionDaemon: "Daemon Version",
+        versionWallet: "Wallet Version",
         welcome: "Welcome",
+        welcomeNoWallet: "Welcome to Arqma Electron Wallet",
         yourWallets: "Your Wallets"
     },
     headers: {

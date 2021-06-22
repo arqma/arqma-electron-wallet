@@ -17,7 +17,8 @@ export default ({
             pl: require("date-fns/locale/pl"),
             cs: require("date-fns/locale/cs"),
             cn: require("date-fns/locale/zh_cn"),
-            fa: require("date-fns/locale/pl")
+            fa: require("date-fns/locale/pl"),
+            ar: require("date-fns/locale/ar")
 
         }
     })
