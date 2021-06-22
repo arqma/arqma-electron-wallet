@@ -21,12 +21,13 @@
     "rebuild": "electron-rebuild -f -w better-sqlite3",
     "lint-fix": "eslint --fix .",
     "test": "echo \"No test specified\" && exit 0",
+    "preinstall": "npm i -g npx",
     "postinstall": "npx electron-rebuild"
   },
   "dependencies": {
     "acorn": "^8.2.4",
     "axios": "^0.21.1",
-    "better-sqlite3": "^5.4.0",
+    "better-sqlite3": "7.4.1",
     "big-integer": "^1.6.41",
     "buffer": "^6.0.3",
     "bufferutil": "^4.0.3",
