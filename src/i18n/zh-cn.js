@@ -519,7 +519,7 @@ export default {
         serviceNode: {
             registration: "注册",
             staking: "罢工",
-            myStakes: "My Stakes"
+            myStakes: "MY STAKES"
         },
         serviceNodeDetails: "Service node details",
         settings: {

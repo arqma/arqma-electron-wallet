@@ -4,7 +4,7 @@
       <p>
         {{ $t("strings.serviceNodeContributionDescription") }}
         <span style="cursor: pointer; text-decoration: underline;" @click="lokiWebsite"
-          >Loki {{ $t("strings.website") }}.</span
+          >Arqma {{ $t("strings.website") }}.</span
         >
       </p>
       <ArqmaField :label="$t('fieldLabels.serviceNodeKey')" :error="$v.service_node.key.$error">
@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     lokiWebsite() {
-      const url = "https://docs.loki.network/ServiceNodes/StakingRequirement/";
+      const url = "https://arqma.com/ServiceNodes/StakingRequirement/";
       this.$gateway.send("core", "open_url", {
         url
       });

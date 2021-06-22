@@ -518,7 +518,7 @@ export default {
         serviceNode: {
             registration: "РЕГИСТРАЦИЯ",
             staking: "СТЕЙК",
-            myStakes: "My Stakes"
+            myStakes: "MY STAKES"
         },
         serviceNodeDetails: "Service node details",
         settings: {
