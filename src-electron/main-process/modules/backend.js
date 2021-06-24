@@ -3,6 +3,7 @@ import { WalletRPC } from "./wallet-rpc"
 import { Market } from "./market"
 import { Pool } from "./pool"
 import { ipcMain, dialog } from "electron"
+import { logger } from "./pool/utils"
 
 const os = require("os")
 const fs = require("fs")
@@ -281,20 +282,23 @@ export class Backend {
                 this.config_data.pool[key] = Object.assign(this.config_data.pool[key], params[key])
             })
             fs.writeFile(this.config_file, JSON.stringify(this.config_data, null, 4), "utf8", () => {
+                console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', this.config_data)
                 this.send("set_app_data", {
                     config: this.config_data
                 })
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
-                if (this.pool) {
+
+                if (!originalServerState) {
+                    if (!this.pool)
+                        this.pool = new Pool(this)
                     this.pool.init(this.config_data)
-                    if (!originalServerState) {
-                        if (this.config_data.pool.server.enabled && this.config_data.daemon.type === "local_zmq") {
-                            this.pool.startWithZmq()
-                        }
-                    } else {
-                        if (!this.config_data.pool.server.enabled) {
-                            this.pool.stop()
-                        }
+                    if (this.config_data.pool.server.enabled && this.config_data.daemon.type === "local_zmq") {
+                        this.pool.startWithZmq()
+                    }
+                } else {
+                    if (!this.config_data.pool.server.enabled && this.pool) {
+                        this.pool.stop()
                     }
                 }
             })

@@ -14,6 +14,7 @@ const http = require("http")
 const fetch = require("node-fetch")
 
 
+
 export class Pool {
     constructor (backend) {
         this.backend = backend
@@ -58,7 +59,7 @@ export class Pool {
 
         this.checkHeight().then(response => {
             logger.log("info", "Contacted remote API -- watchdog is active")
-        }).catch(() => {
+        }).catch((error) => {
             logger.log("warn", "Could not contact remote API")
         })
     }

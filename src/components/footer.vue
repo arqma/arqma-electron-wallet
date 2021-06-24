@@ -24,7 +24,7 @@
                 <div>Solo Mining: Waiting for daemon...</div>
             </template>
             <template v-if="pool.status == 2">
-                <div>Solo Mining: {{ pool.stats.h.hashrate_5min | hashrate }}</div>
+                <div>Solo Mining: {{ hashrate_5min | hashrate }}</div>
             </template>
         </template>
 
@@ -48,6 +48,12 @@ export default {
         daemon: state => state.gateway.daemon,
         wallet: state => state.gateway.wallet,
         pool: state => state.gateway.pool,
+
+        hashrate_5min (state) {
+            if (this.pool.stats && this.pool.stats.h)
+                return this.pool.stats.h.hashrate_5min
+            return 0
+        },
 
         target_height (state) {
             if(this.config.daemon.type === "local_zmq")
