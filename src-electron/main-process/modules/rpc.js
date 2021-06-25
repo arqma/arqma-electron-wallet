@@ -37,11 +37,11 @@ export class RPC {
                 requestOptions.body = JSON.stringify(params)
             }
             // console.log(url, ' ', requestOptions)
-                let response = await fetch(url, requestOptions)
-                return {
-                    params: params,
-                    result: await response.json()
-                }
+            let response = await fetch(url, requestOptions)
+            return {
+                params: params,
+                result: await response.json()
+            }
         } catch (error) {
             return {
                 params: params,
@@ -73,23 +73,23 @@ export class RPC {
 
             requestOptions.body = JSON.stringify(body)
             // console.log(url, ' ', requestOptions)
-                let response = await fetch(url, requestOptions)
-                let data = await response.json()
-                let message = {
-                    method,
-                    params
-                }
-                if ('error' in data)
-                {
-                    message.error = {code: -1,
-                                    message: 'message' in data.error ? data.error.message: "Cannot connect to wallet-rpc",
-                                    cause: 'errno' in data.error ? data.error.errno : ""
-                                    }
-                }
-                else {
-                    message.result = data.result
-                }
-                return message
+            let response = await fetch(url, requestOptions)
+            let data = await response.json()
+            let message = {
+                method,
+                params
+            }
+            if ('error' in data)
+            {
+                message.error = {code: -1,
+                                message: 'message' in data.error ? data.error.message: "Cannot connect to wallet-rpc",
+                                cause: 'errno' in data.error ? data.error.errno : ""
+                                }
+            }
+            else {
+                message.result = data.result
+            }
+            return message
         }catch(error) {
             return {
                 method: method,

@@ -244,9 +244,9 @@ export class Daemon {
         })
     }
 
-    handle (data) {
-        let params = data.data
-        switch (data.method) {
+    handle (value) {
+        let params = value.data
+        switch (value.method) {
         case "ban_peer":
             this.banPeer(params.host, params.seconds)
             break
@@ -316,7 +316,7 @@ export class Daemon {
                         return reject()
                     }
 
-                    let new_pivot = [data.result.block_header.height, data.result.block_header.timestamp]
+                    let new_pivot = [blockHeaderByHeightData.result.block_header.height, blockHeaderByHeightData.result.block_header.timestamp]
 
                     // If we are within an hour that is good enough
                     // If for some reason there is a > 1h gap between blocks
@@ -333,7 +333,7 @@ export class Daemon {
                 }
             }
 
-            let new_pivot = [data.result.block_header.height, data.result.block_header.timestamp]
+            let new_pivot = [blockHeaderByHeightData.result.block_header.height, blockHeaderByHeightData.result.block_header.timestamp]
 
             // If we are within an hour that is good enough
             // If for some reason there is a > 1h gap between blocks
@@ -364,22 +364,22 @@ export class Daemon {
 
     async heartbeatAction () {
         try {
-            let data = []
+            let heartBeatActionData = []
             
             // No difference between local and remote heartbeat action for now
             if (this.local) {
-                data = [
+                heartBeatActionData = [
                     await this.rpc.sendRPC("get_info")
                 ]
             } else {
-                data = [
+                heartBeatActionData = [
                     await this.rpc.sendRPC("get_info")
                 ]
             }
            
             let daemon_info = {}
 
-            for (let n of data) {
+            for (let n of heartBeatActionData) {
                 if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
                 if (n.method === "get_info") {
                     daemon_info.info = n.result
@@ -392,19 +392,19 @@ export class Daemon {
     }
 
     async heartbeatSlowAction (daemon_info = {}) {
-        let data = []
+        let heartbeatSlowActionData = []
         if (this.local) {
-            data = [
+            heartbeatSlowActionData = [
                 await this.rpc.sendRPC("get_connections"),
                 await this.rpc.sendRPC("get_bans")
             ]
         } else {
-            data = []
+            heartbeatSlowActionData = []
         }
 
-        if (!data || data.length === 0) return
+        if (!heartbeatSlowActionData || heartbeatSlowActionData.length === 0) return
 
-        for (let n of data) {
+        for (let n of heartbeatSlowActionData) {
             if (n === undefined || !n.hasOwnProperty("result") || n.result === undefined) { continue }
             if (n.method === "get_connections" && n.result.hasOwnProperty("connections")) {
                 daemon_info.connections = n.result.connections
