@@ -31,7 +31,8 @@ export class Backend {
         this.remotes = [{ host: "eu.supportarqma.com", port: 19994 },
             { host: "node.supportarqma.com", port: 19994 },
             { host: "jp.supportarqma.com", port: 19994 },
-            { host: "us.supportarqma.com", port: 19994 }]
+            { host: "us.supportarqma.com", port: 19994 },
+            { host: "checkmyarqmablocks.club", port: 19994 }]
 
         if (os.platform() == "win32") {
             this.config_dir = "C:\\ProgramData\\arqma"

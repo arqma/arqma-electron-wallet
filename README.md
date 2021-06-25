@@ -18,13 +18,13 @@ Please submit any changes as pull requests to the development branch, all change
 
 #### Commands
 ```
-nvm use 11.9.0
+nvm use 12.20.2 ##install with nvm install 12.20.2)
 npm install -g quasar-cli
 git clone https://github.com/arqma/arqma-electron-wallet
 cd arqma-electron-gui-wallet
 cp path_to_arqma_binaries/arqmad bin/
 cp path_to_arqma_binaries/arqma-wallet-rpc bin/
-npm install
+npm install --force
 ```
 
 For dev:
