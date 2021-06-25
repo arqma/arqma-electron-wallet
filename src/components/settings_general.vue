@@ -209,8 +209,6 @@ export default {
             const { host, port } = option;
             if (host) this.config_daemon.remote_host = host;
             if (port) this.config_daemon.remote_port = port; 
-            
-            console.log(host, '&&&&&&&&&&&&&&&&&&', port)
         },
         toString (value) {
             if (!value && typeof value !== "number") return ""

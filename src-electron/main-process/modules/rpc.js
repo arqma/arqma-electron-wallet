@@ -75,11 +75,21 @@ export class RPC {
             // console.log(url, ' ', requestOptions)
                 let response = await fetch(url, requestOptions)
                 let data = await response.json()
-                return {
-                    method: method,
-                    params: params,
-                    result: data.result
+                let message = {
+                    method,
+                    params
                 }
+                if ('error' in data)
+                {
+                    message.error = {code: -1,
+                                    message: 'message' in data.error ? data.error.message: "Cannot connect to wallet-rpc",
+                                    cause: 'errno' in data.error ? data.error.errno : ""
+                                    }
+                }
+                else {
+                    message.result = data.result
+                }
+                return message
         }catch(error) {
             return {
                 method: method,
@@ -117,12 +127,21 @@ export class RPC {
             // console.log(url, ' ', requestOptions)
             let response = await this.client.fetch(url, requestOptions)
             let data = await response.json()
-            // console.log(data)
-            return {
-                method: method,
-                params: params,
-                result: data.result
+            let message = {
+                method,
+                params
             }
+            if ('error' in data)
+            {
+                message.error = {code: -1,
+                                message: 'message' in data.error ? data.error.message: "Cannot connect to wallet-rpc",
+                                cause: 'errno' in data.error ? data.error.errno : ""
+                                }
+            }
+            else {
+                message.result = data.result
+            }
+            return message
         }catch(error) {
             return {
                 method: method,
@@ -130,7 +149,7 @@ export class RPC {
                 error: {
                     code: -1,
                     message: "Cannot connect to wallet-rpc",
-                    cause: error.errno
+                    cause: 'errno' in error ? error.errno : ""
                 }
             }
         }

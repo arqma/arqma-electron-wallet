@@ -282,12 +282,9 @@ export class Backend {
                 this.config_data.pool[key] = Object.assign(this.config_data.pool[key], params[key])
             })
             fs.writeFile(this.config_file, JSON.stringify(this.config_data, null, 4), "utf8", () => {
-                console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<', this.config_data)
                 this.send("set_app_data", {
                     config: this.config_data
                 })
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-
 
                 if (!originalServerState) {
                     if (!this.pool)
