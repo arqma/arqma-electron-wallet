@@ -42,15 +42,6 @@ export class RPC {
                 params: params,
                 result: await response.json()
             }
-            if (Object.keys(params).length !== 0) {
-                requestOptions.body = JSON.stringify(params)
-            }
-            // console.log(url, ' ', requestOptions)
-                let response = await fetch(url, requestOptions)
-                return {
-                    params: params,
-                    result: await response.json()
-                }
         } catch (error) {
             return {
                 params: params,
