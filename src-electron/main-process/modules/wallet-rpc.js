@@ -1312,10 +1312,6 @@ export class WalletRPC {
         this.backend.send(method, data)
     }
 
-    getRPC (parameter, params = {}) {
-        return this.rpc.sendRPC_WithMD5(`get_${parameter}`, params)
-    }
-
     quit () {
         return new Promise((resolve, reject) => {
             if (this.walletRPCProcess) {
