@@ -107,7 +107,7 @@ export default {
             status: "OK",
             target: 120,
             target_height: 0,
-            testnet: false,
+            stagenet: false,
             top_block_hash: null,
             tx_count: 0,
             tx_pool_size: 0,

@@ -7,8 +7,8 @@ export class Database {
         this.pool = pool
         this.db = null
         this.stats = {}
-        if (options.testnet) {
-            this.sqlitePath = join(options.data_dir, "gui", "pool_stats_testnet.sqlite")
+        if (options.stagenet) {
+            this.sqlitePath = join(options.data_dir, "gui", "pool_stats_stagenet.sqlite")
         } else {
             this.sqlitePath = join(options.data_dir, "gui", "pool_stats.sqlite")
         }

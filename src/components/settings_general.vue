@@ -113,7 +113,7 @@
                 -->
 
                 <div class="col-3 self-center" >
-                    <q-checkbox v-model="config.app.testnet" :label="$t('fieldLabels.testnet')" />
+                    <q-checkbox v-model="config.app.stagenet" :label="$t('fieldLabels.stagenet')" />
                 </div>
             </div>
         </q-field>

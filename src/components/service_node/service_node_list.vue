@@ -14,8 +14,8 @@
               • {{ $t("strings.contribution") }}: <FormatArqma :amount="node.ourContributionAmount"
             /></span>
             <span v-if="node.awaitingContribution">
-              • {{ $t("strings.serviceNodeDetails.minContribution") }}: {{ getMinContribution(node) }} LOKI •
-              {{ $t("strings.serviceNodeDetails.maxContribution") }}: {{ openForContributionLoki(node) }} LOKI
+              • {{ $t("strings.serviceNodeDetails.minContribution") }}: {{ getMinContribution(node) }} ARQ •
+              {{ $t("strings.serviceNodeDetails.maxContribution") }}: {{ openForContributionLoki(node) }} ARQ
             </span>
           </q-item-label>
         </q-item-section>

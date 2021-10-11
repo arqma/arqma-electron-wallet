@@ -11,7 +11,7 @@ export class Daemon {
         this.heartbeat = null
         this.heartbeat_slow = null
         this.id = 0
-        this.testnet = false
+        this.stagenet = false
         this.local = false // do we have a local daemon ?
 
         this.daemon_info = {}
@@ -49,7 +49,7 @@ export class Daemon {
             hostname: "explorer.arqma.com",
             endpoint: "/api/networkinfo"
         }
-        if (this.testnet) {
+        if (this.stagenet) {
             options.hostname = "stageblocks.arqma.com"
         }
         const getInfoData = await this.rpc.callAPI({}, options)
@@ -71,8 +71,8 @@ export class Daemon {
             return new Promise((resolve, reject) => {
                resolve({
                    result:  {
-                        mainnet: !options.app.testnet,
-                        testnet: options.app.testnet
+                        mainnet: !options.app.stagenet,
+                        stagenet: options.app.stagenet
                     }
                })
             })
@@ -142,10 +142,10 @@ export class Daemon {
                 )
             }
 
-            if (options.app.testnet) {
-                this.testnet = true
-                args.push("--testnet")
-                args.push("--log-file", path.join(options.app.data_dir, "testnet", "logs", "arqmad.log"))
+            if (options.app.stagenet) {
+                this.stagenet = true
+                args.push("--stagenet")
+                args.push("--log-file", path.join(options.app.data_dir, "stagenet", "logs", "arqmad.log"))
                 // args.push("--add-peer", "45.77.68.151:13310")
             } else {
                 args.push("--log-file", path.join(options.app.data_dir, "logs", "arqmad.log"))
@@ -153,7 +153,7 @@ export class Daemon {
 
             if (options.daemon.rpc_bind_ip !== "127.0.0.1") { args.push("--confirm-external-bind") }
 
-            if (options.daemon.type === "local_remote" && !options.app.testnet) {
+            if (options.daemon.type === "local_remote" && !options.app.stagenet) {
                 args.push(
                     "--bootstrap-daemon-address",
                     `${options.daemon.remote_host}:${options.daemon.remote_port}`

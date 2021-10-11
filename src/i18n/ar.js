@@ -220,7 +220,7 @@ export default {
         rescanSpentOutputs: "قضى إعادة تفحص النواتج ",
         transactionNotes: "ملاحظات المعاملات ",
         network: "شبكة الاتصال",
-        testnet: "Testnet"
+        stagenet: "stagenet"
     },
     footer: {
         ready: "جاهز",

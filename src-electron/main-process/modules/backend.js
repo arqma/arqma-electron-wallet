@@ -80,11 +80,11 @@ export class Backend {
                 rpc_bind_port: 39994,
                 zmq_bind_port: 39995
             },
-            testnet: {
+            stagenet: {
                 ...daemon,
                 type: "local",
-                p2p_bind_port: 29993,
-                rpc_bind_port: 29994,
+                p2p_bind_port: 39993,
+                rpc_bind_port: 39994,
                 zmq_bind_port: 29995
             }
         }
@@ -94,7 +94,7 @@ export class Backend {
             app: {
                 data_dir: this.config_dir,
                 ws_bind_port: 12213,
-                testnet: false,
+                stagenet: false,
                 wallet_data_dir: this.wallet_dir,
                 net_type: "mainnet",
                 wallet_dir: this.wallet_dir
@@ -313,7 +313,7 @@ export class Backend {
             }
 
             if (path) {
-                const baseUrl = net_type === "testnet" ? "https://stageblocks.arqma.com" : "https://explorer.arqma.com"
+                const baseUrl = net_type === "stagenet" ? "https://stageblocks.arqma.com" : "https://explorer.arqma.com"
                 const url = `${baseUrl}/${path}/`
                 require("electron").shell.openExternal(url + params.id)
             }
@@ -443,14 +443,14 @@ export class Backend {
             let wallet_dir = path.join(this.config_data.app.data_dir, "wallets")
             let gui_dir = path.join(this.config_data.app.data_dir, "gui")
 
-            if (this.config_data.app.testnet) {
-                let testnet_dir = path.join(this.config_data.app.data_dir, "testnet")
-                if (!fs.existsSync(testnet_dir)) { fs.mkdirSync(testnet_dir) }
+            if (this.config_data.app.stagenet) {
+                let stagenet_dir = path.join(this.config_data.app.data_dir, "stagenet")
+                if (!fs.existsSync(stagenet_dir)) { fs.mkdirSync(stagenet_dir) }
 
-                lmdb_dir = path.join(testnet_dir, "lmdb02")
-                log_dir = path.join(testnet_dir, "logs")
-                wallet_dir = path.join(testnet_dir, "wallets")
-                gui_dir = path.join(testnet_dir, "gui")
+                lmdb_dir = path.join(stagenet_dir, "lmdb02")
+                log_dir = path.join(stagenet_dir, "logs")
+                wallet_dir = path.join(stagenet_dir, "wallets")
+                gui_dir = path.join(stagenet_dir, "gui")
             }
 
             if (!fs.existsSync(lmdb_dir)) { fs.mkdirSync(lmdb_dir) }
@@ -534,8 +534,8 @@ export class Backend {
                                 this.send("show_notification", { type: "negative", message: "Error: remote node not available, change to local mode or update remote node", timeout: 2000 })
                                 return
                             }
-                        } else if (this.config_data.app.testnet && !data.result.testnet) {
-                            // remote node network does not match local network (testnet, mainnet)
+                        } else if (this.config_data.app.stagenet && !data.result.stagenet) {
+                            // remote node network does not match local network (stagenet, mainnet)
 
                             if (this.config_data.daemon.type === "local_remote") {
                                 // if in local+remote, then switch to local only

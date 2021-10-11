@@ -16,7 +16,7 @@ export class WalletRPC {
         this.wallet_dir = null
         this.auth = []
         this.id = 0
-        this.testnet = false
+        this.stagenet = false
         this.heartbeat = null
         this.wallet_state = {
             open: false,
@@ -40,7 +40,7 @@ export class WalletRPC {
         // this.agent = new http.Agent({ keepAlive: true, maxSockets: 1 })
     }
 
-    // this function will take an options object for testnet, data-dir, etc
+    // this function will take an options object for stagenet, data-dir, etc
     start (options) {
         return new Promise((resolve, reject) => {
             let daemon_address = `${options.daemon.rpc_bind_ip}:${options.daemon.rpc_bind_port}`
@@ -73,11 +73,11 @@ export class WalletRPC {
 
                 this.data_dir = options.app.data_dir
 
-                if (options.app.testnet) {
-                    this.testnet = true
-                    this.wallet_dir = path.join(options.app.data_dir, "testnet", "wallets")
-                    log_file = path.join(options.app.data_dir, "testnet", "logs", "wallet-rpc.log")
-                    args.push("--testnet")
+                if (options.app.stagenet) {
+                    this.stagenet = true
+                    this.wallet_dir = path.join(options.app.data_dir, "stagenet", "wallets")
+                    log_file = path.join(options.app.data_dir, "stagenet", "logs", "wallet-rpc.log")
+                    args.push("--stagenet")
                     args.push("--log-file", log_file)
                     args.push("--wallet-dir", this.wallet_dir)
                 } else {
@@ -1213,7 +1213,7 @@ export class WalletRPC {
             }
             for (var i = 0; i < legacy_paths.length; i++) {
                 let legacy_config_path = path.join(legacy_paths[i], "config", "wallet_info.json")
-                if (this.testnet) { legacy_config_path = path.join(legacy_paths[i], "testnet", "config", "wallet_info.json") }
+                if (this.stagenet) { legacy_config_path = path.join(legacy_paths[i], "stagenet", "config", "wallet_info.json") }
                 if (!fs.existsSync(legacy_config_path)) { continue }
                 let legacy_config = JSON.parse(fs.readFileSync(legacy_config_path, "utf8"))
                 let legacy_wallet_path = legacy_config.wallet_filepath
