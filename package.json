@@ -79,7 +79,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.10.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "quasar-cli": "^0.17.26",
     "sass-loader": "^7.3.1",
     "strip-ansi": "^3.0.1",
