@@ -48,7 +48,7 @@
     "qrcode.vue": "^1.7.0",
     "rotating-file-stream": "^1.4.1",
     "rxjs": "^6.6.7",
-    "ryo-core-js": "git://github.com/arqtras/ryo-core-js.git",
+    "ryo-core-js": "https://github.com/arqtras/ryo-core-js.git",
     "urllib": "^2.37.1",
     "utf-8-validate": "^5.0.5",
     "validation": "0.0.1",
