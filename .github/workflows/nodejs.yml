@@ -10,7 +10,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-              os: [windows-latest, macos-latest, ubuntu-latest]
+              os: [windows-2019, macos-latest, ubuntu-latest]
 
         steps:
             - name: Checkout git repo
@@ -19,11 +19,19 @@ jobs:
             - name: Install node
               uses: actions/setup-node@v1
               with:
-                node-version: "12.20.2"
-
+                node-version: "12.22.6"
+            - name: Patch node gyp on windows to support Visual Studio 2019
+              if: matrix.os == 'windows-2019'
+              shell: powershell
+              run: |
+                npm install --global node-gyp@latest
+                npm prefix -g | % {npm config set node_gyp "$_\node_modules\node-gyp\bin\node-gyp.js"}
+            - name: Install vs
+              run: npm config set msvs_version 2019
+                
             - name: Install dependencies
               run: npm install -f
-
+              
             - name: Download Arqmad binaries
               run: node ./build/download-binaries.js
 
