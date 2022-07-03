@@ -20,7 +20,7 @@ export default {
         export: "EXPORT",
         generate: "GENEROVAT",
         import: "IMPORT",
-        importWallet: "IMPORTOVAT PENĚŽENKU | IMPORTOTOVAT PENĚŽENKY",
+        importWallet: "IMPORTOVAT PENĚŽENKU | IMPORTOVAT PENĚŽENKY",
         next: "DALŠÍ",
         openWallet: "OTEVŘÍT PENĚŽENKU",
         receive: "PŘIJMOUT",
@@ -157,7 +157,7 @@ export default {
         },
         unlockServiceNodeWarning: {
             title: "Odemknout varování service node",
-            message: "Unlocking a partial stake in a node will also unstake for any other participants, if staking in a shared node its best to let the operator and other participants know you are unstaking.", // **
+            message: "Odblokováním stake podílu v uzlu se zruší stake podíl i pro ostatní účastníky, pokud stakujete ve sdíleném uzlu, je nejlepší dát provozovateli a ostatním účastníkům vědět, že stake podíl rušíte.", // **
             ok: "POKRAČOVAT"
         }
     },
@@ -386,7 +386,7 @@ export default {
         daemon: {
             local: {
                 title: "Pouze lokální daemon",
-                description: "Plné zabezpečení, peněženka stáhne celý blockchain. Nebude možné provádět transakce dokud nebude synchronizace dokončena."
+                description: "Plné zabezpečení, peněženka stáhne celý blockchain. Nebude možné provádět transakce dokud, nebude synchronizace dokončena."
             },
             localRemote: {
                 title: "Lokální + Vzdálený daemon",
@@ -473,7 +473,7 @@ export default {
         },
         changePassword: "Změnit heslo",
         configure: "Konfigurace",
-        currentlyStakedNodes: "Currently staked nodes", // **
+        currentlyStakedNodes: "Aktuálně stakované nody", // **
         privateKeys: "Private keys",
         rescanWallet: "Prohledat znovu peněženku",
         serviceNode: {
