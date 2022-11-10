@@ -63,7 +63,7 @@
     "babel-eslint": "^10.1.0",
     "devtron": "^1.4.0",
     "dotenv": "^10.0.0",
-    "electron": "^4.1.1",
+    "electron": "^18.3.7",
     "electron-builder": "22.10.4",
     "electron-debug": "^2.1.0",
     "electron-devtools-installer": "^2.2.4",
